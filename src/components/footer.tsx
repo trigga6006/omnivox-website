@@ -50,11 +50,22 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 pt-6 border-t border-border text-center">
+        <div className="mt-8 pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-muted-foreground/50">
             &copy; {new Date().getFullYear()} OmniVox. Built with privacy in
             mind.
           </p>
+          <div className="flex items-center gap-1.5 text-xs text-muted-foreground/40">
+            <span>An</span>
+            <Image
+              src="/omni-impact.svg"
+              alt="Omni Impact"
+              width={14}
+              height={14}
+              className="opacity-50"
+            />
+            <span>Omni Impact product</span>
+          </div>
         </div>
       </div>
     </footer>
