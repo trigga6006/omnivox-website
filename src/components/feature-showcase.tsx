@@ -262,21 +262,6 @@ function ContextModesVisual() {
 
 const showcases = [
   {
-    badge: "Context Modes",
-    icon: Layers,
-    title: "Switch profiles, switch vocabulary",
-    description:
-      "Context Modes let you switch between General and Programming profiles — each with its own scoped dictionary and snippets. Programming mode ships with 70+ entries for languages, frameworks, and tools. The floating pill changes color to match your active mode.",
-    highlights: [
-      "General and Programming modes with scoped dictionaries",
-      "70+ built-in programming terms (React, TypeScript, API, etc.)",
-      "Mode-specific snippets for shebangs, comment markers, and more",
-      "Waveform color reflects active mode — amber, blue, and beyond",
-    ],
-    visual: <ContextModesVisual />,
-    reverse: true,
-  },
-  {
     badge: "Privacy",
     icon: Shield,
     title: "Your data stays on your machine",
@@ -320,6 +305,21 @@ const showcases = [
     ],
     visual: <AICleanupVisual />,
     reverse: false,
+  },
+  {
+    badge: "Context Modes",
+    icon: Layers,
+    title: "Switch profiles, switch vocabulary",
+    description:
+      "Context Modes let you switch between General and Programming profiles — each with its own scoped dictionary and snippets. Programming mode ships with 70+ entries for languages, frameworks, and tools. The floating pill changes color to match your active mode.",
+    highlights: [
+      "General and Programming modes with scoped dictionaries",
+      "70+ built-in programming terms (React, TypeScript, API, etc.)",
+      "Mode-specific snippets for shebangs, comment markers, and more",
+      "Waveform color reflects active mode — amber, blue, and beyond",
+    ],
+    visual: <ContextModesVisual />,
+    reverse: true,
   },
 ];
 
