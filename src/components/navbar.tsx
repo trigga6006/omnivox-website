@@ -8,9 +8,10 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { label: "Features", href: "#features" },
-  { label: "How It Works", href: "#how-it-works" },
-  { label: "Privacy", href: "#privacy" },
+  { label: "Features", href: "/#features" },
+  { label: "How It Works", href: "/#how-it-works" },
+  { label: "Privacy", href: "/#privacy" },
+  { label: "Changelog", href: "/changelog" },
 ];
 
 export function Navbar() {

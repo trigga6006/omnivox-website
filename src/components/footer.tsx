@@ -24,22 +24,28 @@ export function Footer() {
 
           <div className="flex items-center gap-6">
             <a
-              href="#features"
+              href="/#features"
               className="text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
               Features
             </a>
             <a
-              href="#how-it-works"
+              href="/#how-it-works"
               className="text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
               How It Works
             </a>
             <a
-              href="#privacy"
+              href="/#privacy"
               className="text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
               Privacy
+            </a>
+            <a
+              href="/changelog"
+              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Changelog
             </a>
           </div>
         </div>

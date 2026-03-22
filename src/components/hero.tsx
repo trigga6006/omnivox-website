@@ -151,13 +151,13 @@ export function Hero() {
 
               <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] xl:text-7xl font-bold tracking-tight leading-[0.95]">
                 <motion.span variants={slideIn} className="block">
-                  Your voice.
-                </motion.span>
-                <motion.span variants={slideIn} className="block">
-                  Your machine.
+                  Dictate at the
                 </motion.span>
                 <motion.span variants={slideIn} className="block text-primary">
-                  Your data.
+                  speed of light.
+                </motion.span>
+                <motion.span variants={slideIn} className="block text-muted-foreground/70 text-[0.55em]">
+                  With no monthly subscription.
                 </motion.span>
               </h1>
 
