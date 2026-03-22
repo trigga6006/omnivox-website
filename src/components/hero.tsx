@@ -91,7 +91,7 @@ const negations = [
   },
   {
     label: "No subscription.",
-    description: "Free and open source, forever. No accounts, no paywalls.",
+    description: "Free forever. No accounts, no paywalls, no hidden fees.",
   },
   {
     label: "No bloat.",

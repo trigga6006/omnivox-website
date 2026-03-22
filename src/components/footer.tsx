@@ -53,7 +53,7 @@ export function Footer() {
         <div className="mt-8 pt-6 border-t border-border text-center">
           <p className="text-xs text-muted-foreground/50">
             &copy; {new Date().getFullYear()} OmniVox. Built with privacy in
-            mind. Open source under MIT.
+            mind.
           </p>
         </div>
       </div>
