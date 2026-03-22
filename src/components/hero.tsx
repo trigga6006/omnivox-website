@@ -149,7 +149,7 @@ export function Hero() {
                 </Badge>
               </motion.div>
 
-              <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] xl:text-7xl font-bold tracking-tight leading-[0.95]">
+              <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] xl:text-7xl font-bold tracking-tight leading-[1.1]">
                 <motion.span variants={slideIn} className="block">
                   Dictate at the
                 </motion.span>

@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 const changelog = [
   {
-    version: "0.1.0",
+    version: "0.1.2",
     date: "2026-03-21",
     title: "Initial Release",
     changes: [
