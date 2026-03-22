@@ -56,7 +56,7 @@ export function Footer() {
             mind.
           </p>
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground/40">
-            <span>An</span>
+            <span>Developed by</span>
             <Image
               src="/omni-impact.svg"
               alt="Omni Impact"
@@ -64,7 +64,7 @@ export function Footer() {
               height={14}
               className="opacity-50"
             />
-            <span>Omni Impact product</span>
+            <span>Omni Impact</span>
           </div>
         </div>
       </div>
