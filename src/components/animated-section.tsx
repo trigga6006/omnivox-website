@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
+const EASE: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
+
 export function AnimatedSection({
   children,
   className,
@@ -18,7 +20,7 @@ export function AnimatedSection({
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] as const, delay }}
+      transition={{ duration: 0.8, ease: EASE, delay }}
       className={cn(className)}
     >
       {children}
@@ -40,7 +42,7 @@ export function AnimatedDiv({
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] as const, delay }}
+      transition={{ duration: 0.7, ease: EASE, delay }}
       className={cn(className)}
     >
       {children}
