@@ -10,6 +10,24 @@ export const metadata: Metadata = {
 
 const changelog = [
   {
+    version: "0.1.4",
+    date: "2026-03-22",
+    title: "Smart List Formatting & Stability",
+    changes: [
+      "Dictated lists are now automatically formatted as bullet points (3+ enumerated items)",
+      "Supports count-word headers (\"these three things\") and ordinal sequences (\"First... Second... Third...\")",
+      "List formatting uses deterministic post-processing — zero added latency",
+      "Base LLM cleanup rules are now a code constant that ships with every update automatically",
+      "Context mode prompts only store domain-specific additions, not the full prompt",
+      "Fixed multi-line text not pasting into text fields (Shift+Enter instead of raw newlines)",
+      "Fixed LLM responding conversationally to short 1-2 word dictations",
+      "Fixed potential data loss in LLM sidecar communication (BufReader persistence)",
+      "Fixed app hang on shutdown (Drop deadlock in LLM engine)",
+      "Fixed overlay pill ignoring dark theme setting",
+      "Increased max LLM output tokens from 256 to 384",
+    ],
+  },
+  {
     version: "0.1.3",
     date: "2026-03-22",
     title: "Context Modes, Light Theme & Polish",
