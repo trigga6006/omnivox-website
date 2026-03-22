@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import Image from "next/image";
-import { Download, Menu, X, Github } from "lucide-react";
+import { Download, Menu, X } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -65,18 +65,6 @@ export function Navbar() {
 
         <div className="hidden md:flex items-center gap-3">
           <a
-            href="https://github.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={cn(
-              buttonVariants({ variant: "ghost", size: "sm" }),
-              "gap-1.5 text-muted-foreground"
-            )}
-          >
-            <Github className="size-4" />
-            GitHub
-          </a>
-          <a
             href="#download"
             className={cn(
               buttonVariants({ size: "sm" }),
@@ -116,18 +104,6 @@ export function Navbar() {
               </a>
             ))}
             <div className="flex gap-3 pt-2 border-t border-border">
-              <a
-                href="https://github.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={cn(
-                  buttonVariants({ variant: "outline", size: "sm" }),
-                  "flex-1 gap-1.5"
-                )}
-              >
-                <Github className="size-4" />
-                GitHub
-              </a>
               <a
                 href="#download"
                 className={cn(

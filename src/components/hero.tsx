@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { Download, Github, ChevronDown } from "lucide-react";
+import { Download, ChevronDown } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -183,18 +183,6 @@ export function Hero() {
                 >
                   <Download className="size-4" />
                   Download for Windows
-                </a>
-                <a
-                  href="https://github.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cn(
-                    buttonVariants({ variant: "outline", size: "lg" }),
-                    "gap-2 px-6 h-11 text-sm"
-                  )}
-                >
-                  <Github className="size-4" />
-                  View on GitHub
                 </a>
               </motion.div>
             </motion.div>

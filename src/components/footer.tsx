@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { Github } from "lucide-react";
 
 export function Footer() {
   return (
@@ -41,14 +40,6 @@ export function Footer() {
               className="text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
               Privacy
-            </a>
-            <a
-              href="https://github.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <Github className="size-4" />
             </a>
           </div>
         </div>
