@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Shield, Activity, Sparkles, Check } from "lucide-react";
+import { Shield, Activity, Sparkles, Check, Layers } from "lucide-react";
 import { AnimatedDiv } from "@/components/animated-section";
 
 function MockWindow({
@@ -184,7 +184,98 @@ function AICleanupVisual() {
   );
 }
 
+function ContextModesVisual() {
+  return (
+    <MockWindow title="omnivox — context modes">
+      <div className="space-y-4">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/15 border border-primary/20">
+            <div className="w-2 h-2 rounded-full bg-primary" />
+            <span className="text-xs font-mono font-medium text-primary">
+              General
+            </span>
+          </div>
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted border border-border">
+            <div className="w-2 h-2 rounded-full bg-blue-400" />
+            <span className="text-xs font-mono text-muted-foreground">
+              Programming
+            </span>
+          </div>
+        </div>
+
+        <div className="border-t border-border pt-3 space-y-2.5">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-mono text-muted-foreground/50 uppercase tracking-wider">
+              Mode Dictionary
+            </span>
+            <span className="text-[10px] font-mono text-primary/50">
+              70+ entries
+            </span>
+          </div>
+
+          <div className="space-y-1">
+            {[
+              { from: "react", to: "React" },
+              { from: "typescript", to: "TypeScript" },
+              { from: "api", to: "API" },
+            ].map((entry) => (
+              <div
+                key={entry.from}
+                className="flex items-center gap-2 text-xs font-mono"
+              >
+                <span className="text-muted-foreground/60">{entry.from}</span>
+                <span className="text-primary/40">&rarr;</span>
+                <span className="text-foreground/80">{entry.to}</span>
+              </div>
+            ))}
+            <span className="text-[10px] text-muted-foreground/30 font-mono">
+              + 67 more...
+            </span>
+          </div>
+        </div>
+
+        <div className="border-t border-border pt-3">
+          <div className="text-[10px] font-mono text-muted-foreground/50 uppercase tracking-wider mb-2">
+            Waveform Color
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="flex items-end gap-px h-6">
+              {[40, 65, 85, 70, 50, 75, 90, 60, 45, 80, 55, 70].map(
+                (h, i) => (
+                  <div
+                    key={i}
+                    className="w-[3px] rounded-full bg-blue-400/70"
+                    style={{ height: `${h}%` }}
+                  />
+                )
+              )}
+            </div>
+            <span className="text-[10px] font-mono text-muted-foreground/50">
+              Matches active mode color
+            </span>
+          </div>
+        </div>
+      </div>
+    </MockWindow>
+  );
+}
+
 const showcases = [
+  {
+    badge: "Context Modes",
+    icon: Layers,
+    title: "Switch profiles, switch vocabulary",
+    description:
+      "Context Modes let you switch between General and Programming profiles — each with its own scoped dictionary and snippets. Programming mode ships with 70+ entries for languages, frameworks, and tools. The floating pill changes color to match your active mode.",
+    highlights: [
+      "General and Programming modes with scoped dictionaries",
+      "70+ built-in programming terms (React, TypeScript, API, etc.)",
+      "Mode-specific snippets for shebangs, comment markers, and more",
+      "Waveform color reflects active mode — amber, blue, and beyond",
+    ],
+    visual: <ContextModesVisual />,
+    reverse: true,
+  },
   {
     badge: "Privacy",
     icon: Shield,

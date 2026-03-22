@@ -10,6 +10,38 @@ export const metadata: Metadata = {
 
 const changelog = [
   {
+    version: "0.1.3",
+    date: "2026-03-22",
+    title: "Context Modes, Light Theme & Polish",
+    changes: [
+      // Critical Bug Fixes
+      "Fixed two mutex deadlocks in the database layer that prevented the app from launching on first run",
+      // Context Modes
+      "Context Modes: switch between General and Programming profiles with scoped dictionaries and snippets",
+      "Programming mode ships with 70+ dictionary entries (languages, frameworks, tools, AI terms) and 7 snippets",
+      "Mode-scoped dictionary and snippet CRUD with inline management in the profile edit form",
+      "ProcessorChain now merges global + active mode entries when processing dictation",
+      "Floating pill mode selector with right-click switching and synced color-coded waveform bars",
+      "Fixed mode switching sync between main window and overlay pill",
+      "6 new Tauri commands for mode-scoped CRUD operations",
+      // Light Mode
+      "Full warm stone light theme with OKLch color variables — soft beige surfaces, warm text, amber accent preserved",
+      "Theme persistence via SQLite settings with localStorage cache and FOUC prevention",
+      "Dark/Light toggle in Settings with Moon/Sun icons",
+      "Replaced all hardcoded dark colors with CSS variable references for theme support",
+      // Word Counter & Milestones
+      "Word counter with milestone progression: First Steps (100) through Prolific Author (100K)",
+      "StatsCard on dictation page showing word count, milestone label, and progress bar",
+      // UI Polish
+      "Fixed record button layout shift when recording starts",
+      "Settings page input device selector now functional with live microphone switching",
+      "Removed amber left border accent from last transcription card",
+      // LLM Safety
+      "Hardened LLM system prompts — reframed as text formatter, never answers or interprets input",
+      "Output safety check: falls back to raw text if LLM generates conversational responses instead of cleaning",
+    ],
+  },
+  {
     version: "0.1.2",
     date: "2026-03-21",
     title: "Initial Release",
