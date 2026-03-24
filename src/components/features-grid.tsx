@@ -6,7 +6,7 @@ import {
   Mic,
   Keyboard,
   Clipboard,
-  Sparkles,
+  Rocket,
   Zap,
   type LucideIcon,
 } from "lucide-react";
@@ -45,10 +45,10 @@ const features: Feature[] = [
       "Paste via clipboard, simulate keystrokes directly into any app, or use both simultaneously.",
   },
   {
-    icon: Sparkles,
-    title: "Qwen3 AI Cleanup",
+    icon: Rocket,
+    title: "Ship Mode",
     description:
-      "Optional local Qwen3 LLM polishes grammar, removes filler words, and fixes spelling — entirely on-device.",
+      "Auto-presses Enter after transcription lands. Dictate and ship — hands-free agentic coding with zero keystrokes.",
   },
   {
     icon: Zap,

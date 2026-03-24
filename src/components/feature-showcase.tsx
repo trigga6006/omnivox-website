@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Shield, Activity, Sparkles, Check, Layers } from "lucide-react";
+import { Shield, Activity, Rocket, Check, Layers } from "lucide-react";
 import { AnimatedDiv } from "@/components/animated-section";
 
 function MockWindow({
@@ -134,50 +134,52 @@ function SmartDictationVisual() {
   );
 }
 
-function AICleanupVisual() {
+function ShipModeVisual() {
   return (
-    <MockWindow title="omnivox — qwen3 cleanup">
+    <MockWindow title="omnivox — ship mode">
       <div className="space-y-4">
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-[10px] font-mono text-muted-foreground/50 uppercase tracking-wider">
-              Raw
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Rocket className="size-3 text-primary" />
+            <span className="text-xs font-mono font-medium text-primary">
+              Ship Mode Active
             </span>
           </div>
-          <p className="text-sm text-muted-foreground/70 leading-relaxed line-through decoration-muted-foreground/20">
-            the quarterly report shows uh significant growth in enterprise
-            segement across all the regions
-          </p>
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-green-400/15 text-green-400 border border-green-400/20">
+            Armed
+          </span>
         </div>
 
-        <div className="flex items-center gap-2 text-primary/60">
-          <Sparkles className="size-3" />
-          <div className="flex-1 h-px bg-gradient-to-r from-primary/30 to-transparent" />
-        </div>
-
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-[10px] font-mono text-primary/60 uppercase tracking-wider">
-              Enhanced
-            </span>
-            <Check className="size-3 text-green-400/60" />
+        <div className="border-t border-border pt-3">
+          <span className="text-[10px] font-mono text-muted-foreground/50 uppercase tracking-wider">
+            Transcribed
+          </span>
+          <div className="mt-2 rounded-lg bg-muted/50 border border-border px-3 py-2">
+            <p className="text-sm text-foreground/90 leading-relaxed">
+              Update the auth middleware to validate JWT tokens on every request
+            </p>
           </div>
-          <p className="text-sm text-foreground/90 leading-relaxed">
-            The quarterly report shows significant growth in the enterprise
-            segment across all regions.
-          </p>
         </div>
 
-        <div className="flex gap-2 pt-1">
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-primary/10 text-primary/60">
-            +capitalization
-          </span>
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-primary/10 text-primary/60">
-            -filler words
-          </span>
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-primary/10 text-primary/60">
-            ~spelling
-          </span>
+        <div className="space-y-2">
+          <div className="flex items-center justify-between text-xs font-mono">
+            <span className="text-muted-foreground/60">Auto-sending...</span>
+            <span className="text-primary">1.5s</span>
+          </div>
+          <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+            <motion.div
+              className="h-full rounded-full bg-gradient-to-r from-primary/80 to-primary"
+              initial={{ width: "0%" }}
+              whileInView={{ width: "100%" }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.5, ease: "linear", delay: 0.5 }}
+            />
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 pt-1 text-xs font-mono text-green-400/80">
+          <Check className="size-3" />
+          <span>Enter pressed — message shipped</span>
         </div>
       </div>
     </MockWindow>
@@ -292,18 +294,18 @@ const showcases = [
     reverse: true,
   },
   {
-    badge: "Intelligence",
-    icon: Sparkles,
-    title: "Qwen3 polishes, locally",
+    badge: "Ship Mode",
+    icon: Rocket,
+    title: "Dictate it. Ship it.",
     description:
-      "Qwen3-0.6B runs entirely on your machine to clean up grammar, remove filler words, and fix spelling — without sending a single byte to the cloud. Define custom dictionaries and snippet shortcuts for domain-specific accuracy.",
+      "Ship Mode auto-presses Enter 1.5 seconds after your transcription lands in the text field. Designed for agentic coding workflows with Claude Code, Cursor, and any chat-based tool — dictate your intent and it ships, completely hands-free.",
     highlights: [
-      "Qwen3-0.6B quantized model, bundled and ready to go",
-      "Custom dictionary for domain-specific terms",
-      "Snippet triggers expand shorthand instantly",
-      "Before/after correction tracking",
+      "Auto-sends 1.5s after transcription completes",
+      "Built for agentic coding with Claude Code & Cursor",
+      "Works with TypeSimulation and Both output modes",
+      "Toggle instantly from the floating pill or settings",
     ],
-    visual: <AICleanupVisual />,
+    visual: <ShipModeVisual />,
     reverse: false,
   },
   {
