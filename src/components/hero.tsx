@@ -1,12 +1,107 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Download, ChevronDown } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+
+// ─── Flowing text stream that wraps around the waveform ─────────────────────
+
+const FLOW_TEXT =
+  "the quarterly report shows significant growth across all enterprise segments revenue increased by thirty-two percent compared to last year we need to schedule a follow-up meeting with the product team to discuss the roadmap for next quarter please send the updated proposal to the client by end of day ";
+
+const CHAR_WIDTH = 7.8; // approx width per char at fontSize 13 in SVG units
+const TEXT_PX = FLOW_TEXT.length * CHAR_WIDTH;
+
+function FlowingTextStream() {
+  const t1 = useRef<SVGTextPathElement>(null);
+  const t2 = useRef<SVGTextPathElement>(null);
+  const raf = useRef(0);
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    setShow(true);
+    let offset = 0;
+    let prev = 0;
+
+    const tick = (time: number) => {
+      if (!prev) prev = time;
+      offset -= 55 * (time - prev) / 1000; // 55 SVG-units/s
+      prev = time;
+      if (offset < -TEXT_PX) offset += TEXT_PX;
+
+      t1.current?.setAttribute("startOffset", String(offset));
+      t2.current?.setAttribute("startOffset", String(offset + TEXT_PX));
+      raf.current = requestAnimationFrame(tick);
+    };
+
+    raf.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf.current);
+  }, []);
+
+  if (!show) return null;
+
+  return (
+    <svg
+      className="absolute inset-0 w-full h-full hidden lg:block"
+      viewBox="0 0 1400 400"
+      preserveAspectRatio="xMidYMid slice"
+      aria-hidden="true"
+      style={{ pointerEvents: "none", overflow: "visible" }}
+    >
+      <defs>
+        {/* Curve: enters bottom-left, arcs over the waveform peak, exits upper-right */}
+        <path
+          id="flowCurve"
+          d="M -400 550 C 50 450 300 -20 700 -10 C 1100 0 1350 -50 1800 -120"
+          fill="none"
+        />
+        {/* Gradient: grey → gold flash at center → white, with edge fade */}
+        <linearGradient
+          id="flowGrad"
+          x1="-200"
+          y1="0"
+          x2="1600"
+          y2="0"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0%" stopColor="#7a7774" stopOpacity="0" />
+          <stop offset="12%" stopColor="#7a7774" stopOpacity="0.18" />
+          <stop offset="32%" stopColor="#7a7774" stopOpacity="0.28" />
+          <stop offset="46%" stopColor="#b49a40" stopOpacity="0.38" />
+          <stop offset="54%" stopColor="#d9a730" stopOpacity="0.5" />
+          <stop offset="62%" stopColor="#e8e6e3" stopOpacity="0.65" />
+          <stop offset="80%" stopColor="#e8e6e3" stopOpacity="0.55" />
+          <stop offset="100%" stopColor="#e8e6e3" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+
+      <text
+        fill="url(#flowGrad)"
+        fontSize="13"
+        fontFamily="var(--font-geist-mono), ui-monospace, monospace"
+        letterSpacing="0.02em"
+      >
+        <textPath ref={t1} href="#flowCurve">
+          {FLOW_TEXT}
+        </textPath>
+      </text>
+      <text
+        fill="url(#flowGrad)"
+        fontSize="13"
+        fontFamily="var(--font-geist-mono), ui-monospace, monospace"
+        letterSpacing="0.02em"
+      >
+        <textPath ref={t2} href="#flowCurve">
+          {FLOW_TEXT}
+        </textPath>
+      </text>
+    </svg>
+  );
+}
 
 // Pre-compute bar data — complex multi-frequency waveform
 const BAR_COUNT = 140;
@@ -79,6 +174,9 @@ function MassiveWaveform() {
           ))}
         </div>
       )}
+
+      {/* Flowing text stream — arcs over the waveform */}
+      <FlowingTextStream />
     </div>
   );
 }
