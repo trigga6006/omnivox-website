@@ -46,36 +46,35 @@ function FlowingTextStream() {
 
   return (
     <svg
-      className="absolute inset-0 w-full h-full hidden lg:block"
+      className="absolute inset-0 w-full h-full hidden lg:block z-[1]"
       viewBox="0 0 1400 400"
       preserveAspectRatio="xMidYMid slice"
       aria-hidden="true"
       style={{ pointerEvents: "none", overflow: "visible" }}
     >
       <defs>
-        {/* Curve: enters bottom-left, arcs over the waveform peak, exits upper-right */}
+        {/* Curve: enters upper-left of waveform, passes through center (behind bars), exits lower-right */}
         <path
           id="flowCurve"
-          d="M -400 550 C 50 450 300 -20 700 -10 C 1100 0 1350 -50 1800 -120"
+          d="M -300 20 C 0 60 300 170 700 200 C 1100 230 1400 340 1700 380"
           fill="none"
         />
-        {/* Gradient: grey → gold flash at center → white, with edge fade */}
+        {/* Vertical gradient: grey above → gold/primary below (transition hidden behind bars) */}
         <linearGradient
           id="flowGrad"
-          x1="-200"
+          x1="0"
           y1="0"
-          x2="1600"
-          y2="0"
+          x2="0"
+          y2="400"
           gradientUnits="userSpaceOnUse"
         >
           <stop offset="0%" stopColor="#7a7774" stopOpacity="0" />
-          <stop offset="12%" stopColor="#7a7774" stopOpacity="0.18" />
-          <stop offset="32%" stopColor="#7a7774" stopOpacity="0.28" />
-          <stop offset="46%" stopColor="#b49a40" stopOpacity="0.38" />
-          <stop offset="54%" stopColor="#d9a730" stopOpacity="0.5" />
-          <stop offset="62%" stopColor="#e8e6e3" stopOpacity="0.65" />
-          <stop offset="80%" stopColor="#e8e6e3" stopOpacity="0.55" />
-          <stop offset="100%" stopColor="#e8e6e3" stopOpacity="0" />
+          <stop offset="12%" stopColor="#7a7774" stopOpacity="0.28" />
+          <stop offset="38%" stopColor="#7a7774" stopOpacity="0.35" />
+          <stop offset="50%" stopColor="#9a8a50" stopOpacity="0.25" />
+          <stop offset="62%" stopColor="#d9a730" stopOpacity="0.45" />
+          <stop offset="80%" stopColor="#d9a730" stopOpacity="0.6" />
+          <stop offset="100%" stopColor="#d9a730" stopOpacity="0" />
         </linearGradient>
       </defs>
 
@@ -136,8 +135,11 @@ function MassiveWaveform() {
       {/* Center baseline */}
       <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-px bg-gradient-to-r from-transparent via-primary/15 to-transparent" />
 
+      {/* Flowing text stream — rendered behind bars, z-[1] */}
+      <FlowingTextStream />
+
       {mounted && (
-        <div className="relative flex items-center justify-between w-full h-full px-2 sm:px-4 md:px-8 lg:px-12">
+        <div className="relative z-[2] flex items-center justify-between w-full h-full px-2 sm:px-4 md:px-8 lg:px-12">
           {BARS.map((bar, i) => (
             <div
               key={i}
@@ -174,9 +176,6 @@ function MassiveWaveform() {
           ))}
         </div>
       )}
-
-      {/* Flowing text stream — arcs over the waveform */}
-      <FlowingTextStream />
     </div>
   );
 }
