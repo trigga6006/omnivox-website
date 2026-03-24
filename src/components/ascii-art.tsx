@@ -1,7 +1,6 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
 
 function AsciiBlock({
   art,
@@ -10,14 +9,10 @@ function AsciiBlock({
   art: string;
   className?: string;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
-
   const lines = art.split("\n").filter((l) => l.length > 0);
 
   return (
     <div
-      ref={ref}
       className={`overflow-hidden select-none pointer-events-none ${className}`}
       aria-hidden="true"
     >
@@ -26,13 +21,12 @@ function AsciiBlock({
           <motion.div
             key={i}
             className="font-mono text-[6px] sm:text-[8px] md:text-[10px] leading-[1.15] whitespace-pre"
-            initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
-            animate={
-              isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: i % 2 === 0 ? -20 : 20 }
-            }
+            initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
             transition={{
-              duration: 0.4,
-              delay: i * 0.02,
+              duration: 0.5,
+              delay: i * 0.03,
               ease: [0.25, 0.1, 0.25, 1],
             }}
           >

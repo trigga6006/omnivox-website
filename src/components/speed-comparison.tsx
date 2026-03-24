@@ -9,12 +9,10 @@ import { Badge } from "@/components/ui/badge";
 const SAMPLE_TEXT =
   "The quarterly report shows significant growth across all enterprise segments. Revenue increased by thirty-two percent compared to last year, driven primarily by expansion into new markets and improved customer retention rates.";
 
-const TYPING_WPM = 40;
-const VOICE_WPM = 160;
+const TYPING_WPM = 130;
 
 // Characters per millisecond based on WPM (average 5 chars per word)
 const TYPING_CPMS = (TYPING_WPM * 5) / 60000;
-const VOICE_CPMS = (VOICE_WPM * 5) / 60000;
 
 function MockDocument({
   title,
@@ -137,30 +135,28 @@ export function SpeedComparison() {
   }, [isInView, started]);
 
   const typing = useTypewriter(SAMPLE_TEXT, TYPING_CPMS, started, 0);
-  const voice = useTypewriter(SAMPLE_TEXT, VOICE_CPMS, started, 0);
 
-  // Calculate elapsed time for WPM display
-  const [elapsedMs, setElapsedMs] = useState(0);
-  const timerRef = useRef<ReturnType<typeof setInterval>>(undefined);
+  // Voice text appears instantly after a brief "processing" delay
+  const [voicePhase, setVoicePhase] = useState<
+    "idle" | "listening" | "done"
+  >("idle");
 
   useEffect(() => {
-    if (started && !voice.done) {
-      const start = Date.now();
-      timerRef.current = setInterval(() => {
-        setElapsedMs(Date.now() - start);
-      }, 100);
-      return () => clearInterval(timerRef.current);
+    if (!started) {
+      setVoicePhase("idle");
+      return;
     }
-    if (voice.done) {
-      clearInterval(timerRef.current);
-    }
-  }, [started, voice.done]);
+    // Brief "listening" phase, then text appears all at once
+    setVoicePhase("listening");
+    const timer = setTimeout(() => setVoicePhase("done"), 800);
+    return () => clearTimeout(timer);
+  }, [started]);
 
-  const elapsedMin = elapsedMs / 60000;
-  const typingWpm =
-    elapsedMin > 0 ? Math.round(typing.wordCount / elapsedMin) : 0;
-  const voiceWpm =
-    elapsedMin > 0 ? Math.round(voice.wordCount / elapsedMin) : 0;
+  const voiceDone = voicePhase === "done";
+  const voiceText = voiceDone ? SAMPLE_TEXT : "";
+  const voiceWordCount = voiceDone
+    ? SAMPLE_TEXT.split(/\s+/).filter(Boolean).length
+    : 0;
 
   return (
     <section ref={sectionRef} className="py-24 lg:py-32 relative overflow-hidden">
@@ -187,8 +183,8 @@ export function SpeedComparison() {
 
           <AnimatedDiv delay={0.2}>
             <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
-              The average person types at 40 WPM. You speak at 150+. Watch the
-              difference in real time.
+              Even fast typists cap out around 130 WPM. Voice transcription
+              delivers your words instantly. Watch the difference.
             </p>
           </AnimatedDiv>
         </div>
@@ -228,7 +224,7 @@ export function SpeedComparison() {
                     {typing.wordCount} words
                   </span>
                   <span className="text-xs font-mono font-medium text-muted-foreground/80 tabular-nums">
-                    {typingWpm} WPM
+                    ~{TYPING_WPM} WPM
                   </span>
                 </div>
               </div>
@@ -242,47 +238,63 @@ export function SpeedComparison() {
               icon={Mic}
               accentColor="text-primary"
             >
-              <div className="min-h-[180px] rounded-lg bg-primary/[0.03] border border-primary/10 p-4">
-                <p className="text-sm text-foreground/90 leading-relaxed font-mono whitespace-pre-wrap">
-                  {voice.displayed}
-                  <Cursor visible={started && !voice.done} />
-                </p>
+              <div className="min-h-[180px] rounded-lg bg-primary/[0.03] border border-primary/10 p-4 relative">
+                {voicePhase === "listening" && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                      <span className="text-xs font-mono text-primary/80">
+                        Listening...
+                      </span>
+                    </div>
+                  </div>
+                )}
+                <motion.p
+                  className="text-sm text-foreground/90 leading-relaxed font-mono whitespace-pre-wrap"
+                  initial={{ opacity: 0 }}
+                  animate={voiceDone ? { opacity: 1 } : { opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  {voiceText}
+                </motion.p>
               </div>
 
               <div className="flex items-center justify-between pt-2">
                 <div className="flex items-center gap-2">
                   <div
                     className={`w-2 h-2 rounded-full ${
-                      started && !voice.done
+                      voicePhase === "listening"
                         ? "bg-primary animate-pulse"
-                        : voice.done
+                        : voiceDone
                           ? "bg-green-400"
                           : "bg-muted-foreground/20"
                     }`}
                   />
                   <span
                     className={`text-[11px] font-mono ${
-                      voice.done
+                      voiceDone
                         ? "text-green-400/80"
-                        : started
+                        : voicePhase === "listening"
                           ? "text-primary/80"
                           : "text-muted-foreground/60"
                     }`}
                   >
-                    {voice.done
-                      ? "Complete"
-                      : started
-                        ? "Transcribing..."
+                    {voiceDone
+                      ? "Complete — instant"
+                      : voicePhase === "listening"
+                        ? "Listening..."
                         : "Waiting"}
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="text-[11px] font-mono text-muted-foreground/60">
-                    {voice.wordCount} words
+                    {voiceWordCount} words
                   </span>
-                  <span className="text-xs font-mono font-medium text-primary tabular-nums">
-                    {voiceWpm} WPM
-                  </span>
+                  {voiceDone && (
+                    <span className="text-xs font-mono font-medium text-primary tabular-nums">
+                      Instant
+                    </span>
+                  )}
                 </div>
               </div>
             </MockDocument>
@@ -294,16 +306,16 @@ export function SpeedComparison() {
           <motion.div
             className="mt-10 text-center"
             initial={{ opacity: 0 }}
-            animate={voice.done ? { opacity: 1 } : {}}
+            animate={voiceDone ? { opacity: 1 } : {}}
             transition={{ duration: 0.6 }}
           >
-            {voice.done && (
+            {voiceDone && (
               <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-primary/20 bg-primary/5">
                 <span className="text-sm text-muted-foreground">
-                  Voice transcription finished
+                  OmniVox finished while you&apos;re still typing
                 </span>
                 <span className="font-heading font-bold text-primary text-lg">
-                  4x faster
+                  Instant
                 </span>
               </div>
             )}
