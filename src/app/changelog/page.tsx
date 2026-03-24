@@ -10,6 +10,23 @@ export const metadata: Metadata = {
 
 const changelog = [
   {
+    version: "0.1.6",
+    date: "2026-03-24",
+    title: "Voice Commands, Writing Styles & Ghost Mode",
+    changes: [
+      "Voice Commands — say \"new line\", \"new paragraph\", or \"delete last word\" while dictating to control formatting with your voice; toggle on/off in Settings",
+      "Writing Styles — choose between Formal, Casual, and Very Casual output styles; Formal adds proper capitalization and trailing punctuation, Casual keeps capitalization but skips forced periods, Very Casual lowercases everything for chat-friendly output; configurable globally in Settings and per context mode",
+      "Ship Mode — automatically presses Enter after transcription to send messages instantly in chat apps like Slack, Discord, and Teams; toggle in Settings or from the pill overlay",
+      "Auto Context Switch Fallback — when switching between apps, OmniVox now automatically returns to your General context mode if the foreground app doesn't have a binding, instead of staying stuck on the previous mode",
+      "Ghost Mode — hide the floating pill overlay completely while keeping it interactive; click or right-click the invisible area to reveal it again",
+      "Reliable Text Output — replaced SendInput-based keystroke simulation with clipboard paste for the TypeSimulation output mode; eliminates dropped characters and repeated-character glitches on Windows, especially for longer transcriptions; clipboard is saved and restored automatically",
+      "Zero-Allocation Audio Capture — audio callback no longer allocates heap memory per frame; mono conversion and resampling happen inline directly into the shared buffer",
+      "Stack-Only Denoise — RNNoise processing now uses stack-allocated frame buffers instead of creating intermediate heap vectors, reducing GC pressure during recording",
+      "Pill Overlay Polish — toggle buttons use a consistent dark amber accent color for better visibility on light backgrounds; Ghost mode button matches the popup menu background",
+      "Fixed transcription corruption caused by style-conditioning sentences leaking into the Whisper initial prompt",
+    ],
+  },
+  {
     version: "0.1.5",
     date: "2026-03-23",
     title: "Deterministic Pipeline, Floating Pill & Context Modes",
