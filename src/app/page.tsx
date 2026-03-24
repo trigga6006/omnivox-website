@@ -8,12 +8,6 @@ import { FeatureShowcase } from "@/components/feature-showcase";
 import { PrivacySection } from "@/components/privacy-section";
 import { CTASection } from "@/components/cta-section";
 import { Footer } from "@/components/footer";
-import {
-  AsciiWaveform,
-  AsciiEqualizer,
-  AsciiMicrophone,
-} from "@/components/ascii-art";
-
 export default function Home() {
   return (
     <>
@@ -22,12 +16,9 @@ export default function Home() {
         <Hero />
         <TrustStrip />
         <FeaturesGrid />
-        <AsciiEqualizer />
         <HowItWorks />
         <SpeedComparison />
-        <AsciiWaveform />
         <FeatureShowcase />
-        <AsciiMicrophone />
         <PrivacySection />
         <CTASection />
       </main>
