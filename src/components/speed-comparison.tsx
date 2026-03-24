@@ -9,12 +9,10 @@ import { Badge } from "@/components/ui/badge";
 const SAMPLE_TEXT =
   "The quarterly report shows significant growth across all enterprise segments. Revenue increased by thirty-two percent compared to last year, driven primarily by expansion into new markets and improved customer retention rates.";
 
-const TYPING_WPM = 40;
-const VOICE_WPM = 160;
-
-// Characters per millisecond based on WPM (average 5 chars per word)
-const TYPING_CPMS = (TYPING_WPM * 5) / 60000;
-const VOICE_CPMS = (VOICE_WPM * 5) / 60000;
+// Demo-accelerated speeds — keeps the 4x ratio but finishes in ~10s
+// Voice: ~3.5s to complete, Typing: ~14s (only gets ~25% through before voice wins)
+const VOICE_CPMS = SAMPLE_TEXT.length / 3500; // ~65 chars/sec
+const TYPING_CPMS = VOICE_CPMS / 4; // 4x slower
 
 function MockDocument({
   title,
@@ -58,22 +56,60 @@ function useTypewriter(
   text: string,
   cpms: number,
   active: boolean,
-  startDelay: number = 0
+  startDelay: number = 0,
+  stuttery: boolean = false
 ) {
   const [displayed, setDisplayed] = useState("");
   const [done, setDone] = useState(false);
   const startTimeRef = useRef<number | null>(null);
   const rafRef = useRef<number>(0);
   const delayedRef = useRef(false);
+  // Pre-generate stutter pattern for consistent pauses
+  const stutterMapRef = useRef<number[]>([]);
+
+  useEffect(() => {
+    if (stuttery && stutterMapRef.current.length === 0) {
+      // Build a cumulative time array with micro-pauses every 2-4 chars
+      const map: number[] = [];
+      let t = 0;
+      let burstLen = 0;
+      const nextBurst = () => 2 + Math.floor(Math.random() * 3);
+      let burstTarget = nextBurst();
+      for (let i = 0; i < text.length; i++) {
+        t += 1 / cpms; // base ms per char
+        burstLen++;
+        if (burstLen >= burstTarget) {
+          // Add a micro-pause (80-200ms)
+          t += 80 + Math.random() * 120;
+          burstLen = 0;
+          burstTarget = nextBurst();
+        }
+        map.push(t);
+      }
+      stutterMapRef.current = map;
+    }
+  }, [stuttery, text, cpms]);
 
   const animate = useCallback(
     (timestamp: number) => {
       if (!startTimeRef.current) startTimeRef.current = timestamp;
       const elapsed = timestamp - startTimeRef.current;
-      const charCount = Math.min(
-        Math.floor(elapsed * cpms),
-        text.length
-      );
+
+      let charCount: number;
+      if (stuttery && stutterMapRef.current.length > 0) {
+        // Binary search for how many chars fit within elapsed time
+        const map = stutterMapRef.current;
+        let lo = 0, hi = map.length;
+        while (lo < hi) {
+          const mid = (lo + hi) >>> 1;
+          if (map[mid] <= elapsed) lo = mid + 1;
+          else hi = mid;
+        }
+        charCount = Math.min(lo, text.length);
+      } else {
+        charCount = Math.min(Math.floor(elapsed * cpms), text.length);
+      }
+
       setDisplayed(text.slice(0, charCount));
 
       if (charCount < text.length) {
@@ -82,7 +118,7 @@ function useTypewriter(
         setDone(true);
       }
     },
-    [text, cpms]
+    [text, cpms, stuttery]
   );
 
   useEffect(() => {
@@ -136,31 +172,30 @@ export function SpeedComparison() {
     }
   }, [isInView, started]);
 
-  const typing = useTypewriter(SAMPLE_TEXT, TYPING_CPMS, started, 0);
-  const voice = useTypewriter(SAMPLE_TEXT, VOICE_CPMS, started, 0);
+  const typing = useTypewriter(SAMPLE_TEXT, TYPING_CPMS, started, 0, true);
+  const voice = useTypewriter(SAMPLE_TEXT, VOICE_CPMS, started, 0, false);
 
-  // Calculate elapsed time for WPM display
-  const [elapsedMs, setElapsedMs] = useState(0);
-  const timerRef = useRef<ReturnType<typeof setInterval>>(undefined);
+  // Show the real WPM labels, animated up from 0
+  const [typingWpm, setTypingWpm] = useState(0);
+  const [voiceWpm, setVoiceWpm] = useState(0);
 
   useEffect(() => {
-    if (started && !voice.done) {
-      const start = Date.now();
-      timerRef.current = setInterval(() => {
-        setElapsedMs(Date.now() - start);
-      }, 100);
-      return () => clearInterval(timerRef.current);
+    if (!started) {
+      setTypingWpm(0);
+      setVoiceWpm(0);
+      return;
     }
-    if (voice.done) {
-      clearInterval(timerRef.current);
-    }
-  }, [started, voice.done]);
-
-  const elapsedMin = elapsedMs / 60000;
-  const typingWpm =
-    elapsedMin > 0 ? Math.round(typing.wordCount / elapsedMin) : 0;
-  const voiceWpm =
-    elapsedMin > 0 ? Math.round(voice.wordCount / elapsedMin) : 0;
+    // Animate WPM counters up over 800ms after start
+    const start = Date.now();
+    const raf = setInterval(() => {
+      const t = Math.min((Date.now() - start) / 800, 1);
+      const ease = t * (2 - t); // easeOut
+      setTypingWpm(Math.round(40 * ease));
+      setVoiceWpm(Math.round(160 * ease));
+      if (t >= 1) clearInterval(raf);
+    }, 30);
+    return () => clearInterval(raf);
+  }, [started]);
 
   return (
     <section ref={sectionRef} className="py-24 lg:py-32 relative overflow-hidden">
@@ -290,25 +325,27 @@ export function SpeedComparison() {
         </div>
 
         {/* Speed multiplier callout */}
-        <AnimatedDiv delay={0.3}>
+        {voice.done && (
           <motion.div
             className="mt-10 text-center"
-            initial={{ opacity: 0 }}
-            animate={voice.done ? { opacity: 1 } : {}}
-            transition={{ duration: 0.6 }}
+            initial={{ opacity: 0, scale: 0.85, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            {voice.done && (
-              <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-primary/20 bg-primary/5">
-                <span className="text-sm text-muted-foreground">
-                  Voice transcription finished
+            <div className="inline-flex items-center gap-4 px-6 py-3 rounded-full border border-primary/25 bg-primary/[0.07] shadow-lg shadow-primary/10">
+              <span className="text-sm text-muted-foreground">
+                Voice finished while typing is at{" "}
+                <span className="text-foreground/80 font-medium">
+                  {Math.round((typing.displayed.length / SAMPLE_TEXT.length) * 100)}%
                 </span>
-                <span className="font-heading font-bold text-primary text-lg">
-                  4x faster
-                </span>
-              </div>
-            )}
+              </span>
+              <div className="w-px h-5 bg-primary/20" />
+              <span className="font-heading font-bold text-primary text-xl tracking-tight">
+                4x faster
+              </span>
+            </div>
           </motion.div>
-        </AnimatedDiv>
+        )}
       </div>
     </section>
   );

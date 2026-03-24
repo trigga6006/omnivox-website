@@ -169,6 +169,58 @@
   animation: marquee 45s linear infinite;
 }
 
+/* ─── ASCII ambient animations ─────────────────────────────────────────── */
+
+@keyframes ascii-breathe {
+  0%, 100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 0.55;
+    filter: brightness(1.3);
+  }
+}
+
+@keyframes ascii-eq {
+  0%, 100% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+  30% {
+    opacity: 0.4;
+    transform: scaleY(0.92);
+  }
+  60% {
+    opacity: 0.9;
+    transform: scaleY(1.02);
+  }
+}
+
+@keyframes ascii-glow {
+  0%, 100% {
+    opacity: 1;
+    filter: brightness(1) drop-shadow(0 0 0px oklch(0.78 0.16 75 / 0));
+  }
+  50% {
+    opacity: 0.65;
+    filter: brightness(1.4) drop-shadow(0 0 6px oklch(0.78 0.16 75 / 0.25));
+  }
+}
+
+.animate-ascii-breathe {
+  animation: ascii-breathe var(--ascii-duration, 3.5s) ease-in-out var(--ascii-delay, 0s) infinite;
+}
+
+.animate-ascii-eq {
+  animation: ascii-eq var(--ascii-duration, 2s) ease-in-out var(--ascii-delay, 0s) infinite;
+  transform-origin: bottom center;
+}
+
+.animate-ascii-glow {
+  animation: ascii-glow var(--ascii-duration, 3s) ease-in-out var(--ascii-delay, 0s) infinite;
+}
+
 /* Grain texture overlay */
 body::after {
   content: "";
