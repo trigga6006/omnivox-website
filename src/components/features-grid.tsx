@@ -3,11 +3,11 @@
 import { motion } from "framer-motion";
 import {
   CloudOff,
-  Mic,
+  AudioLines,
   Keyboard,
-  Clipboard,
+  Layers,
   Rocket,
-  Zap,
+  PenLine,
   type LucideIcon,
 } from "lucide-react";
 import { AnimatedDiv } from "@/components/animated-section";
@@ -27,10 +27,10 @@ const features: Feature[] = [
       "All transcription runs locally via Whisper. No internet needed. No data leaves your device.",
   },
   {
-    icon: Mic,
-    title: "Smart Voice Detection",
+    icon: Layers,
+    title: "Context Modes",
     description:
-      "VAD auto-stops recording when you finish speaking. No manual stop required.",
+      "Create custom profiles with scoped dictionaries and snippets. Bind apps like VS Code or Slack to auto-switch modes when you focus them.",
   },
   {
     icon: Keyboard,
@@ -39,22 +39,22 @@ const features: Feature[] = [
       "Press Ctrl+Alt from anywhere to start dictating. Hold-to-record or double-tap to toggle.",
   },
   {
-    icon: Clipboard,
-    title: "Multi-Output",
+    icon: AudioLines,
+    title: "Voice Commands",
     description:
-      "Paste via clipboard, simulate keystrokes directly into any app, or use both simultaneously.",
+      "Say \"new line\", \"new paragraph\", or \"delete last word\" while dictating to control formatting with your voice.",
   },
   {
     icon: Rocket,
     title: "Ship Mode",
     description:
-      "Auto-presses Enter after transcription lands. Dictate and ship — hands-free agentic coding with zero keystrokes.",
+      "Auto-presses Enter after transcription lands. Dictate and send messages instantly in Slack, Discord, Teams, and more.",
   },
   {
-    icon: Zap,
-    title: "4 Whisper Models",
+    icon: PenLine,
+    title: "Writing Styles",
     description:
-      "Choose from Tiny, Base, Small, or Medium Whisper models. Hardware-aware recommendations for your CPU.",
+      "Choose Formal, Casual, or Very Casual output. Control capitalization, punctuation, and tone — globally or per context mode.",
   },
 ];
 

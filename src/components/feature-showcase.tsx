@@ -161,25 +161,9 @@ function ShipModeVisual() {
           </div>
         </div>
 
-        <div className="space-y-2">
-          <div className="flex items-center justify-between text-xs font-mono">
-            <span className="text-muted-foreground/60">Auto-sending...</span>
-            <span className="text-primary">1.5s</span>
-          </div>
-          <div className="h-1.5 rounded-full bg-muted overflow-hidden">
-            <motion.div
-              className="h-full rounded-full bg-gradient-to-r from-primary/80 to-primary"
-              initial={{ width: "0%" }}
-              whileInView={{ width: "100%" }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.5, ease: "linear", delay: 0.5 }}
-            />
-          </div>
-        </div>
-
         <div className="flex items-center gap-2 pt-1 text-xs font-mono text-green-400/80">
           <Check className="size-3" />
-          <span>Enter pressed — message shipped</span>
+          <span>Enter pressed — message shipped instantly</span>
         </div>
       </div>
     </MockWindow>
@@ -190,7 +174,7 @@ function ContextModesVisual() {
   return (
     <MockWindow title="omnivox — context modes">
       <div className="space-y-4">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 flex-wrap">
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/15 border border-primary/20">
             <div className="w-2 h-2 rounded-full bg-primary" />
             <span className="text-xs font-mono font-medium text-primary">
@@ -200,60 +184,50 @@ function ContextModesVisual() {
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted border border-border">
             <div className="w-2 h-2 rounded-full bg-blue-400" />
             <span className="text-xs font-mono text-muted-foreground">
-              Programming
+              Coding
+            </span>
+          </div>
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted border border-border">
+            <div className="w-2 h-2 rounded-full bg-green-400" />
+            <span className="text-xs font-mono text-muted-foreground">
+              Chat
             </span>
           </div>
         </div>
 
         <div className="border-t border-border pt-3 space-y-2.5">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono text-muted-foreground/50 uppercase tracking-wider">
-              Mode Dictionary
-            </span>
-            <span className="text-[10px] font-mono text-primary/50">
-              70+ entries
-            </span>
-          </div>
+          <span className="text-[10px] font-mono text-muted-foreground/50 uppercase tracking-wider">
+            App Bindings
+          </span>
 
-          <div className="space-y-1">
+          <div className="space-y-1.5">
             {[
-              { from: "react", to: "React" },
-              { from: "typescript", to: "TypeScript" },
-              { from: "api", to: "API" },
+              { app: "Code.exe", mode: "Coding", color: "text-blue-400" },
+              { app: "Slack.exe", mode: "Chat", color: "text-green-400" },
+              { app: "Outlook.exe", mode: "General", color: "text-primary" },
             ].map((entry) => (
               <div
-                key={entry.from}
+                key={entry.app}
                 className="flex items-center gap-2 text-xs font-mono"
               >
-                <span className="text-muted-foreground/60">{entry.from}</span>
+                <span className="text-muted-foreground/60">{entry.app}</span>
                 <span className="text-primary/40">&rarr;</span>
-                <span className="text-foreground/80">{entry.to}</span>
+                <span className={entry.color}>{entry.mode}</span>
               </div>
             ))}
-            <span className="text-[10px] text-muted-foreground/30 font-mono">
-              + 67 more...
-            </span>
           </div>
         </div>
 
         <div className="border-t border-border pt-3">
-          <div className="text-[10px] font-mono text-muted-foreground/50 uppercase tracking-wider mb-2">
-            Waveform Color
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[10px] font-mono text-muted-foreground/50 uppercase tracking-wider">
+              Auto-Switched
+            </span>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="flex items-end gap-px h-6">
-              {[40, 65, 85, 70, 50, 75, 90, 60, 45, 80, 55, 70].map(
-                (h, i) => (
-                  <div
-                    key={i}
-                    className="w-[3px] rounded-full bg-blue-400/70"
-                    style={{ height: `${h}%` }}
-                  />
-                )
-              )}
-            </div>
-            <span className="text-[10px] font-mono text-muted-foreground/50">
-              Matches active mode color
+          <div className="flex items-center gap-2 rounded-lg bg-blue-400/10 border border-blue-400/20 px-3 py-2">
+            <div className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+            <span className="text-xs font-mono text-blue-400">
+              Coding mode — VS Code detected
             </span>
           </div>
         </div>
@@ -281,14 +255,14 @@ const showcases = [
   {
     badge: "Workflow",
     icon: Activity,
-    title: "Dictation that adapts to you",
+    title: "Dictation that cleans up after itself",
     description:
-      "Voice Activity Detection automatically knows when you've finished speaking. The global hotkey works from any application. Text appears exactly where your cursor is — or on your clipboard. Your choice.",
+      "OmniVox doesn't just transcribe — it processes. Filler words are stripped, stuttered phrases are deduplicated, and lists are automatically formatted. RNNoise suppression removes background noise before Whisper even sees the audio. Voice commands let you say \"new line\" or \"delete last word\" mid-sentence.",
     highlights: [
-      "Auto-stops when you stop speaking",
-      "Works from any application via system hotkey",
-      "Choose clipboard, direct typing, or both",
-      "Floating overlay shows recording status",
+      "Filler word removal — strips \"um\", \"uh\", \"you know\", and more",
+      "RNNoise suppression removes fan noise and keyboard clicks",
+      "Smart list formatting detects and bullets enumerated items",
+      "Voice commands for line breaks, paragraphs, and word deletion",
     ],
     visual: <SmartDictationVisual />,
     reverse: true,
@@ -298,10 +272,10 @@ const showcases = [
     icon: Rocket,
     title: "Dictate it. Ship it.",
     description:
-      "Ship Mode auto-presses Enter 1.5 seconds after your transcription lands in the text field. Designed for agentic coding workflows with Claude Code, Cursor, and any chat-based tool — dictate your intent and it ships, completely hands-free.",
+      "Ship Mode automatically presses Enter after your transcription lands, sending your message instantly. Built for chat-based workflows — Slack, Discord, Teams, Claude Code, Cursor — dictate your intent and it ships, completely hands-free.",
     highlights: [
-      "Auto-sends 1.5s after transcription completes",
-      "Built for agentic coding with Claude Code & Cursor",
+      "Auto-presses Enter after transcription completes",
+      "Perfect for Slack, Discord, Teams, and agentic coding tools",
       "Works with TypeSimulation and Both output modes",
       "Toggle instantly from the floating pill or settings",
     ],
@@ -311,14 +285,14 @@ const showcases = [
   {
     badge: "Context Modes",
     icon: Layers,
-    title: "Switch profiles, switch vocabulary",
+    title: "Your apps, your vocabulary",
     description:
-      "Context Modes let you switch between General and Programming profiles — each with its own scoped dictionary and snippets. Programming mode ships with 70+ entries for languages, frameworks, and tools. The floating pill changes color to match your active mode.",
+      "Create custom context modes with their own dictionaries, snippets, and writing styles. Bind applications like VS Code, Slack, or Outlook to specific modes — OmniVox detects the focused app and switches automatically. If an app has no binding, it falls back to General mode so you're never stuck.",
     highlights: [
-      "General and Programming modes with scoped dictionaries",
-      "70+ built-in programming terms (React, TypeScript, API, etc.)",
-      "Mode-specific snippets for shebangs, comment markers, and more",
-      "Waveform color reflects active mode — amber, blue, and beyond",
+      "Bind apps to modes — auto-switches when you change windows",
+      "Per-mode dictionaries, snippets, and writing style overrides",
+      "Falls back to General mode for unbound applications",
+      "Create unlimited custom modes with unique icons and colors",
     ],
     visual: <ContextModesVisual />,
     reverse: true,

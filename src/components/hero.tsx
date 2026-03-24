@@ -166,8 +166,8 @@ export function Hero() {
                 className="mt-5 text-muted-foreground text-base sm:text-lg max-w-md leading-relaxed"
               >
                 OmniVox transcribes speech to text entirely on your device using
-                Whisper AI. No internet required. No data ever leaves your
-                computer.
+                Whisper AI. Smart text processing, voice commands, context modes
+                that switch per app — all local, all private.
               </motion.p>
 
               <motion.div

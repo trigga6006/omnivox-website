@@ -23,9 +23,9 @@ const steps = [
   {
     number: "03",
     icon: Type,
-    title: "Text appears",
+    title: "Clean text appears",
     description:
-      "Your words are transcribed locally and inserted right where your cursor is.",
+      "Your words are transcribed, cleaned up — filler words stripped, lists formatted — and inserted right where your cursor is.",
   },
 ];
 

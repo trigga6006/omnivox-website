@@ -9,6 +9,9 @@ const items = [
   "100% LOCAL",
   "GPU ACCELERATED",
   "WHISPER POWERED",
+  "VOICE COMMANDS",
+  "NOISE SUPPRESSION",
+  "CONTEXT MODES",
 ];
 
 export function TrustStrip() {
