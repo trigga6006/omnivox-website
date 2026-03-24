@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Syne, Outfit } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 const syne = Syne({
@@ -41,6 +42,7 @@ export default function RootLayout({
     <html lang="en" className={`${syne.variable} ${outfit.variable} dark`}>
       <body className="min-h-screen bg-background text-foreground overflow-x-hidden">
         {children}
+        <Analytics />
       </body>
     </html>
   );
