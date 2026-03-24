@@ -27,6 +27,9 @@ export const metadata: Metadata = {
     "windows",
     "transcription",
   ],
+  icons: {
+    icon: "/logo.svg",
+  },
 };
 
 export default function RootLayout({
