@@ -10,6 +10,28 @@ export const metadata: Metadata = {
 
 const changelog = [
   {
+    version: "0.1.7",
+    date: "2026-03-25",
+    title: "Command Send, Mode Creation & Toast Overhaul",
+    changes: [
+      "Command Send voice command — say \"send\" at the end of your dictation to press Enter and submit; works independently from Ship Mode so you control exactly when messages go out",
+      "Command Send toggle in Settings — new sub-slider within the Voice Commands section lets you enable or disable the \"send\" command independently from other voice commands",
+      "View Commands modal now lists all four voice commands including \"send\"",
+      "Ship button right-click popup — right-click the Rocket button in the floating pill's quick-toggle menu to open a compact Command Send toggle popup; quickly switch between auto-sending everything (Ship Mode) and only sending when you say \"send\"",
+      "New mode creation now includes dictionary, snippets, and app bindings — creating a new context mode transitions directly into edit mode so you can immediately configure everything without re-opening the mode",
+      "Enhanced toast notification system — toasts now support multiple concurrent notifications, auto-dismiss timers, and different severity levels (info, success, warning, error)",
+      "Smoother floating pill popup animation — the Command Send popup uses CSS opacity and scale transitions instead of window resizing for a flicker-free open/close",
+      "Ship button right-click no longer toggles Ship Mode — right-clicking the Rocket button only opens the popup menu; left-click still toggles Ship Mode as before",
+      "Floating pill overlay pre-allocates popup width — the overlay window reserves space for the popup when the mode selector opens, eliminating flash/jump artifacts",
+      "Fixed \"New Mode\" button alignment — the button in the Context Modes header now aligns to the top of the title block instead of floating mid-way",
+      "Unified placeholder text — dictionary inputs now consistently use \"Heard as…\" / \"Replace with…\" and snippet inputs use \"Word…\" / \"Expands to…\" across both the global dictionary page and mode-scoped editors",
+      "Cross-platform error handling — improved error types with platform-specific variants for better debugging on macOS and Linux",
+      "Hotkey system overhaul — refactored hotkey registration for improved reliability",
+      "Fixed OOM crash on 16 GB laptops — reduced memory usage during dictation to prevent out-of-memory crashes on systems with 16 GB RAM",
+      "Fixed output router Send command — the Send voice command now correctly presses Enter via the output router when using Type Simulation or Both output modes",
+    ],
+  },
+  {
     version: "0.1.6",
     date: "2026-03-24",
     title: "Voice Commands, Writing Styles & Ghost Mode",
