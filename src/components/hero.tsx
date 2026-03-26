@@ -8,33 +8,49 @@ import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
-// ─── Flowing text stream that wraps around the waveform ─────────────────────
+// ─── Flowing text stream — luminous arcs of dictated text ────────────────────
 
-const FLOW_TEXT =
-  "the quarterly report shows significant growth across all enterprise segments revenue increased by thirty-two percent compared to last year we need to schedule a follow-up meeting with the product team to discuss the roadmap for next quarter please send the updated proposal to the client by end of day ";
+const FLOW_PRIMARY =
+  "the quarterly report shows significant growth across all enterprise segments · revenue increased by thirty-two percent compared to last year · we need to schedule a follow-up meeting with the product team to discuss the roadmap for next quarter · please send the updated proposal to the client by end of day · ";
 
-const CHAR_WIDTH = 7.8; // approx width per char at fontSize 13 in SVG units
-const TEXT_PX = FLOW_TEXT.length * CHAR_WIDTH;
+const FLOW_SECONDARY =
+  "remind me to call sarah about the partnership agreement tomorrow · draft a summary of today's standup and share it with the engineering channel · schedule a demo with the new client for next wednesday afternoon · ";
+
+const PRI_CW = 12.2; // char width at fontSize 20 + letterSpacing
+const SEC_CW = 9.8; // char width at fontSize 16 + letterSpacing
+const PRI_LEN = FLOW_PRIMARY.length * PRI_CW;
+const SEC_LEN = FLOW_SECONDARY.length * SEC_CW;
 
 function FlowingTextStream() {
-  const t1 = useRef<SVGTextPathElement>(null);
-  const t2 = useRef<SVGTextPathElement>(null);
+  const p1 = useRef<SVGTextPathElement>(null);
+  const p2 = useRef<SVGTextPathElement>(null);
+  const s1 = useRef<SVGTextPathElement>(null);
+  const s2 = useRef<SVGTextPathElement>(null);
   const raf = useRef(0);
   const [show, setShow] = useState(false);
 
   useEffect(() => {
     setShow(true);
-    let offset = 0;
+    let offP = 0;
+    let offS = 0;
     let prev = 0;
 
     const tick = (time: number) => {
       if (!prev) prev = time;
-      offset -= 55 * (time - prev) / 1000; // 55 SVG-units/s
+      const dt = (time - prev) / 1000;
       prev = time;
-      if (offset < -TEXT_PX) offset += TEXT_PX;
 
-      t1.current?.setAttribute("startOffset", String(offset));
-      t2.current?.setAttribute("startOffset", String(offset + TEXT_PX));
+      offP -= 42 * dt; // primary speed
+      offS -= 56 * dt; // secondary — slightly faster for parallax
+
+      if (offP < -PRI_LEN) offP += PRI_LEN;
+      if (offS < -SEC_LEN) offS += SEC_LEN;
+
+      p1.current?.setAttribute("startOffset", String(offP));
+      p2.current?.setAttribute("startOffset", String(offP + PRI_LEN));
+      s1.current?.setAttribute("startOffset", String(offS));
+      s2.current?.setAttribute("startOffset", String(offS + SEC_LEN));
+
       raf.current = requestAnimationFrame(tick);
     };
 
@@ -53,51 +69,82 @@ function FlowingTextStream() {
       style={{ pointerEvents: "none", overflow: "visible" }}
     >
       <defs>
-        {/* Curve: enters upper-left of waveform, passes through center (behind bars), exits lower-right */}
+        {/* Primary arc — sweeps from upper-left down through center to lower-right */}
         <path
-          id="flowCurve"
-          d="M -300 20 C 0 60 300 170 700 200 C 1100 230 1400 340 1700 380"
+          id="flowArc1"
+          d="M -500 -60 C 0 60 300 340 700 380 C 1100 420 1400 240 1900 60"
           fill="none"
         />
-        {/* Vertical gradient: grey above → gold/primary below (transition hidden behind bars) */}
-        <linearGradient
-          id="flowGrad"
-          x1="0"
-          y1="0"
-          x2="0"
-          y2="400"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop offset="0%" stopColor="#7a7774" stopOpacity="0" />
-          <stop offset="12%" stopColor="#7a7774" stopOpacity="0.28" />
-          <stop offset="38%" stopColor="#7a7774" stopOpacity="0.35" />
-          <stop offset="50%" stopColor="#9a8a50" stopOpacity="0.25" />
-          <stop offset="62%" stopColor="#d9a730" stopOpacity="0.45" />
-          <stop offset="80%" stopColor="#d9a730" stopOpacity="0.6" />
-          <stop offset="100%" stopColor="#d9a730" stopOpacity="0" />
-        </linearGradient>
+        {/* Secondary arc — counter-curve, lower-left up through center to upper-right */}
+        <path
+          id="flowArc2"
+          d="M -400 440 C 0 280 350 40 700 -10 C 1050 -60 1400 160 1900 380"
+          fill="none"
+        />
+
+        {/* Warm glow filter — blurs then composites over crisp text */}
+        <filter id="flowGlow" x="-15%" y="-40%" width="130%" height="180%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
       </defs>
 
-      <text
-        fill="url(#flowGrad)"
-        fontSize="13"
-        fontFamily="var(--font-geist-mono), ui-monospace, monospace"
-        letterSpacing="0.02em"
-      >
-        <textPath ref={t1} href="#flowCurve">
-          {FLOW_TEXT}
-        </textPath>
-      </text>
-      <text
-        fill="url(#flowGrad)"
-        fontSize="13"
-        fontFamily="var(--font-geist-mono), ui-monospace, monospace"
-        letterSpacing="0.02em"
-      >
-        <textPath ref={t2} href="#flowCurve">
-          {FLOW_TEXT}
-        </textPath>
-      </text>
+      {/* ── Primary layer — warm cream, large text, glowing ── */}
+      <g filter="url(#flowGlow)">
+        <animate
+          attributeName="opacity"
+          values="0.5;0.7;0.5"
+          dur="8s"
+          repeatCount="indefinite"
+        />
+        <text
+          fill="#e8dfd0"
+          fontSize="20"
+          fontFamily="var(--font-geist-mono), ui-monospace, monospace"
+          letterSpacing="0.04em"
+        >
+          <textPath ref={p1} href="#flowArc1">
+            {FLOW_PRIMARY}
+          </textPath>
+        </text>
+        <text
+          fill="#e8dfd0"
+          fontSize="20"
+          fontFamily="var(--font-geist-mono), ui-monospace, monospace"
+          letterSpacing="0.04em"
+        >
+          <textPath ref={p2} href="#flowArc1">
+            {FLOW_PRIMARY}
+          </textPath>
+        </text>
+      </g>
+
+      {/* ── Secondary layer — soft gold, smaller, subtler ── */}
+      <g opacity="0.35">
+        <text
+          fill="#c9b07a"
+          fontSize="16"
+          fontFamily="var(--font-geist-mono), ui-monospace, monospace"
+          letterSpacing="0.03em"
+        >
+          <textPath ref={s1} href="#flowArc2">
+            {FLOW_SECONDARY}
+          </textPath>
+        </text>
+        <text
+          fill="#c9b07a"
+          fontSize="16"
+          fontFamily="var(--font-geist-mono), ui-monospace, monospace"
+          letterSpacing="0.03em"
+        >
+          <textPath ref={s2} href="#flowArc2">
+            {FLOW_SECONDARY}
+          </textPath>
+        </text>
+      </g>
     </svg>
   );
 }
