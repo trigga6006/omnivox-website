@@ -72,7 +72,7 @@ function FlowingTextStream() {
         {/* Primary arc — sweeps from upper-left down through center to lower-right */}
         <path
           id="flowArc1"
-          d="M -500 -60 C 0 60 300 340 700 380 C 1100 420 1400 240 1900 60"
+          d="M -500 -40 C 0 40 300 220 700 270 C 1100 320 1400 200 1900 20"
           fill="none"
         />
         {/* Secondary arc — counter-curve, lower-left up through center to upper-right */}
