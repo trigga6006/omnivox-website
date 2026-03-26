@@ -62,7 +62,7 @@ function FlowingTextStream() {
 
   return (
     <svg
-      className="absolute inset-0 w-full h-full hidden md:block z-[1]"
+      className="absolute inset-0 w-full h-full z-[1]"
       viewBox="0 0 1400 400"
       preserveAspectRatio="xMidYMid slice"
       aria-hidden="true"
