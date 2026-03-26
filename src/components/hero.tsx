@@ -11,10 +11,10 @@ import { cn } from "@/lib/utils";
 // ─── Flowing text stream — luminous arcs of dictated text ────────────────────
 
 const FLOW_PRIMARY =
-  "the quarterly report shows significant growth across all enterprise segments · revenue increased by thirty-two percent compared to last year · we need to schedule a follow-up meeting with the product team to discuss the roadmap for next quarter · please send the updated proposal to the client by end of day · ";
+  "ok claude lets refactor this hook into a custom composable and add proper error boundaries · can you center these divs and fix the padding on mobile · I need you to write a unit test for the auth middleware before we merge · hey grab the response type from that API endpoint and make it generic · ";
 
 const FLOW_SECONDARY =
-  "remind me to call sarah about the partnership agreement tomorrow · draft a summary of today's standup and share it with the engineering channel · schedule a demo with the new client for next wednesday afternoon · ";
+  "move this logic into a server action and cache the result · add a loading skeleton to the dashboard while the query resolves · pull the latest from main and rebase our feature branch on top · why is this useEffect firing twice on mount · ";
 
 const PRI_CW = 12.2; // char width at fontSize 20 + letterSpacing
 const SEC_CW = 9.8; // char width at fontSize 16 + letterSpacing
