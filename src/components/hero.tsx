@@ -272,11 +272,11 @@ const fadeUp = {
 
 export function Hero() {
   return (
-    <section className="relative min-h-screen flex flex-col pt-20 overflow-hidden">
+    <section className="relative flex flex-col pt-20 overflow-hidden lg:min-h-screen">
       {/* Editorial two-column content */}
-      <div className="flex-1 flex items-start lg:items-center pt-8 lg:pt-0">
-        <div className="max-w-7xl mx-auto px-6 w-full py-10 lg:py-0">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+      <div className="flex-1 flex items-start lg:items-center pt-2 lg:pt-0">
+        <div className="max-w-7xl mx-auto px-6 w-full py-4 lg:py-0">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-16">
             {/* Left: Headline + Subtitle + CTAs */}
             <motion.div
               variants={staggerContainer}
