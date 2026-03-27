@@ -143,7 +143,7 @@ export function UseCasesSection() {
     >
       <div
         className="rounded-[32px] px-6 py-20 md:px-16"
-        style={{ backgroundColor: "rgb(26, 26, 26)", minHeight: "50rem" }}
+        style={{ backgroundColor: "var(--section-dark-bg)", minHeight: "50rem" }}
       >
         {/* Heading */}
         <h2
@@ -171,7 +171,7 @@ export function UseCasesSection() {
                   isActive
                     ? {
                         backgroundColor: "#F0D7FF",
-                        color: "rgb(26, 26, 26)",
+                        color: "#1a1a1a",
                         fontWeight: 600,
                         border: "1px solid transparent",
                       }
@@ -226,8 +226,8 @@ export function UseCasesSection() {
                 className="inline-flex items-center gap-2 rounded-xl px-6 py-3.5 text-base font-semibold"
                 style={{
                   backgroundColor: "#F0D7FF",
-                  color: "rgb(26, 26, 26)",
-                  border: "2px solid rgb(26, 26, 26)",
+                  color: "#1a1a1a",
+                  border: "2px solid #1a1a1a",
                 }}
               >
                 Download for Windows

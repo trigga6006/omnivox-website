@@ -126,7 +126,7 @@ function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
     <div
       className="flex-shrink-0 flex flex-col items-center rounded-2xl p-8"
       style={{
-        backgroundColor: "#FFFFEB",
+        backgroundColor: "var(--section-light-bg)",
         width: 368,
         minHeight: 250,
       }}
@@ -146,7 +146,7 @@ function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
         className="text-center leading-6 mt-4 mb-4"
         style={{
           fontSize: 16,
-          color: "#1A1A1A",
+          color: "var(--foreground)",
         }}
       >
         &ldquo;{testimonial.quote}&rdquo;
@@ -154,11 +154,11 @@ function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
       <div className="mt-auto text-center">
         <p
           className="font-semibold"
-          style={{ fontSize: 14, color: "#1A1A1A" }}
+          style={{ fontSize: 14, color: "var(--foreground)" }}
         >
           {testimonial.name}
         </p>
-        <p style={{ fontSize: 14, color: "rgba(26, 26, 26, 0.6)" }}>
+        <p style={{ fontSize: 14, color: "var(--muted-foreground)" }}>
           {testimonial.title}
         </p>
       </div>
@@ -170,7 +170,7 @@ function CaseStudyCard({ study }: { study: CaseStudy }) {
   return (
     <div
       className="relative rounded-3xl p-10"
-      style={{ backgroundColor: "#034F46" }}
+      style={{ backgroundColor: "var(--section-green-bg)" }}
     >
       <div className="absolute top-6 right-6">
         <ArrowUpRight
@@ -246,7 +246,7 @@ function SparkleLines() {
             bottom: line.bottom,
             width: 2,
             height: line.height,
-            backgroundColor: "#034F46",
+            backgroundColor: "var(--section-green-bg)",
             transform: `rotate(${line.rotate}deg)`,
           }}
         />
@@ -262,7 +262,7 @@ export function TestimonialsSection() {
     <section
       className="overflow-hidden"
       style={{
-        backgroundColor: "#1A1A1A",
+        backgroundColor: "var(--section-dark-bg)",
         borderRadius: "32px 32px 0 0",
         padding: "80px 24px",
       }}

@@ -8,7 +8,7 @@ const NAV_LINKS = ["Product", "Individuals", "Business", "Resources"] as const;
 export function Navigation() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-[999] pt-[65px]">
-      <div className="mx-auto max-w-[1360px] flex items-center justify-between border-b border-cream-dark bg-cream/95 px-6 py-2.5 backdrop-blur-sm">
+      <div className="mx-auto max-w-[1360px] flex items-center justify-between px-6 py-2.5 backdrop-blur-sm" style={{ backgroundColor: "var(--nav-bg)", borderBottom: "1px solid var(--nav-border)" }}>
         {/* Logo */}
         <Link href="/" className="shrink-0">
           <Image
@@ -26,7 +26,8 @@ export function Navigation() {
             <Link
               key={label}
               href="#"
-              className="text-base font-medium text-dark transition-opacity hover:opacity-70"
+              className="text-base font-medium transition-opacity hover:opacity-70"
+              style={{ color: "var(--foreground)" }}
             >
               {label}
             </Link>
@@ -38,7 +39,8 @@ export function Navigation() {
           {/* Flow for Android */}
           <Link
             href="#"
-            className="rounded-xl border-2 border-dark bg-transparent px-5 py-2.5 text-base font-semibold text-dark transition-colors hover:bg-dark/5"
+            className="rounded-xl border-2 bg-transparent px-5 py-2.5 text-base font-semibold transition-colors hover:opacity-80"
+            style={{ borderColor: "var(--foreground)", color: "var(--foreground)" }}
           >
             Flow for Android
           </Link>
@@ -46,7 +48,8 @@ export function Navigation() {
           {/* Download for Windows */}
           <Link
             href="#"
-            className="flex items-center gap-2 rounded-xl border-2 border-dark bg-purple px-5 py-2.5 text-base font-semibold text-dark transition-colors hover:bg-purple/80"
+            className="flex items-center gap-2 rounded-xl border-2 px-5 py-2.5 text-base font-semibold transition-colors hover:opacity-80"
+            style={{ borderColor: "var(--foreground)", backgroundColor: "var(--purple)", color: "var(--foreground)" }}
           >
             <WindowsIcon />
             Download for Windows
@@ -68,7 +71,7 @@ export function Navigation() {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="text-dark"
+            style={{ color: "var(--foreground)" }}
           >
             <line x1="3" y1="6" x2="21" y2="6" />
             <line x1="3" y1="12" x2="21" y2="12" />

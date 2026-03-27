@@ -9,10 +9,11 @@ import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { CTASection } from "@/components/CTASection";
 import { AskAISection } from "@/components/AskAISection";
 import { Footer } from "@/components/Footer";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function Home() {
   return (
-    <main className="bg-cream">
+    <main className="bg-background text-foreground transition-colors duration-300">
       <AnnouncementBar />
       <Navigation />
       <HeroSection />
@@ -24,6 +25,7 @@ export default function Home() {
       <CTASection />
       <AskAISection />
       <Footer />
+      <ThemeToggle />
     </main>
   );
 }

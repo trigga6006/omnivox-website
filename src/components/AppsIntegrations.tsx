@@ -298,7 +298,7 @@ export function AppsIntegrations() {
       <div
         className="w-full px-4 pb-0 pt-16 sm:px-6 lg:px-8"
         style={{
-          backgroundColor: "#034F46",
+          backgroundColor: "var(--section-green-bg)",
           borderRadius: "32px 32px 0 0",
         }}
       >
@@ -306,7 +306,7 @@ export function AppsIntegrations() {
         <div
           className="w-full overflow-hidden"
           style={{
-            backgroundColor: "#1A1A1A",
+            backgroundColor: "var(--section-dark-bg)",
             borderRadius: "32px 32px 0 0",
           }}
         >
@@ -373,7 +373,7 @@ export function AppsIntegrations() {
           <div
             className="mt-16 w-full px-6 py-16 sm:px-8 lg:mt-20 lg:px-12"
             style={{
-              backgroundColor: "#034F46",
+              backgroundColor: "var(--section-green-bg)",
               borderRadius: "32px 32px 0 0",
             }}
           >

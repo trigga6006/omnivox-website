@@ -2,7 +2,7 @@ export function HeroSection() {
   return (
     <section
       className="relative overflow-hidden"
-      style={{ backgroundColor: "#FFFFEB" }}
+      style={{ backgroundColor: "var(--section-light-bg)" }}
     >
       {/* Main content */}
       <div className="relative z-10 mx-auto max-w-[1200px] px-6 pt-40 pb-4 text-center">
@@ -10,13 +10,13 @@ export function HeroSection() {
         <h1 className="font-heading mx-auto" style={{ textWrap: "balance" }}>
           <span
             className="block text-[48px] leading-[0.85em] font-normal md:text-[72px] lg:text-[120px]"
-            style={{ color: "rgba(26, 26, 26, 0.3)" }}
+            style={{ color: "color-mix(in srgb, var(--foreground) 30%, transparent)" }}
           >
             Don&apos;t type,
           </span>
           <span
             className="block text-[48px] leading-[0.85em] font-bold italic md:text-[72px] lg:text-[120px]"
-            style={{ color: "rgb(26, 26, 26)" }}
+            style={{ color: "var(--foreground)" }}
           >
             just speak
           </span>
@@ -25,7 +25,7 @@ export function HeroSection() {
         {/* Subtitle */}
         <p
           className="font-sans mx-auto mt-6 mb-8 max-w-[500px] text-xl leading-7 font-normal"
-          style={{ color: "#333333" }}
+          style={{ color: "var(--dark-secondary)" }}
         >
           The voice-to-text AI that turns speech into clear, polished writing in
           every app.
@@ -36,9 +36,9 @@ export function HeroSection() {
           href="#download"
           className="inline-flex items-center gap-2 rounded-xl border-2 px-8 py-4 text-base font-semibold transition-colors hover:opacity-90"
           style={{
-            backgroundColor: "#F0D7FF",
-            borderColor: "rgb(26, 26, 26)",
-            color: "rgb(26, 26, 26)",
+            backgroundColor: "var(--purple)",
+            borderColor: "var(--foreground)",
+            color: "var(--foreground)",
           }}
         >
           <svg
@@ -59,7 +59,7 @@ export function HeroSection() {
         {/* Availability text */}
         <p
           className="mt-4 text-sm"
-          style={{ color: "rgba(26, 26, 26, 0.5)" }}
+          style={{ color: "var(--muted-foreground)" }}
         >
           Available on Mac, Windows, iPhone, and Android
         </p>
@@ -85,7 +85,7 @@ export function HeroSection() {
                 #marquee-text-left {
                   font-size: 16px;
                   font-weight: 400;
-                  fill: #1A1A1A;
+                  fill: var(--foreground);
                   opacity: 0.25;
                   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
                 }
@@ -129,7 +129,7 @@ export function HeroSection() {
           {/* "Removed repetition" pill */}
           <span
             className="mb-3 inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium"
-            style={{ backgroundColor: "#034F46" }}
+            style={{ backgroundColor: "var(--section-green-bg)" }}
           >
             <svg
               width="14"
@@ -149,32 +149,46 @@ export function HeroSection() {
             <span style={{ color: "#F97316" }}>Removed repetition</span>
           </span>
 
-          {/* Waveform pill */}
+          {/* Waveform pill — bars animate to simulate live audio */}
           <div
             className="flex items-center justify-center rounded-full border"
             style={{
               width: 155,
               height: 57,
-              backgroundColor: "#FFFFEB",
-              borderColor: "rgba(26,26,26,0.15)",
+              backgroundColor: "var(--color-cream, #FFFFEB)",
+              borderColor: "var(--border)",
             }}
           >
-            {/* Waveform bars */}
             <div className="flex items-center gap-[3px]">
-              {[14, 20, 8, 24, 6, 18, 10, 26, 8, 20, 14, 6, 22, 10, 16].map(
-                (h, i) => (
-                  <div
-                    key={i}
-                    className="rounded-full"
-                    style={{
-                      width: 3,
-                      height: h,
-                      backgroundColor: "#1A1A1A",
-                      opacity: 0.6,
-                    }}
-                  />
-                )
-              )}
+              {[
+                { base: 14, delay: 0 },
+                { base: 20, delay: 0.15 },
+                { base: 8, delay: 0.3 },
+                { base: 24, delay: 0.05 },
+                { base: 6, delay: 0.45 },
+                { base: 18, delay: 0.2 },
+                { base: 10, delay: 0.55 },
+                { base: 26, delay: 0.1 },
+                { base: 8, delay: 0.4 },
+                { base: 20, delay: 0.25 },
+                { base: 14, delay: 0.35 },
+                { base: 6, delay: 0.5 },
+                { base: 22, delay: 0.08 },
+                { base: 10, delay: 0.42 },
+                { base: 16, delay: 0.18 },
+              ].map((bar, i) => (
+                <div
+                  key={i}
+                  className="animate-waveform rounded-full"
+                  style={{
+                    width: 3,
+                    height: bar.base,
+                    backgroundColor: "var(--color-dark, #1A1A1A)",
+                    opacity: 0.6,
+                    animationDelay: `${bar.delay}s`,
+                  }}
+                />
+              ))}
             </div>
           </div>
         </div>
@@ -203,7 +217,7 @@ export function HeroSection() {
             <path
               id="curve-right-bg"
               d="M2.04309 563.872C111.592 558.268 316.491 554.016 517.963 490.064C703.017 431.323 875.319 444.531 1021.88 453.216"
-              stroke="#1A1A1A"
+              stroke="var(--section-dark-bg)"
               strokeWidth="48"
               strokeLinecap="round"
               fill="none"

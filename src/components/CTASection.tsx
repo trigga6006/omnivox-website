@@ -34,14 +34,14 @@ export function CTASection() {
       </div>
 
       {/* Heading */}
-      <h2 className="font-heading text-cream text-center font-normal leading-none"
-        style={{ fontSize: "clamp(48px, 10vw, 96px)" }}
+      <h2 className="font-heading text-center font-normal leading-none"
+        style={{ color: "#ffffeb", fontSize: "clamp(48px, 10vw, 96px)" }}
       >
         Start flowing
       </h2>
 
       {/* Subtitle */}
-      <p className="mt-6 text-center text-lg leading-7 text-cream-muted max-w-[520px]">
+      <p className="mt-6 text-center text-lg leading-7 max-w-[520px]" style={{ color: "rgba(255, 255, 235, 0.7)" }}>
         Effortless voice dictation in every application: 4x faster than typing, AI commands and auto-edits.
       </p>
 
@@ -49,20 +49,22 @@ export function CTASection() {
       <div className="flex gap-3 justify-center mt-8 flex-wrap">
         <a
           href="#"
-          className="rounded-xl border-2 border-cream bg-transparent px-7 py-3.5 text-base font-medium text-cream transition-colors hover:bg-cream/10"
+          className="rounded-xl border-2 bg-transparent px-7 py-3.5 text-base font-medium transition-colors hover:opacity-80"
+          style={{ borderColor: "#ffffeb", color: "#ffffeb" }}
         >
           Try Flow
         </a>
         <a
           href="#"
-          className="rounded-xl border-2 border-dark bg-purple px-7 py-3.5 text-base font-medium text-dark transition-colors hover:bg-purple/80"
+          className="rounded-xl border-2 px-7 py-3.5 text-base font-medium transition-colors hover:opacity-80"
+          style={{ borderColor: "#1a1a1a", backgroundColor: "#F0D7FF", color: "#1a1a1a" }}
         >
           Download for Windows
         </a>
       </div>
 
       {/* Availability text */}
-      <p className="mt-4 text-sm text-cream-faint text-center">
+      <p className="mt-4 text-sm text-center" style={{ color: "rgba(255, 255, 235, 0.5)" }}>
         Available on Mac, Windows, iPhone, and Android
       </p>
     </section>

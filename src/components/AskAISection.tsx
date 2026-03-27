@@ -1,7 +1,7 @@
 export function AskAISection() {
   return (
-    <section className="bg-cream px-6 py-20">
-      <div className="relative mx-auto max-w-[1200px] rounded-3xl border-2 border-dark p-10 md:p-16 overflow-hidden">
+    <section className="px-6 py-20" style={{ backgroundColor: "var(--section-light-bg)" }}>
+      <div className="relative mx-auto max-w-[1200px] rounded-3xl border-2 p-10 md:p-16 overflow-hidden" style={{ borderColor: "var(--foreground)" }}>
         {/* Decorative illustration placeholder - coral/orange shape on the right */}
         <div
           className="absolute -right-5 -top-10 hidden md:block"
@@ -13,7 +13,7 @@ export function AskAISection() {
             <div className="absolute top-2 left-10 size-[60px] rounded-full bg-[#E8825A]/60" />
             <div className="absolute top-0 right-4 size-[50px] rounded-full border-4 border-[#E8825A]/70 bg-transparent" />
             {/* Speech bubble */}
-            <div className="absolute -top-2 right-0 rounded-lg bg-white px-3 py-1 text-xs font-bold text-dark shadow-sm">
+            <div className="absolute -top-2 right-0 rounded-lg px-3 py-1 text-xs font-bold shadow-sm" style={{ backgroundColor: "var(--section-light-bg)", color: "var(--foreground)" }}>
               eee
             </div>
           </div>
@@ -22,17 +22,17 @@ export function AskAISection() {
         {/* Content */}
         <div className="relative z-10 max-w-2xl">
           {/* Heading */}
-          <h2 className="font-sans text-[28px] font-bold uppercase leading-tight tracking-tight text-dark md:text-[32px]"
-            style={{ letterSpacing: "-0.5px" }}
+          <h2 className="font-sans text-[28px] font-bold uppercase leading-tight tracking-tight md:text-[32px]"
+            style={{ color: "var(--foreground)", letterSpacing: "-0.5px" }}
           >
             Still not sure that Wispr Flow is right for you?
           </h2>
 
           {/* Subtitle */}
-          <p className="mt-4 text-lg text-[#333]">
+          <p className="mt-4 text-lg" style={{ color: "var(--dark-secondary)" }}>
             Let ChatGPT, Claude, or Perplexity do the thinking for you.
           </p>
-          <p className="mt-2 text-lg text-[#333]">
+          <p className="mt-2 text-lg" style={{ color: "var(--dark-secondary)" }}>
             Click a button and see what your favorite AI says about Wispr Flow.
           </p>
 
@@ -41,7 +41,7 @@ export function AskAISection() {
             {/* Ask ChatGPT */}
             <a
               href="#"
-              className="inline-flex items-center gap-2 rounded-xl border-2 border-dark bg-purple px-6 py-3 text-base font-semibold text-dark transition-colors hover:bg-purple/80"
+              className="inline-flex items-center gap-2 rounded-xl border-2 px-6 py-3 text-base font-semibold transition-colors hover:opacity-80" style={{ borderColor: "var(--foreground)", backgroundColor: "var(--purple)", color: "var(--foreground)" }}
             >
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
                 <circle cx="9" cy="9" r="8" stroke="currentColor" strokeWidth="1.5" fill="none" />
@@ -53,7 +53,7 @@ export function AskAISection() {
             {/* Ask Claude */}
             <a
               href="#"
-              className="inline-flex items-center gap-2 rounded-xl border-2 border-dark bg-purple px-6 py-3 text-base font-semibold text-dark transition-colors hover:bg-purple/80"
+              className="inline-flex items-center gap-2 rounded-xl border-2 px-6 py-3 text-base font-semibold transition-colors hover:opacity-80" style={{ borderColor: "var(--foreground)", backgroundColor: "var(--purple)", color: "var(--foreground)" }}
             >
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
                 <path d="M9 1 L11 7 L17 9 L11 11 L9 17 L7 11 L1 9 L7 7 Z" fill="currentColor" />
@@ -64,7 +64,7 @@ export function AskAISection() {
             {/* Ask Perplexity */}
             <a
               href="#"
-              className="inline-flex items-center gap-2 rounded-xl border-2 border-dark bg-purple px-6 py-3 text-base font-semibold text-dark transition-colors hover:bg-purple/80"
+              className="inline-flex items-center gap-2 rounded-xl border-2 px-6 py-3 text-base font-semibold transition-colors hover:opacity-80" style={{ borderColor: "var(--foreground)", backgroundColor: "var(--purple)", color: "var(--foreground)" }}
             >
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
                 <circle cx="9" cy="9" r="3" fill="currentColor" />

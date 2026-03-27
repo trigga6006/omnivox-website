@@ -23,9 +23,9 @@ function AIAutoEditsSection() {
     <section className="mx-auto w-full max-w-[1280px] px-6 py-20 md:py-28">
       <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[1.2fr_0.8fr]">
         {/* Left — Demo Card */}
-        <div className="relative overflow-hidden rounded-3xl bg-[#1A1A1A] p-6 md:p-8">
+        <div className="relative overflow-hidden rounded-3xl p-6 md:p-8" style={{ backgroundColor: "var(--section-dark-bg)" }}>
           {/* Dark top half — messy dictation */}
-          <div className="relative mb-6 rounded-2xl bg-gradient-to-br from-[#2A2018] to-[#1A1A1A] p-6">
+          <div className="relative mb-6 rounded-2xl p-6" style={{ background: "linear-gradient(to bottom right, #2A2018, var(--section-dark-bg))" }}>
             <p className="text-[15px] leading-relaxed text-[#FFFBEB]/70">
               So um let&apos;s reach out to Jenny from Legal she may have
               mentioned the NDA isn&apos;t finalized yet or possibly already sent
@@ -42,8 +42,8 @@ function AIAutoEditsSection() {
           </div>
 
           {/* Bottom — clean output */}
-          <div className="rounded-2xl bg-[#FFFBF0] p-6">
-            <p className="text-[15px] leading-relaxed text-[#333]">
+          <div className="rounded-2xl p-6" style={{ backgroundColor: "var(--section-light-bg)" }}>
+            <p className="text-[15px] leading-relaxed" style={{ color: "var(--dark-secondary)" }}>
               Let&apos;s reach out to Jenny from Legal&mdash;she may have
               mentioned the NDA isn&apos;t finalized yet, or possibly already
               sent it. Let&apos;s also CC Dave. Finally, make sure the Q2 Goals
@@ -52,7 +52,7 @@ function AIAutoEditsSection() {
             </p>
 
             {/* Toolbar */}
-            <div className="mt-4 flex items-center gap-1 border-t border-[#E5E2D9] pt-3">
+            <div className="mt-4 flex items-center gap-1 pt-3" style={{ borderTop: "1px solid var(--border)" }}>
               <ToolbarButton>
                 <Bold className="size-4" />
               </ToolbarButton>
@@ -77,7 +77,8 @@ function AIAutoEditsSection() {
               <div className="flex-1" />
               <button
                 type="button"
-                className="flex size-8 items-center justify-center rounded-full bg-[#FFA946] text-[#1A1A1A] transition-colors hover:bg-[#FF9B2E]"
+                className="flex size-8 items-center justify-center rounded-full transition-colors hover:opacity-80"
+                style={{ backgroundColor: "var(--orange)", color: "#1A1A1A" }}
               >
                 <ArrowRight className="size-4" />
               </button>
@@ -88,14 +89,14 @@ function AIAutoEditsSection() {
         {/* Right — Text */}
         <div className="flex flex-col gap-6">
           <div>
-            <span className="mb-1 block text-xs font-medium tracking-widest text-[#999] uppercase">
+            <span className="mb-1 block text-xs font-medium tracking-widest uppercase" style={{ color: "var(--muted-foreground)" }}>
               AI
             </span>
-            <h2 className="font-heading text-5xl font-normal leading-tight text-[#1A1A1A]">
+            <h2 className="font-heading text-5xl font-normal leading-tight" style={{ color: "var(--foreground)" }}>
               Auto Edits
             </h2>
           </div>
-          <p className="max-w-md text-lg leading-7 text-[#333]">
+          <p className="max-w-md text-lg leading-7" style={{ color: "var(--dark-secondary)" }}>
             Speak naturally and Flow transcribes and edits your voice, instantly.
             Rambled thoughts become clear, perfectly formatted text, without the
             filler words or typos.
@@ -103,13 +104,15 @@ function AIAutoEditsSection() {
           <div className="flex flex-wrap items-center gap-3">
             <a
               href="#"
-              className="inline-flex items-center rounded-full border border-[#1A1A1A] px-6 py-2.5 text-sm font-medium text-[#1A1A1A] transition-colors hover:bg-[#1A1A1A] hover:text-[#FFFBF0]"
+              className="inline-flex items-center rounded-full px-6 py-2.5 text-sm font-medium transition-colors hover:opacity-80"
+              style={{ border: "1px solid var(--foreground)", color: "var(--foreground)" }}
             >
               Try Flow
             </a>
             <a
               href="#"
-              className="inline-flex items-center rounded-full bg-[#7C3AED] px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#6D28D9]"
+              className="inline-flex items-center rounded-full px-6 py-2.5 text-sm font-medium transition-colors hover:opacity-80"
+              style={{ backgroundColor: "var(--purple)", color: "var(--foreground)" }}
             >
               Download for Windows
             </a>
@@ -124,7 +127,8 @@ function ToolbarButton({ children }: { children: React.ReactNode }) {
   return (
     <button
       type="button"
-      className="flex size-8 items-center justify-center rounded-lg text-[#999] transition-colors hover:bg-[#F0EDE4] hover:text-[#333]"
+      className="flex size-8 items-center justify-center rounded-lg transition-colors hover:opacity-70"
+      style={{ color: "var(--muted-foreground)" }}
     >
       {children}
     </button>
@@ -151,7 +155,7 @@ function PersonalDictionaryCard() {
       title="Personal dictionary"
       subtitle="Flow automatically learns your unique words and adds them to your personal dictionary."
     >
-      <div className="rounded-3xl bg-[#1A1A1A] p-6 md:p-8">
+      <div className="rounded-3xl p-6 md:p-8" style={{ backgroundColor: "var(--section-dark-bg)" }}>
         <div className="mb-4 flex items-center justify-between">
           <span className="text-base font-semibold text-[#FFFBEB]">
             Your Dictionary
@@ -194,7 +198,7 @@ function SnippetLibraryCard() {
       title="Snippet library"
       subtitle="Create voice shortcuts for the things your team says over and over. From scheduling links to FAQs, just speak a cue and get the full formatted text."
     >
-      <div className="rounded-3xl bg-[#1A1A1A] p-6 md:p-8">
+      <div className="rounded-3xl p-6 md:p-8" style={{ backgroundColor: "var(--section-dark-bg)" }}>
         <div className="mb-4 flex items-center justify-between">
           <span className="text-base font-semibold text-[#FFFBEB]">
             Your Snippets
@@ -238,7 +242,8 @@ function DifferentTonesCard() {
       title="Different tones for each app"
       subtitle="Flow automatically adjusts tone based on the app you're using. Sound like you—not a robot."
     >
-      <div className="relative flex min-h-[320px] flex-col items-center rounded-3xl bg-[#1A1A1A] p-6 md:p-8">
+      <div className="relative flex min-h-[320px] flex-col items-center rounded-3xl p-6 md:p-8"
+          style={{ backgroundColor: "var(--section-dark-bg)" }}>
         {/* Top — pill with waveform */}
         <div className="mb-8 flex items-center gap-2 rounded-full border border-[rgba(255,255,235,0.15)] bg-[#2A2A2A] px-4 py-2">
           <Mic className="size-4 text-[#FFFBEB]" />
@@ -341,7 +346,8 @@ function LanguagesCard() {
       title="100+ languages"
       subtitle="Flow automatically detects and transcribes in your language, letting you move between them—just like you do."
     >
-      <div className="relative flex min-h-[320px] items-center justify-center rounded-3xl bg-[#1A1A1A] p-6 md:p-8">
+      <div className="relative flex min-h-[320px] items-center justify-center rounded-3xl p-6 md:p-8"
+          style={{ backgroundColor: "var(--section-dark-bg)" }}>
         {/* Center label */}
         <span className="z-10 text-base font-semibold text-[#FFFBEB]">
           100+ Languages
@@ -379,10 +385,10 @@ function FeatureCard({
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h3 className="font-heading text-4xl font-normal leading-tight text-[#1A1A1A]">
+        <h3 className="font-heading text-4xl font-normal leading-tight" style={{ color: "var(--foreground)" }}>
           {title}
         </h3>
-        <p className="mt-2 max-w-md text-base leading-relaxed text-[#333]">
+        <p className="mt-2 max-w-md text-base leading-relaxed" style={{ color: "var(--dark-secondary)" }}>
           {subtitle}
         </p>
       </div>
@@ -421,24 +427,26 @@ function OnTheGoSection() {
             {platforms.map((platform) => (
               <span
                 key={platform}
-                className="inline-flex items-center rounded-full border border-[#E5E2D9] bg-white px-4 py-1.5 text-sm font-medium text-[#333]"
+                className="inline-flex items-center rounded-full px-4 py-1.5 text-sm font-medium"
+                style={{ border: "1px solid var(--border)", backgroundColor: "var(--section-light-bg)", color: "var(--dark-secondary)" }}
               >
                 {platform}
               </span>
             ))}
           </div>
 
-          <h2 className="font-heading text-5xl font-normal leading-tight text-[#1A1A1A] md:text-6xl lg:text-[64px]">
+          <h2 className="font-heading text-5xl font-normal leading-tight md:text-6xl lg:text-[64px]" style={{ color: "var(--foreground)" }}>
             On-the-go or at your desk
           </h2>
-          <p className="max-w-lg text-lg leading-7 text-[#333]">
+          <p className="max-w-lg text-lg leading-7" style={{ color: "var(--dark-secondary)" }}>
             Flow is the only voice-to-text tool that works on any app or device,
             with your personal dictionary, style, and settings synced everywhere.
           </p>
           <div>
             <a
               href="#"
-              className="inline-flex items-center rounded-full bg-[#7C3AED] px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#6D28D9]"
+              className="inline-flex items-center rounded-full px-6 py-2.5 text-sm font-medium transition-colors hover:opacity-80"
+              style={{ backgroundColor: "var(--purple)", color: "var(--foreground)" }}
             >
               Download for Windows
             </a>
@@ -448,7 +456,7 @@ function OnTheGoSection() {
         {/* Right — Device mockups */}
         <div className="relative flex items-center justify-center">
           {/* Desktop mockup */}
-          <div className="relative z-0 w-full max-w-[520px] overflow-hidden rounded-2xl bg-[#1A1A1A] shadow-2xl">
+          <div className="relative z-0 w-full max-w-[520px] overflow-hidden rounded-2xl shadow-2xl" style={{ backgroundColor: "var(--section-dark-bg)" }}>
             <div className="flex items-center gap-2 border-b border-white/10 px-4 py-3">
               <div className="size-3 rounded-full bg-[#FF5F57]" />
               <div className="size-3 rounded-full bg-[#FEBC2E]" />
@@ -469,7 +477,7 @@ function OnTheGoSection() {
           </div>
 
           {/* Phone mockup */}
-          <div className="absolute -bottom-4 -left-4 z-10 w-[180px] overflow-hidden rounded-2xl bg-[#1A1A1A] shadow-2xl ring-1 ring-white/10 md:-bottom-8 md:left-4">
+          <div className="absolute -bottom-4 -left-4 z-10 w-[180px] overflow-hidden rounded-2xl shadow-2xl ring-1 ring-white/10 md:-bottom-8 md:left-4" style={{ backgroundColor: "var(--section-dark-bg)" }}>
             <div className="flex items-center justify-center border-b border-white/10 px-3 py-2">
               <div className="h-1 w-12 rounded-full bg-white/20" />
             </div>
@@ -500,7 +508,7 @@ function OnTheGoSection() {
 
 export function FeaturesGrid() {
   return (
-    <div className="bg-[#FFFBF0]">
+    <div style={{ backgroundColor: "var(--section-light-bg)" }}>
       <AIAutoEditsSection />
       <FeaturesGridSection />
       <OnTheGoSection />

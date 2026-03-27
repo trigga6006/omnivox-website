@@ -1,22 +1,22 @@
 export function SpeedSection() {
   return (
-    <section className="bg-cream px-6 py-20">
+    <section className="px-6 py-20" style={{ backgroundColor: "var(--section-light-bg)" }}>
       <div className="mx-auto max-w-[1200px] text-center">
         {/* Heading */}
-        <h2 className="font-heading text-[48px] leading-[48px] font-normal text-dark md:text-[72px] md:leading-[68px] lg:text-[120px] lg:leading-[102px]">
+        <h2 className="font-heading text-[48px] leading-[48px] font-normal md:text-[72px] md:leading-[68px] lg:text-[120px] lg:leading-[102px]" style={{ color: "var(--foreground)" }}>
           <span className="relative inline-block">
             4x faster
             <span
               aria-hidden="true"
               className="absolute bottom-0 left-0 h-1 w-full rounded-full"
-              style={{ backgroundColor: "rgba(240, 215, 255, 0.6)" }}
+              style={{ backgroundColor: "color-mix(in srgb, var(--purple) 60%, transparent)" }}
             />
           </span>{" "}
           than typing
         </h2>
 
         {/* Body text */}
-        <p className="mx-auto mt-6 mb-8 max-w-[680px] text-lg leading-7 text-body">
+        <p className="mx-auto mt-6 mb-8 max-w-[680px] text-lg leading-7" style={{ color: "var(--dark-secondary)" }}>
           After 150 years of using the same keyboard, voice that actually works
           is <em>finally</em> here. When you create, code, and respond faster,
           you free up time for more. Speak naturally at the speed you think and
@@ -27,7 +27,8 @@ export function SpeedSection() {
         <div className="mb-12 flex flex-wrap items-center justify-center gap-3">
           <button
             type="button"
-            className="flex items-center gap-2 rounded-xl border-2 border-dark bg-transparent px-7 py-3.5 text-base font-semibold text-dark transition-colors hover:bg-dark hover:text-cream"
+            className="flex items-center gap-2 rounded-xl border-2 bg-transparent px-7 py-3.5 text-base font-semibold transition-colors hover:opacity-80"
+            style={{ borderColor: "var(--foreground)", color: "var(--foreground)" }}
           >
             <svg
               width="16"
@@ -51,7 +52,8 @@ export function SpeedSection() {
 
           <button
             type="button"
-            className="flex items-center gap-2 rounded-xl border-2 border-dark bg-purple px-7 py-3.5 text-base font-semibold text-dark transition-colors hover:brightness-95"
+            className="flex items-center gap-2 rounded-xl border-2 px-7 py-3.5 text-base font-semibold transition-colors hover:brightness-95"
+            style={{ borderColor: "var(--foreground)", backgroundColor: "var(--purple)", color: "var(--foreground)" }}
           >
             <svg
               width="16"
@@ -73,12 +75,12 @@ export function SpeedSection() {
         {/* Comparison cards */}
         <div className="mx-auto grid max-w-[1100px] grid-cols-1 gap-4 md:grid-cols-[1fr_2.5fr]">
           {/* Keyboard card */}
-          <div className="overflow-hidden rounded-3xl border-[1.5px] border-cream-dark p-8 text-left">
-            <p className="text-sm font-medium text-dark/50">Keyboard</p>
-            <p className="font-heading mt-2 text-5xl font-normal italic text-dark">
+          <div className="overflow-hidden rounded-3xl border-[1.5px] p-8 text-left" style={{ borderColor: "var(--border)" }}>
+            <p className="text-sm font-medium" style={{ color: "var(--muted-foreground)" }}>Keyboard</p>
+            <p className="font-heading mt-2 text-5xl font-normal italic" style={{ color: "var(--foreground)" }}>
               45 wpm
             </p>
-            <p className="mt-4 max-h-24 overflow-hidden text-sm leading-relaxed text-dark/40">
+            <p className="mt-4 max-h-24 overflow-hidden text-sm leading-relaxed" style={{ color: "var(--muted-foreground)" }}>
               I&apos;m getting started with the project, How would you like to
               set up the file. Here are a few options.
             </p>

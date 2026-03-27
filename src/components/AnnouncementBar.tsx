@@ -1,7 +1,7 @@
 export function AnnouncementBar() {
   return (
-    <div className="flex items-center justify-center gap-2 bg-green px-5 py-[22px] text-center">
-      <p className="font-sans text-base leading-normal text-cream">
+    <div className="flex items-center justify-center gap-2 px-5 py-[22px] text-center" style={{ backgroundColor: "var(--section-green-bg)" }}>
+      <p className="font-sans text-base leading-normal" style={{ color: "#ffffeb" }}>
         <span className="font-semibold">Now live on Android</span>
         {" — free & unlimited during launch "}
         <a

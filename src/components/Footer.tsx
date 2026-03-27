@@ -33,13 +33,14 @@ function FooterLinkColumn({
 }) {
   return (
     <div>
-      <h3 className="font-heading text-2xl text-dark-faint">{title}</h3>
+      <h3 className="font-heading text-2xl" style={{ color: "var(--muted-foreground)" }}>{title}</h3>
       <ul className="mt-4">
         {links.map((link) => (
           <li key={link.label}>
             <Link
               href={link.href}
-              className="text-base text-dark leading-9 no-underline hover:underline"
+              className="text-base leading-9 no-underline hover:underline"
+              style={{ color: "var(--foreground)" }}
             >
               {link.label}
             </Link>
@@ -58,8 +59,8 @@ function FlowSoundwaveLogo() {
       {barHeights.map((h, i) => (
         <div
           key={i}
-          className="w-[20px] rounded-full bg-dark md:w-[28px] lg:w-[36px]"
-          style={{ height: `${h * 3}px` }}
+          className="w-[20px] rounded-full md:w-[28px] lg:w-[36px]"
+          style={{ backgroundColor: "var(--foreground)", height: `${h * 3}px` }}
         />
       ))}
     </div>
@@ -109,7 +110,7 @@ function LinkedInIcon() {
 
 export function Footer() {
   return (
-    <footer className="bg-cream">
+    <footer style={{ backgroundColor: "var(--section-light-bg)" }}>
       <div className="mx-auto max-w-[1360px] px-6 pt-20 pb-10">
         {/* Links Grid */}
         <div className="grid grid-cols-1 gap-12 md:grid-cols-3 md:gap-12">
@@ -122,17 +123,17 @@ export function Footer() {
         <div className="mt-16 flex items-end gap-4 overflow-hidden md:gap-8">
           <FlowSoundwaveLogo />
           <span
-            className="font-sans text-dark font-bold leading-none tracking-tighter"
-            style={{ fontSize: "clamp(120px, 20vw, 300px)" }}
+            className="font-sans font-bold leading-none tracking-tighter"
+            style={{ color: "var(--foreground)", fontSize: "clamp(120px, 20vw, 300px)" }}
           >
             Flow
           </span>
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-10 flex flex-col items-start justify-between gap-6 border-t border-border-cream pt-6 md:flex-row md:items-center">
+        <div className="mt-10 flex flex-col items-start justify-between gap-6 pt-6 md:flex-row md:items-center" style={{ borderTop: "1px solid var(--border)" }}>
           {/* Left: copyright + legal links */}
-          <div className="flex flex-wrap items-center gap-4 text-sm text-dark-muted">
+          <div className="flex flex-wrap items-center gap-4 text-sm" style={{ color: "var(--muted-foreground)" }}>
             <span>&copy; Wispr Flow 2026</span>
             <Link href="/terms" className="hover:underline">
               Terms
@@ -158,7 +159,8 @@ export function Footer() {
                 key={social.label}
                 href={social.href}
                 aria-label={social.label}
-                className="text-dark opacity-50 transition-opacity hover:opacity-100"
+                className="opacity-50 transition-opacity hover:opacity-100"
+                style={{ color: "var(--foreground)" }}
               >
                 {social.icon}
               </a>
