@@ -266,12 +266,12 @@ export function HeroSection() {
 
       {/* === Hero Animation === */}
       <div
-        className="relative mx-auto mt-6 flex items-end justify-center lg:mt-2"
-        style={{ height: 300, maxWidth: 1440 }}
+        className="relative mt-6 flex w-full items-end justify-center lg:mt-2"
+        style={{ height: 300 }}
       >
         {/* Left SVG — messy text trail */}
-        <div className="flex-1 overflow-visible" aria-hidden="true">
-          <svg id="hero-svg-left" viewBox="0 0 1048 594" width="100%" height="auto" style={{ overflow: "visible" }} preserveAspectRatio="xMidYMid meet">
+        <div className="absolute inset-y-0 left-0 w-1/2 overflow-visible" aria-hidden="true">
+          <svg id="hero-svg-left" viewBox="0 0 1048 594" width="100%" height="100%" style={{ overflow: "visible" }} preserveAspectRatio="xMinYMid meet">
             <defs><style>{`#marquee-text-left { font-size: 16px; font-weight: 400; fill: var(--foreground); opacity: 0.25; font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif; }`}</style></defs>
             <path id="curve-left" d="M0.597656 50.924805C17.4612 143.2965 97.8522 293.141 284.508 353.548C440.828 399.056 583.839 294.067 500.618 184.7492C417.397 75.4309 238.217 282.098 499.258 441.668C551.913 477.802 817.468 561.26 1046.43 565.235" stroke="transparent" fill="none" />
             <text x="-3300">
@@ -389,8 +389,8 @@ export function HeroSection() {
         </div>
 
         {/* Right SVG — clean text trail */}
-        <div className="flex-1 overflow-visible" aria-hidden="true">
-          <svg id="hero-svg-right" viewBox="0 0 1024 620" width="100%" height="auto" style={{ overflow: "visible" }} preserveAspectRatio="xMidYMid meet">
+        <div className="absolute inset-y-0 right-0 w-1/2 overflow-visible" aria-hidden="true">
+          <svg id="hero-svg-right" viewBox="0 0 1024 620" width="100%" height="100%" style={{ overflow: "visible" }} preserveAspectRatio="xMaxYMid meet">
             <defs><style>{`#marquee-text-right { font-size: 16px; font-weight: 600; fill: #FFFFEB; font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif; }`}</style></defs>
             <path id="curve-right-bg" d="M2.04309 563.872C111.592 558.268 316.491 554.016 517.963 490.064C703.017 431.323 875.319 444.531 1021.88 453.216" stroke="var(--section-dark-bg)" strokeWidth="48" strokeLinecap="round" fill="none" />
             <path id="curve-right" d="M2.04309 563.872C111.592 558.268 316.491 554.016 517.963 490.064C703.017 431.323 875.319 444.531 1021.88 453.216" stroke="transparent" fill="none" />
