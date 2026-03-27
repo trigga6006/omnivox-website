@@ -1,74 +1,132 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+/**
+ * OmniVox-style 16-bar waveform — bell-curve weighted, center bars peak higher.
+ * Idle: flat muted bars. Active: amber bars animate with staggered timing.
+ */
+const BAR_COUNT = 16;
+const WEIGHTS = [
+  0.25, 0.35, 0.48, 0.6, 0.72, 0.84, 0.92, 1.0, 1.0, 0.92, 0.84, 0.72, 0.6,
+  0.48, 0.35, 0.25,
+];
+const PHASE_OFFSETS = [
+  0, 0.15, 0.05, 0.22, 0.1, 0.28, 0.08, 0.18, 0.12, 0.25, 0.06, 0.2, 0.14,
+  0.03, 0.24, 0.09,
+];
+
+function PillWaveform() {
+  const [level, setLevel] = useState(0);
+
+  useEffect(() => {
+    // Simulate organic audio levels
+    let frame: number;
+    const animate = () => {
+      setLevel(0.3 + Math.sin(Date.now() / 400) * 0.25 + Math.sin(Date.now() / 170) * 0.15);
+      frame = requestAnimationFrame(animate);
+    };
+    frame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
+  return (
+    <div className="flex items-center justify-center" style={{ gap: 3, height: 28 }}>
+      {Array.from({ length: BAR_COUNT }, (_, i) => {
+        const weight = WEIGHTS[i];
+        const phase = PHASE_OFFSETS[i];
+        const h = 3 + Math.min(1, level * weight + phase * level * 0.5) * 25;
+        return (
+          <div
+            key={i}
+            className="rounded-full"
+            style={{
+              width: 3,
+              height: h,
+              backgroundColor: "#E8B546",
+              transition: "height 100ms ease-out",
+            }}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
 export function HeroSection() {
   return (
     <section
       className="relative overflow-hidden"
       style={{ backgroundColor: "var(--section-light-bg)" }}
     >
-      {/* Main content */}
-      <div className="relative z-10 mx-auto max-w-[1200px] px-6 pt-40 pb-4 text-center">
-        {/* Heading */}
-        <h1 className="font-heading mx-auto" style={{ textWrap: "balance" }}>
+      {/* Main content — vertically centered in the viewport-minus-nav space */}
+      <div className="relative z-10 mx-auto max-w-[1200px] px-6 pt-32 text-center lg:pt-36">
+        {/* Heading — single line with generous letter-spacing */}
+        <h1 className="font-heading mx-auto text-[44px] leading-[1em] tracking-[-0.02em] font-normal md:text-[72px] lg:text-[110px]">
           <span
-            className="block text-[48px] leading-[0.85em] font-normal md:text-[72px] lg:text-[120px]"
-            style={{ color: "color-mix(in srgb, var(--foreground) 30%, transparent)" }}
+            style={{
+              color: "color-mix(in srgb, var(--foreground) 30%, transparent)",
+            }}
           >
-            Don&apos;t type,
+            Don&apos;t type,{" "}
           </span>
           <span
-            className="block text-[48px] leading-[0.85em] font-bold italic md:text-[72px] lg:text-[120px]"
+            className="font-bold italic"
             style={{ color: "var(--foreground)" }}
           >
             just speak
           </span>
         </h1>
 
-        {/* Subtitle */}
+        {/* Subtitle — tighter coupling to heading */}
         <p
-          className="font-sans mx-auto mt-6 mb-8 max-w-[500px] text-xl leading-7 font-normal"
+          className="font-sans mx-auto mt-6 max-w-[520px] text-lg leading-relaxed font-normal md:text-xl"
           style={{ color: "var(--dark-secondary)" }}
         >
           The voice-to-text AI that turns speech into clear, polished writing in
           every app.
         </p>
 
-        {/* CTA Button */}
-        <a
-          href="#download"
-          className="inline-flex items-center gap-2 rounded-xl border-2 px-8 py-4 text-base font-semibold transition-colors hover:opacity-90"
-          style={{
-            backgroundColor: "var(--purple)",
-            borderColor: "var(--foreground)",
-            color: "var(--foreground)",
-          }}
-        >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-            fill="none"
-            aria-hidden="true"
+        {/* CTA Button — breathing room above and below */}
+        <div className="mt-8">
+          <a
+            href="#download"
+            className="inline-flex items-center gap-2.5 rounded-xl border-2 px-7 py-3.5 text-[15px] font-semibold transition-all hover:opacity-90"
+            style={{
+              backgroundColor: "var(--purple)",
+              borderColor: "var(--foreground)",
+              color: "var(--foreground)",
+            }}
           >
-            <rect x="0" y="0" width="7" height="7" fill="currentColor" />
-            <rect x="9" y="0" width="7" height="7" fill="currentColor" />
-            <rect x="0" y="9" width="7" height="7" fill="currentColor" />
-            <rect x="9" y="9" width="7" height="7" fill="currentColor" />
-          </svg>
-          Download for Windows
-        </a>
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 16 16"
+              fill="none"
+              aria-hidden="true"
+            >
+              <rect x="0" y="0" width="7" height="7" fill="currentColor" />
+              <rect x="9" y="0" width="7" height="7" fill="currentColor" />
+              <rect x="0" y="9" width="7" height="7" fill="currentColor" />
+              <rect x="9" y="9" width="7" height="7" fill="currentColor" />
+            </svg>
+            Download for Windows
+          </a>
+        </div>
 
         {/* Availability text */}
         <p
-          className="mt-4 text-sm"
+          className="mt-3 text-[13px] tracking-wide"
           style={{ color: "var(--muted-foreground)" }}
         >
           Available on Mac, Windows, iPhone, and Android
         </p>
       </div>
 
-      {/* === Hero Animation: SVG text-on-path with center pill === */}
+      {/* === Hero Animation: SVG text trails + OmniVox-style floating pill === */}
       <div
-        className="relative mx-auto flex items-end justify-center"
-        style={{ height: 430, maxWidth: 1440 }}
+        className="relative mx-auto mt-6 flex items-end justify-center lg:mt-2"
+        style={{ height: 300, maxWidth: 1440 }}
       >
         {/* Left SVG — messy/unedited text flowing along a curved path */}
         <div className="flex-1 overflow-visible" aria-hidden="true">
@@ -121,79 +179,74 @@ export function HeroSection() {
           </svg>
         </div>
 
-        {/* Center: transcription pill with waveform */}
+        {/* Center: OmniVox-style glass-morphic floating pill */}
         <div
           className="absolute z-10 flex flex-col items-center"
-          style={{ bottom: 10, left: "50%", transform: "translateX(-50%)" }}
+          style={{ bottom: 16, left: "50%", transform: "translateX(-50%)" }}
         >
-          {/* "Removed repetition" pill */}
+          {/* "Removed repetition" tag above pill */}
           <span
-            className="mb-3 inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium"
+            className="mb-3 inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold tracking-wide"
             style={{ backgroundColor: "var(--section-green-bg)" }}
           >
             <svg
-              width="14"
-              height="14"
+              width="12"
+              height="12"
               viewBox="0 0 14 14"
               fill="none"
               aria-hidden="true"
             >
               <path
                 d="M2 7L5.5 10.5L12 3.5"
-                stroke="#F97316"
+                stroke="#E8B546"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
             </svg>
-            <span style={{ color: "#F97316" }}>Removed repetition</span>
+            <span style={{ color: "#E8B546" }}>Removed repetition</span>
           </span>
 
-          {/* Waveform pill — bars animate to simulate live audio */}
+          {/* Floating pill — OmniVox glass morphism style */}
           <div
-            className="flex items-center justify-center rounded-full border"
+            className="flex items-center gap-3 rounded-full px-5"
             style={{
-              width: 155,
-              height: 57,
-              backgroundColor: "var(--color-cream, #FFFFEB)",
-              borderColor: "var(--border)",
+              height: 48,
+              minWidth: 280,
+              background: "rgba(18, 16, 14, 0.72)",
+              backdropFilter: "blur(24px) saturate(1.5)",
+              WebkitBackdropFilter: "blur(24px) saturate(1.5)",
+              boxShadow: "0 4px 30px rgba(0,0,0,0.35)",
+              border: "1px solid rgba(255,255,255,0.08)",
             }}
           >
-            <div className="flex items-center gap-[3px]">
-              {[
-                { base: 14, delay: 0 },
-                { base: 20, delay: 0.15 },
-                { base: 8, delay: 0.3 },
-                { base: 24, delay: 0.05 },
-                { base: 6, delay: 0.45 },
-                { base: 18, delay: 0.2 },
-                { base: 10, delay: 0.55 },
-                { base: 26, delay: 0.1 },
-                { base: 8, delay: 0.4 },
-                { base: 20, delay: 0.25 },
-                { base: 14, delay: 0.35 },
-                { base: 6, delay: 0.5 },
-                { base: 22, delay: 0.08 },
-                { base: 10, delay: 0.42 },
-                { base: 16, delay: 0.18 },
-              ].map((bar, i) => (
-                <div
-                  key={i}
-                  className="animate-waveform rounded-full"
-                  style={{
-                    width: 3,
-                    height: bar.base,
-                    backgroundColor: "var(--color-dark, #1A1A1A)",
-                    opacity: 0.6,
-                    animationDelay: `${bar.delay}s`,
-                  }}
-                />
-              ))}
+            {/* Left: brand mark */}
+            <span
+              className="shrink-0 text-sm font-semibold tracking-wider"
+              style={{ color: "rgba(255,255,235,0.5)" }}
+            >
+              OV
+            </span>
+
+            {/* Center: animated waveform */}
+            <div className="flex-1 flex items-center justify-center">
+              <PillWaveform />
+            </div>
+
+            {/* Right: recording indicator dot */}
+            <div className="shrink-0 flex items-center justify-center">
+              <span
+                className="block h-2.5 w-2.5 rounded-full"
+                style={{
+                  backgroundColor: "#E8B546",
+                  boxShadow: "0 0 8px rgba(232,181,70,0.4)",
+                }}
+              />
             </div>
           </div>
         </div>
 
-        {/* Right SVG — clean/edited text flowing along a different curved path */}
+        {/* Right SVG — clean/edited text flowing along a curved path */}
         <div className="flex-1 overflow-visible" aria-hidden="true">
           <svg
             id="hero-svg-right"
@@ -213,7 +266,6 @@ export function HeroSection() {
                 }
               `}</style>
             </defs>
-            {/* Dark background band along the path */}
             <path
               id="curve-right-bg"
               d="M2.04309 563.872C111.592 558.268 316.491 554.016 517.963 490.064C703.017 431.323 875.319 444.531 1021.88 453.216"
