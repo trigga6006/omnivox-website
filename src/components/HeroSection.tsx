@@ -61,14 +61,13 @@ function PillWaveform({ active }: { active: boolean }) {
 }
 
 /* ─── Pill state types ─── */
-type PillState = "idle" | "recording" | "processing" | "success";
+type PillState = "idle" | "recording" | "processing";
 
 /* ─── Auto-cycle demo sequence ─── */
 const DEMO_SEQUENCE: { state: PillState; duration: number }[] = [
   { state: "idle", duration: 4000 },
-  { state: "recording", duration: 5000 },
+  { state: "recording", duration: 5500 },
   { state: "processing", duration: 2500 },
-  { state: "success", duration: 2500 },
 ];
 
 function formatDuration(ms: number) {
@@ -78,57 +77,112 @@ function formatDuration(ms: number) {
   return `${m}:${sec.toString().padStart(2, "0")}`;
 }
 
-/* ─── Popup menu items ─── */
-const MENU_ITEMS = [
-  { icon: "mic", label: "Start Recording", shortcut: "Alt+V" },
-  { icon: "globe", label: "Language", shortcut: "English" },
-  { icon: "history", label: "History", shortcut: "" },
-  { icon: "sliders", label: "Settings", shortcut: "" },
-  { icon: "info", label: "About OmniVox", shortcut: "" },
+/* ─── OmniVox App UI (miniature replica of real app) ─── */
+const NAV_ITEMS = [
+  { id: "mic", label: "Dictation", active: true },
+  { id: "clock", label: "History", active: false },
+  { id: "book", label: "Dictionary", active: false },
+  { id: "download", label: "Models", active: false },
+  { id: "settings", label: "Settings", active: false },
 ];
 
-function MenuIcon({ name }: { name: string }) {
-  const icons: Record<string, React.ReactNode> = {
-    mic: (
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="9" y="2" width="6" height="11" rx="3" />
-        <path d="M5 10a7 7 0 0 0 14 0" /><line x1="12" y1="19" x2="12" y2="22" />
-      </svg>
-    ),
-    globe: (
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" />
-        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-      </svg>
-    ),
-    history: (
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
-      </svg>
-    ),
-    sliders: (
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <line x1="4" y1="21" x2="4" y2="14" /><line x1="4" y1="10" x2="4" y2="3" />
-        <line x1="12" y1="21" x2="12" y2="12" /><line x1="12" y1="8" x2="12" y2="3" />
-        <line x1="20" y1="21" x2="20" y2="16" /><line x1="20" y1="12" x2="20" y2="3" />
-        <line x1="1" y1="14" x2="7" y2="14" /><line x1="9" y1="8" x2="15" y2="8" />
-        <line x1="17" y1="16" x2="23" y2="16" />
-      </svg>
-    ),
-    info: (
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" />
-      </svg>
-    ),
-  };
-  return <>{icons[name]}</>;
+function NavIcon({ id }: { id: string }) {
+  const p = { width: 16, height: 16, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.75, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
+  switch (id) {
+    case "mic": return <svg {...p}><rect x="9" y="2" width="6" height="11" rx="3" /><path d="M5 10a7 7 0 0 0 14 0" /><line x1="12" y1="19" x2="12" y2="22" /></svg>;
+    case "clock": return <svg {...p}><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>;
+    case "book": return <svg {...p}><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></svg>;
+    case "download": return <svg {...p}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>;
+    case "settings": return <svg {...p}><circle cx="12" cy="12" r="3" /><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" /></svg>;
+    default: return null;
+  }
+}
+
+function AppPopup({ pillState }: { pillState: PillState }) {
+  const isIdle = pillState === "idle";
+  const isRecording = pillState === "recording";
+  const isProcessing = pillState === "processing";
+
+  return (
+    <div className="flex overflow-hidden rounded-xl" style={{
+      width: 320, height: 240,
+      background: "oklch(0.11 0.006 60)",
+      border: "1px solid rgba(255,255,255,0.06)",
+      boxShadow: "0 12px 48px rgba(0,0,0,0.6)",
+    }}>
+      {/* Sidebar */}
+      <div className="flex w-[44px] shrink-0 flex-col items-center border-r py-3" style={{ borderColor: "rgba(255,255,255,0.06)", background: "oklch(0.11 0.006 60)" }}>
+        <span className="text-[10px] font-bold tracking-wider select-none" style={{ color: "#E8B546" }}>OV</span>
+        <div className="my-2 h-px w-5" style={{ background: "rgba(255,255,255,0.08)" }} />
+        <nav className="flex flex-1 flex-col items-center gap-0.5">
+          {NAV_ITEMS.map((item) => (
+            <div key={item.id} className="relative flex h-7 w-7 items-center justify-center rounded-lg" style={{ color: item.active ? "#E8B546" : "rgba(255,255,235,0.3)" }}>
+              {item.active && <span className="absolute left-0 top-1/2 h-3.5 w-[2px] -translate-y-1/2 rounded-r-full" style={{ background: "#E8B546" }} />}
+              <NavIcon id={item.id} />
+            </div>
+          ))}
+        </nav>
+      </div>
+
+      {/* Main content — Dictation panel */}
+      <div className="flex flex-1 flex-col items-center justify-center px-4" style={{
+        background: "radial-gradient(ellipse at 50% 80%, oklch(0.14 0.015 55) 0%, oklch(0.11 0.006 60) 60%)",
+      }}>
+        {/* Status headline */}
+        <p className="text-[11px] font-medium tracking-wide" style={{
+          fontFamily: "'Instrument Serif', Georgia, serif",
+          color: isRecording ? "#E8B546" : isProcessing ? "rgba(255,255,235,0.5)" : "rgba(255,255,235,0.8)",
+        }}>
+          {isIdle && "Ready to listen"}
+          {isRecording && "Listening..."}
+          {isProcessing && "Transcribing..."}
+        </p>
+        <p className="mt-0.5 text-[9px]" style={{ color: "rgba(255,255,235,0.25)" }}>
+          {isIdle && "Ctrl + Win to begin"}
+          {isRecording && "Speak now — press again to stop"}
+          {isProcessing && "Processing your audio..."}
+        </p>
+
+        {/* Record button */}
+        <div className="relative mt-4 flex items-center justify-center">
+          {isRecording && <span className="absolute inset-[-4px] rounded-full" style={{ background: "rgba(180,50,40,0.15)", animation: "pulse 2s ease-in-out infinite" }} />}
+          {isProcessing && (
+            <svg className="absolute h-[52px] w-[52px]" viewBox="0 0 52 52" style={{ animation: "spin 2s linear infinite" }}>
+              <circle cx="26" cy="26" r="24" fill="none" stroke="#E8B546" strokeWidth="1.5" strokeDasharray="38 114" strokeLinecap="round" />
+            </svg>
+          )}
+          <div className="flex h-11 w-11 items-center justify-center rounded-full" style={{
+            background: isRecording ? "oklch(0.52 0.22 18)" : "oklch(0.17 0.008 52)",
+            border: isRecording ? "1px solid rgba(180,50,40,0.4)" : "1px solid rgba(232,181,70,0.3)",
+            boxShadow: isRecording ? "0 0 20px rgba(180,50,40,0.3)" : "none",
+          }}>
+            {isIdle && <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8B546" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="2" width="6" height="11" rx="3" /><path d="M5 10a7 7 0 0 0 14 0" /><line x1="12" y1="19" x2="12" y2="22" /></svg>}
+            {isRecording && <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><rect x="6" y="6" width="12" height="12" rx="2" /></svg>}
+            {isProcessing && <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8B546" strokeWidth="1.5" style={{ animation: "spin 1s linear infinite" }}><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg>}
+          </div>
+        </div>
+
+        {/* Audio visualizer bars (recording only) */}
+        <div className="mt-3 flex items-end justify-center gap-[3px] transition-opacity duration-300" style={{ height: 20, opacity: isRecording ? 1 : 0 }}>
+          {[0.5, 0.7, 0.9, 1.0, 0.8].map((w, i) => (
+            <div key={i} className="rounded-full" style={{
+              width: 3,
+              background: "linear-gradient(to top, #E8B546, rgba(232,181,70,0.4))",
+              height: isRecording ? `${8 + w * 12}px` : "3px",
+              transition: "height 150ms ease-out",
+              animation: isRecording ? `bar-bounce 0.6s ease-in-out ${i * 0.08}s infinite alternate` : "none",
+            }} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export function HeroSection() {
   const [pillState, setPillState] = useState<PillState>("idle");
   const [elapsed, setElapsed] = useState(0);
-  const [flashText, setFlashText] = useState<string | null>(null);
-  const [showMenu, setShowMenu] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   const seqIdx = useRef(0);
 
   // Auto-cycle through demo states
@@ -138,8 +192,6 @@ export function HeroSection() {
       const seq = DEMO_SEQUENCE[seqIdx.current % DEMO_SEQUENCE.length];
       setPillState(seq.state);
       if (seq.state === "recording") setElapsed(0);
-      if (seq.state === "success") setFlashText("Hope your week is off to a good start...");
-      else setFlashText(null);
       seqIdx.current++;
       timer = setTimeout(step, seq.duration);
     };
@@ -156,13 +208,12 @@ export function HeroSection() {
 
   const handleContextMenu = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
-    setShowMenu((v) => !v);
+    setShowPopup((v) => !v);
   }, []);
 
   const isIdle = pillState === "idle";
   const isRecording = pillState === "recording";
   const isProcessing = pillState === "processing";
-  const isSuccess = pillState === "success";
 
   return (
     <section
@@ -248,45 +299,16 @@ export function HeroSection() {
             <span style={{ color: "#E8B546" }}>Removed repetition</span>
           </span>
 
-          {/* Popup menu — appears above the pill on right-click */}
+          {/* App popup — miniature replica of the real OmniVox desktop app */}
           <div
-            className="mb-2 overflow-hidden rounded-2xl transition-all duration-300 ease-out"
+            className="mb-2 overflow-hidden rounded-xl transition-all duration-300 ease-out"
             style={{
-              maxHeight: showMenu ? 300 : 0,
-              opacity: showMenu ? 1 : 0,
-              width: 260,
-              background: "rgba(18, 16, 14, 0.88)",
-              backdropFilter: "blur(24px) saturate(1.5)",
-              WebkitBackdropFilter: "blur(24px) saturate(1.5)",
-              boxShadow: "0 8px 40px rgba(0,0,0,0.5)",
-              border: showMenu ? "1px solid rgba(255,255,255,0.08)" : "1px solid transparent",
+              maxHeight: showPopup ? 260 : 0,
+              opacity: showPopup ? 1 : 0,
+              transform: showPopup ? "scale(1) translateY(0)" : "scale(0.95) translateY(8px)",
             }}
           >
-            <div className="py-1.5">
-              {MENU_ITEMS.map((item, i) => (
-                <button
-                  key={i}
-                  className="flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-white/5"
-                  style={{ color: "rgba(255,255,235,0.8)" }}
-                  onClick={() => setShowMenu(false)}
-                >
-                  <span style={{ color: "#E8B546", opacity: 0.8 }}>
-                    <MenuIcon name={item.icon} />
-                  </span>
-                  <span className="flex-1 text-[13px] font-medium">{item.label}</span>
-                  {item.shortcut && (
-                    <span className="text-[11px] font-mono" style={{ color: "rgba(255,255,235,0.3)" }}>
-                      {item.shortcut}
-                    </span>
-                  )}
-                </button>
-              ))}
-            </div>
-            <div className="border-t px-4 py-2" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
-              <span className="text-[10px] font-medium tracking-wider" style={{ color: "rgba(255,255,235,0.25)" }}>
-                OMNIVOX v1.0
-              </span>
-            </div>
+            <AppPopup pillState={pillState} />
           </div>
 
           {/* Floating pill */}
@@ -308,7 +330,7 @@ export function HeroSection() {
               cursor: "pointer",
             }}
             onContextMenu={handleContextMenu}
-            onClick={() => showMenu && setShowMenu(false)}
+            onClick={() => showPopup && setShowPopup(false)}
           >
             {/* Processing shimmer */}
             {isProcessing && (
@@ -335,11 +357,6 @@ export function HeroSection() {
                   <path d="M21 12a9 9 0 1 1-6.219-8.56" />
                 </svg>
               )}
-              {isSuccess && (
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#4ade80" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="3 8.5 6.5 12 13 4" />
-                </svg>
-              )}
             </div>
 
             {/* Center: waveform / status */}
@@ -348,11 +365,6 @@ export function HeroSection() {
               {isProcessing && (
                 <span className="truncate text-xs font-medium tracking-wide" style={{ color: "rgba(232,181,70,0.8)" }}>
                   Transcribing...
-                </span>
-              )}
-              {isSuccess && flashText && (
-                <span className="truncate text-xs" style={{ color: "rgba(255,255,235,0.7)" }}>
-                  {flashText}
                 </span>
               )}
             </div>
@@ -367,7 +379,6 @@ export function HeroSection() {
                 </div>
               )}
               {isProcessing && <div className="h-2 w-2 rounded-full" style={{ backgroundColor: "rgba(232,181,70,0.5)" }} />}
-              {isSuccess && <div className="h-2 w-2 rounded-full" style={{ backgroundColor: "rgba(74,222,128,0.5)" }} />}
             </div>
           </div>
 
@@ -397,6 +408,7 @@ export function HeroSection() {
         @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(200%); } }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.4); opacity: 0; } }
+        @keyframes bar-bounce { 0% { height: 4px; } 100% { height: 18px; } }
       `}</style>
     </section>
   );
