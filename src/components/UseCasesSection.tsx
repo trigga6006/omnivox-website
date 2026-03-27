@@ -13,56 +13,56 @@ const useCases: UseCase[] = [
   {
     id: "accessibility",
     label: "Accessibility",
-    title: "Flow for Accessibility",
-    desc: "Your voice deserves a shortcut. Flow supports anyone who feels slowed down by a keyboard by turning speech into structured, polished text\u2014quietly, reliably, naturally.",
+    title: "Vox for Accessibility",
+    desc: "Your voice deserves a shortcut. Vox supports anyone who feels slowed down by a keyboard by turning speech into structured, polished text\u2014quietly, reliably, naturally.",
   },
   {
     id: "teams",
     label: "Teams",
-    title: "Flow for Teams",
+    title: "Vox for Teams",
     desc: "Fewer meetings, faster alignment, and a voice for everyone when it matters most. Teams also get centralized admin controls and special pricing.",
   },
   {
     id: "students",
     label: "Students",
-    title: "Flow for Students",
-    desc: "Blank pages and looming deadlines? Flow\u2019s got you. Capture class notes, draft cover letters, and break through writer\u2019s block with minimal effort.",
+    title: "Vox for Students",
+    desc: "Blank pages and looming deadlines? Vox\u2019s got you. Capture class notes, draft cover letters, and break through writer\u2019s block with minimal effort.",
   },
   {
     id: "developers",
     label: "Developers",
-    title: "Flow for Developers",
-    desc: "Dictate in natural language and let Flow translate\u2014perfect for Cursor, VS Code, or wherever you build. From commit messages to refactors, stay in the zone with Flow.",
+    title: "Vox for Developers",
+    desc: "Dictate in natural language and let Vox translate\u2014perfect for Cursor, VS Code, or wherever you build. From commit messages to refactors, stay in the zone with Vox.",
   },
   {
     id: "creators",
     label: "Creators",
-    title: "Flow for Creators",
+    title: "Vox for Creators",
     desc: "Ideas hit fast, but execution is slow. Breeze through unread DMs, comment replies, and draft content with your voice. Create more, type less.",
   },
   {
     id: "sales",
     label: "Sales",
-    title: "Flow for Sales",
-    desc: "Slow follow ups mean lost deals. With Flow, you can follow up instantly after meetings, personalize outreach, and punch up your pitch\u2014without typing a word.",
+    title: "Vox for Sales",
+    desc: "Slow follow ups mean lost deals. With Vox, you can follow up instantly after meetings, personalize outreach, and punch up your pitch\u2014without typing a word.",
   },
   {
     id: "support",
     label: "Customer Support",
-    title: "Flow for Customer Support",
-    desc: "Speak naturally to resolve tickets faster. Skip the script. Flow helps reps speak naturally while still sending perfect replies\u2014across tickets, chats, and DMs.",
+    title: "Vox for Customer Support",
+    desc: "Speak naturally to resolve tickets faster. Skip the script. Vox helps reps speak naturally while still sending perfect replies\u2014across tickets, chats, and DMs.",
   },
   {
     id: "lawyers",
     label: "Lawyers",
-    title: "Flow for Lawyers",
-    desc: "Legal precision demands perfect transcription. Flow delivers smart dictation for contracts, case notes, and client records\u2014with formatting that catches every clause, not typos. HIPAA-ready on all plans, SOC 2 Type II compliant on Enterprise plans.",
+    title: "Vox for Lawyers",
+    desc: "Legal precision demands perfect transcription. Vox delivers smart dictation for contracts, case notes, and client records\u2014with formatting that catches every clause, not typos. HIPAA-ready on all plans, SOC 2 Type II compliant on Enterprise plans.",
   },
   {
     id: "leaders",
     label: "Leaders",
-    title: "Flow for Leaders",
-    desc: "Who doesn\u2019t want faster teams and happier people? Flow delivers instant productivity your team will actually use. SOC2 Type II compliant for Enterprise plans and HIPAA-eligible for everyone\u2014so you can move fast without breaking anything.",
+    title: "Vox for Leaders",
+    desc: "Who doesn\u2019t want faster teams and happier people? Vox delivers instant productivity your team will actually use. SOC2 Type II compliant for Enterprise plans and HIPAA-eligible for everyone\u2014so you can move fast without breaking anything.",
   },
 ];
 
@@ -123,7 +123,7 @@ function IllustrationPlaceholder({ useCase }: { useCase: UseCase }) {
 }
 
 function extractCategoryWord(title: string): { before: string; category: string } {
-  // Title format: "Flow for [Category]"
+  // Title format: "Vox for [Category]"
   const parts = title.split("for ");
   if (parts.length >= 2) {
     return { before: parts[0] + "for ", category: parts.slice(1).join("for ") };
@@ -150,7 +150,7 @@ export function UseCasesSection() {
           className="mb-10 font-heading text-5xl font-normal leading-[0.95em] md:text-7xl lg:text-[80px]"
           style={{ color: "rgb(255, 255, 235)" }}
         >
-          Flow is made{" "}
+          Vox is made{" "}
           <span style={{ color: "#F0D7FF" }}>for you</span>
         </h2>
 

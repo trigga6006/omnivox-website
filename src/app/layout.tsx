@@ -16,17 +16,17 @@ const figtree = Figtree({
 });
 
 export const metadata: Metadata = {
-  title: "Wispr Flow | Effortless Voice Dictation",
+  title: "OmniVox | Effortless Voice Dictation",
   description:
-    "Flow makes writing quick and clear with seamless voice dictation. It is the fastest, smartest way to type with your voice.",
+    "Vox makes writing quick and clear with seamless voice dictation. It is the fastest, smartest way to type with your voice.",
   icons: {
     icon: "/seo/favicon.png",
     apple: "/seo/apple-touch-icon.png",
   },
   openGraph: {
-    title: "Wispr Flow | Effortless Voice Dictation",
+    title: "OmniVox | Effortless Voice Dictation",
     description:
-      "Flow makes writing quick and clear with seamless voice dictation. It is the fastest, smartest way to type with your voice.",
+      "Vox makes writing quick and clear with seamless voice dictation. It is the fastest, smartest way to type with your voice.",
     images: ["/seo/og-image.jpg"],
   },
 };

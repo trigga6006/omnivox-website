@@ -13,7 +13,7 @@ export function Navigation() {
         <Link href="/" className="shrink-0">
           <Image
             src="/images/683215c6f233131a07d8bafc_navbar_logo.svg"
-            alt="Flow Logo"
+            alt="Vox Logo"
             width={80}
             height={23}
             priority
@@ -36,13 +36,13 @@ export function Navigation() {
 
         {/* Right-side CTA buttons — hidden on mobile */}
         <div className="hidden items-center gap-3 lg:flex">
-          {/* Flow for Android */}
+          {/* Vox for Android */}
           <Link
             href="#"
             className="rounded-xl border-2 bg-transparent px-5 py-2.5 text-base font-semibold transition-colors hover:opacity-80"
             style={{ borderColor: "var(--foreground)", color: "var(--foreground)" }}
           >
-            Flow for Android
+            Vox for Android
           </Link>
 
           {/* Download for Windows */}

@@ -97,7 +97,7 @@ function AIAutoEditsSection() {
             </h2>
           </div>
           <p className="max-w-md text-lg leading-7" style={{ color: "var(--dark-secondary)" }}>
-            Speak naturally and Flow transcribes and edits your voice, instantly.
+            Speak naturally and Vox transcribes and edits your voice, instantly.
             Rambled thoughts become clear, perfectly formatted text, without the
             filler words or typos.
           </p>
@@ -107,7 +107,7 @@ function AIAutoEditsSection() {
               className="inline-flex items-center rounded-full px-6 py-2.5 text-sm font-medium transition-colors hover:opacity-80"
               style={{ border: "1px solid var(--foreground)", color: "var(--foreground)" }}
             >
-              Try Flow
+              Try Vox
             </a>
             <a
               href="#"
@@ -153,7 +153,7 @@ function PersonalDictionaryCard() {
   return (
     <FeatureCard
       title="Personal dictionary"
-      subtitle="Flow automatically learns your unique words and adds them to your personal dictionary."
+      subtitle="Vox automatically learns your unique words and adds them to your personal dictionary."
     >
       <div className="rounded-3xl p-6 md:p-8" style={{ backgroundColor: "var(--section-dark-bg)" }}>
         <div className="mb-4 flex items-center justify-between">
@@ -240,7 +240,7 @@ function DifferentTonesCard() {
   return (
     <FeatureCard
       title="Different tones for each app"
-      subtitle="Flow automatically adjusts tone based on the app you're using. Sound like you—not a robot."
+      subtitle="Vox automatically adjusts tone based on the app you're using. Sound like you—not a robot."
     >
       <div className="relative flex min-h-[320px] flex-col items-center rounded-3xl p-6 md:p-8"
           style={{ backgroundColor: "var(--section-dark-bg)" }}>
@@ -344,7 +344,7 @@ function LanguagesCard() {
   return (
     <FeatureCard
       title="100+ languages"
-      subtitle="Flow automatically detects and transcribes in your language, letting you move between them—just like you do."
+      subtitle="Vox automatically detects and transcribes in your language, letting you move between them—just like you do."
     >
       <div className="relative flex min-h-[320px] items-center justify-center rounded-3xl p-6 md:p-8"
           style={{ backgroundColor: "var(--section-dark-bg)" }}>
@@ -439,7 +439,7 @@ function OnTheGoSection() {
             On-the-go or at your desk
           </h2>
           <p className="max-w-lg text-lg leading-7" style={{ color: "var(--dark-secondary)" }}>
-            Flow is the only voice-to-text tool that works on any app or device,
+            Vox is the only voice-to-text tool that works on any app or device,
             with your personal dictionary, style, and settings synced everywhere.
           </p>
           <div>

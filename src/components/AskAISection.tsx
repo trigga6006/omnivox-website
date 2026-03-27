@@ -25,7 +25,7 @@ export function AskAISection() {
           <h2 className="font-sans text-[28px] font-bold uppercase leading-tight tracking-tight md:text-[32px]"
             style={{ color: "var(--foreground)", letterSpacing: "-0.5px" }}
           >
-            Still not sure that Wispr Flow is right for you?
+            Still not sure that OmniVox is right for you?
           </h2>
 
           {/* Subtitle */}
@@ -33,7 +33,7 @@ export function AskAISection() {
             Let ChatGPT, Claude, or Perplexity do the thinking for you.
           </p>
           <p className="mt-2 text-lg" style={{ color: "var(--dark-secondary)" }}>
-            Click a button and see what your favorite AI says about Wispr Flow.
+            Click a button and see what your favorite AI says about OmniVox.
           </p>
 
           {/* AI Buttons */}

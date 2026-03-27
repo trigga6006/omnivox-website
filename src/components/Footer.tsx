@@ -11,9 +11,9 @@ const companyLinks = [
 const productLinks = [
   { label: "What's New", href: "/whats-new" },
   { label: "Use Cases", href: "/use-cases" },
-  { label: "Flow for Students", href: "/students" },
-  { label: "Flow for Non-Profits", href: "/non-profits" },
-  { label: "Flow for Android", href: "/android" },
+  { label: "Vox for Students", href: "/students" },
+  { label: "Vox for Non-Profits", href: "/non-profits" },
+  { label: "Vox for Android", href: "/android" },
 ];
 
 const resourceLinks = [
@@ -52,7 +52,7 @@ function FooterLinkColumn({
 }
 
 function FlowSoundwaveLogo() {
-  // Approximate the Flow soundwave icon with 5 rounded vertical bars
+  // Approximate the Vox soundwave icon with 5 rounded vertical bars
   const barHeights = [40, 70, 100, 70, 40];
   return (
     <div className="flex items-center gap-2" aria-hidden="true">
@@ -119,14 +119,14 @@ export function Footer() {
           <FooterLinkColumn title="Resources" links={resourceLinks} />
         </div>
 
-        {/* Large Flow Logo */}
+        {/* Large Vox Logo */}
         <div className="mt-16 flex items-end gap-4 overflow-hidden md:gap-8">
           <FlowSoundwaveLogo />
           <span
             className="font-sans font-bold leading-none tracking-tighter"
             style={{ color: "var(--foreground)", fontSize: "clamp(120px, 20vw, 300px)" }}
           >
-            Flow
+            Vox
           </span>
         </div>
 
@@ -134,7 +134,7 @@ export function Footer() {
         <div className="mt-10 flex flex-col items-start justify-between gap-6 pt-6 md:flex-row md:items-center" style={{ borderTop: "1px solid var(--border)" }}>
           {/* Left: copyright + legal links */}
           <div className="flex flex-wrap items-center gap-4 text-sm" style={{ color: "var(--muted-foreground)" }}>
-            <span>&copy; Wispr Flow 2026</span>
+            <span>&copy; OmniVox 2026</span>
             <Link href="/terms" className="hover:underline">
               Terms
             </Link>

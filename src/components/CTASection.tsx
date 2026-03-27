@@ -37,7 +37,7 @@ export function CTASection() {
       <h2 className="font-heading text-center font-normal leading-none"
         style={{ color: "#ffffeb", fontSize: "clamp(48px, 10vw, 96px)" }}
       >
-        Start flowing
+        Start voxing
       </h2>
 
       {/* Subtitle */}
@@ -52,7 +52,7 @@ export function CTASection() {
           className="rounded-xl border-2 bg-transparent px-7 py-3.5 text-base font-medium transition-colors hover:opacity-80"
           style={{ borderColor: "#ffffeb", color: "#ffffeb" }}
         >
-          Try Flow
+          Try Vox
         </a>
         <a
           href="#"

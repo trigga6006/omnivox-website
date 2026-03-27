@@ -113,7 +113,7 @@ const caseStudies: CaseStudy[] = [
   {
     stat: "50+ hours saved",
     subtitle:
-      "Before Flow, writing was a battle. Now, it\u2019s a conversation.",
+      "Before Vox, writing was a battle. Now, it\u2019s a conversation.",
     name: "Greg Dickson",
     role: "Author",
     initials: "GD",
@@ -279,7 +279,7 @@ export function TestimonialsSection() {
             lineHeight: 1.1,
           }}
         >
-          Love letters to Flow
+          Love letters to Vox
         </h2>
       </div>
 

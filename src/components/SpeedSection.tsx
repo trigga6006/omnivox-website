@@ -20,7 +20,7 @@ export function SpeedSection() {
           After 150 years of using the same keyboard, voice that actually works
           is <em>finally</em> here. When you create, code, and respond faster,
           you free up time for more. Speak naturally at the speed you think and
-          let Flow handle the rest.
+          let Vox handle the rest.
         </p>
 
         {/* Buttons row */}
@@ -47,7 +47,7 @@ export function SpeedSection() {
                 fill="currentColor"
               />
             </svg>
-            Try Flow
+            Try Vox
           </button>
 
           <button
@@ -86,7 +86,7 @@ export function SpeedSection() {
             </p>
           </div>
 
-          {/* Flow card */}
+          {/* Vox card */}
           <div
             className="relative overflow-hidden rounded-3xl p-8 text-left"
             style={{
@@ -129,14 +129,14 @@ export function SpeedSection() {
                   className="absolute top-[78%] left-[6%] text-sm whitespace-nowrap text-cream/20"
                   style={{ transform: "rotate(-4deg)" }}
                 >
-                  Flow captures your ideas before they disappear from your mind
+                  Vox captures your ideas before they disappear from your mind
                 </span>
               </div>
             </div>
 
             {/* Card content */}
             <div className="relative z-10">
-              <p className="text-sm font-medium text-cream/70">Flow</p>
+              <p className="text-sm font-medium text-cream/70">Vox</p>
               <p className="font-heading mt-2 text-5xl font-normal italic text-cream">
                 220 wpm
               </p>
