@@ -269,11 +269,11 @@ export function HeroSection() {
         className="relative mt-6 flex w-full items-end justify-center lg:mt-2"
         style={{ height: 300 }}
       >
-        {/* Left SVG — messy text trail, ends at right edge mid-height to meet pill */}
-        <div className="absolute left-0 w-[52%] overflow-visible" style={{ bottom: 16, height: 260 }} aria-hidden="true">
-          <svg id="hero-svg-left" viewBox="0 0 1000 500" width="100%" height="100%" style={{ overflow: "visible" }} preserveAspectRatio="none">
-            <defs><style>{`#marquee-text-left { font-size: 18px; font-weight: 400; fill: var(--foreground); opacity: 0.25; font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif; }`}</style></defs>
-            <path id="curve-left" d="M0 40 C80 130, 200 280, 350 310 C470 335, 550 240, 480 160 C410 80, 280 230, 500 350 C560 380, 780 440, 1000 250" stroke="transparent" fill="none" />
+        {/* Left SVG — messy text trail flowing from left edge INTO the pill */}
+        <div className="absolute left-0 right-[48%] overflow-visible" style={{ top: 0, bottom: 0 }} aria-hidden="true">
+          <svg id="hero-svg-left" viewBox="0 0 600 300" width="100%" height="100%" style={{ overflow: "visible" }} preserveAspectRatio="xMidYMid meet">
+            <defs><style>{`#marquee-text-left { font-size: 14px; font-weight: 400; fill: var(--foreground); opacity: 0.25; font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif; }`}</style></defs>
+            <path id="curve-left" d="M0 30 C40 80, 100 170, 180 190 C260 210, 320 140, 280 90 C240 40, 160 120, 320 210 C380 245, 490 270, 600 150" stroke="transparent" fill="none" />
             <text x="-3300">
               <textPath id="marquee-text-left" xlinkHref="#curve-left">
                 Umm, hope your week has started well…I was talking to Cheyene earlier but reception was really bad and I think their going to handle the first part of the project, but I&apos;m not totally sure. Also, I told the team the the new timeline should be ready by Friday, although it&apos;s probably going to slip. There&apos;s been a lot of back and forth and honestly the the whole thing&apos;s been kind of chaotic, like nobody really knows what&apos;s going on so can you check in with them and see if the notes from yesterday&apos;s meeting were sent out, or if they&apos;re still waiting. I think Cheyene mentioned it but didn&apos;t confirm, and now I&apos;m a little lost.
@@ -388,12 +388,12 @@ export function HeroSection() {
           </p>
         </div>
 
-        {/* Right SVG — clean text trail, starts at left edge mid-height from pill */}
-        <div className="absolute right-0 w-[52%] overflow-visible" style={{ bottom: 16, height: 260 }} aria-hidden="true">
-          <svg id="hero-svg-right" viewBox="0 0 1000 500" width="100%" height="100%" style={{ overflow: "visible" }} preserveAspectRatio="none">
-            <defs><style>{`#marquee-text-right { font-size: 18px; font-weight: 600; fill: #FFFFEB; font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif; }`}</style></defs>
-            <path id="curve-right-bg" d="M0 250 C180 260, 400 400, 600 350 C750 310, 880 340, 1000 320" stroke="var(--section-dark-bg)" strokeWidth="48" strokeLinecap="round" fill="none" />
-            <path id="curve-right" d="M0 250 C180 260, 400 400, 600 350 C750 310, 880 340, 1000 320" stroke="transparent" fill="none" />
+        {/* Right SVG — clean text trail flowing OUT of the pill to right edge */}
+        <div className="absolute left-[48%] right-0 overflow-visible" style={{ top: 0, bottom: 0 }} aria-hidden="true">
+          <svg id="hero-svg-right" viewBox="0 0 600 300" width="100%" height="100%" style={{ overflow: "visible" }} preserveAspectRatio="xMidYMid meet">
+            <defs><style>{`#marquee-text-right { font-size: 14px; font-weight: 600; fill: #FFFFEB; font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif; }`}</style></defs>
+            <path id="curve-right-bg" d="M0 150 C100 155, 200 230, 330 220 C430 212, 520 240, 600 220" stroke="var(--section-dark-bg)" strokeWidth="40" strokeLinecap="round" fill="none" />
+            <path id="curve-right" d="M0 150 C100 155, 200 230, 330 220 C430 212, 520 240, 600 220" stroke="transparent" fill="none" />
             <text x="-4500">
               <textPath id="marquee-text-right" xlinkHref="#curve-right">
                 Hope your week is off to a good start. I was talking to Cheyene earlier, but the reception was really bad. I think they&apos;re going to handle the first part of the project, but I&apos;m not totally sure. I also told the team the new timeline should be ready by Friday — although it might slip. There&apos;s been a lot of back and forth, and honestly, the whole thing has been a bit chaotic. It feels like nobody really knows what&apos;s going on. Can you check in with them and see if the notes from yesterday&apos;s meeting were sent out, or if they&apos;re still waiting? I think Cheyene mentioned it, but didn&apos;t confirm — and now I&apos;m a little lost!
