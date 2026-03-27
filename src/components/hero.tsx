@@ -210,7 +210,7 @@ function DictationShowcase() {
           <defs>
             <path
               id="flowLoop"
-              d="M -300 660 C -100 550 -50 250 80 100 C 180 -20 350 -30 480 80 C 620 200 400 420 640 510 C 880 600 1250 680 1700 740"
+              d="M -300 660 C -100 500 -50 200 100 50 C 220 -60 400 -40 550 80 C 700 200 500 400 700 490 C 900 580 1250 670 1700 740"
               fill="none"
             />
             <filter id="textGlow" x="-10%" y="-30%" width="120%" height="160%">
@@ -222,7 +222,7 @@ function DictationShowcase() {
             </filter>
           </defs>
 
-          <g filter="url(#textGlow)" opacity="0.6">
+          <g filter="url(#textGlow)" opacity="0.65">
             <text
               fill="#d4c9b0"
               fontSize="18"
@@ -247,45 +247,20 @@ function DictationShowcase() {
         </svg>
       )}
 
-      {/* OmniVox pill — anchored at the curve's focal point */}
-      <div className="absolute bottom-[12%] sm:bottom-[14%] left-[44%] -translate-x-1/2">
+      {/* OmniVox pill — centered at the curve's crossing */}
+      <div className="absolute bottom-[18%] sm:bottom-[20%] left-1/2 -translate-x-1/2">
         <OmniVoxPill />
       </div>
     </div>
   );
 }
 
-const negations = [
-  {
-    label: "No cloud.",
-    description:
-      "100% on-device Whisper AI. Your voice data never touches a server.",
-  },
-  {
-    label: "No subscription.",
-    description: "Currently free. No accounts, no subscriptions, just a one-time fee when pricing launches.",
-  },
-  {
-    label: "No bloat.",
-    description: "~80MB download. Extract and run. That\u2019s it.",
-  },
-];
-
-const staggerContainer = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.1, delayChildren: 0.3 },
-  },
-};
-
 const EASE: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
 
-const slideIn = {
-  hidden: { opacity: 0, x: -30 },
+const staggerCenter = {
+  hidden: {},
   visible: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.7, ease: EASE },
+    transition: { staggerChildren: 0.12, delayChildren: 0.15 },
   },
 };
 
@@ -300,98 +275,69 @@ const fadeUp = {
 
 export function Hero() {
   return (
-    <section className="relative flex flex-col pt-20 overflow-hidden lg:min-h-screen">
-      {/* Editorial two-column content */}
-      <div className="flex-1 flex items-start lg:items-center pt-2 lg:pt-0">
-        <div className="max-w-7xl mx-auto px-6 w-full py-4 lg:py-0">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-16">
-            {/* Left: Headline + Subtitle + CTAs */}
-            <motion.div
-              variants={staggerContainer}
-              initial="hidden"
-              animate="visible"
-              className="lg:col-span-7"
+    <section className="relative flex flex-col pt-16 sm:pt-20 overflow-hidden lg:min-h-screen">
+      {/* ── Centered hero content ── */}
+      <div className="flex-1 flex flex-col items-center justify-center text-center px-6 pt-6 lg:pt-0">
+        <motion.div
+          variants={staggerCenter}
+          initial="hidden"
+          animate="visible"
+          className="flex flex-col items-center"
+        >
+          <motion.div variants={fadeUp}>
+            <Badge
+              variant="outline"
+              className="mb-6 px-3 py-1.5 text-xs font-medium tracking-wide border-primary/20 text-primary bg-primary/5"
             >
-              <motion.div variants={slideIn}>
-                <Badge
-                  variant="outline"
-                  className="mb-5 px-3 py-1.5 text-xs font-medium tracking-wide border-primary/20 text-primary bg-primary/5"
-                >
-                  Local AI Dictation for Windows
-                </Badge>
-              </motion.div>
+              Local AI Dictation for Windows
+            </Badge>
+          </motion.div>
 
-              <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] xl:text-7xl font-bold tracking-tight leading-[1.1]">
-                <motion.span variants={slideIn} className="block">
-                  Dictate at the
-                </motion.span>
-                <motion.span variants={slideIn} className="block text-primary">
-                  speed of light.
-                </motion.span>
-                <motion.span variants={slideIn} className="block text-muted-foreground/70 text-[0.55em]">
-                  With no monthly subscription.
-                </motion.span>
-              </h1>
+          <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight leading-[1.08]">
+            <motion.span variants={fadeUp} className="block">
+              Dictate at the
+            </motion.span>
+            <motion.span variants={fadeUp} className="block text-primary italic">
+              speed of light.
+            </motion.span>
+          </h1>
 
-              <motion.p
-                variants={fadeUp}
-                className="mt-5 text-muted-foreground text-base sm:text-lg max-w-md leading-relaxed"
-              >
-                OmniVox transcribes speech to text entirely on your device using
-                Whisper AI. Smart text processing, voice commands, context modes
-                that switch per app — all local, all private.
-              </motion.p>
+          <motion.p
+            variants={fadeUp}
+            className="mt-5 text-muted-foreground text-base sm:text-lg max-w-lg leading-relaxed"
+          >
+            The voice-to-text AI that turns speech into clean, polished writing
+            in every app. 100% on-device, zero cloud.
+          </motion.p>
 
-              <motion.div
-                variants={fadeUp}
-                className="mt-7 flex flex-wrap gap-3"
-              >
-                <a
-                  href="#download"
-                  className={cn(
-                    buttonVariants({ size: "lg" }),
-                    "gap-2 px-6 h-11 text-sm font-semibold shadow-lg shadow-primary/15"
-                  )}
-                >
-                  <Download className="size-4" />
-                  Download for Windows
-                </a>
-              </motion.div>
-            </motion.div>
-
-            {/* Right: Negation value props */}
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={{
-                hidden: {},
-                visible: {
-                  transition: { staggerChildren: 0.12, delayChildren: 0.7 },
-                },
-              }}
-              className="lg:col-span-5 flex flex-col justify-center gap-6 lg:gap-8 lg:border-l lg:border-border lg:pl-12"
+          <motion.div variants={fadeUp} className="mt-7">
+            <a
+              href="#download"
+              className={cn(
+                buttonVariants({ size: "lg" }),
+                "gap-2 px-8 h-12 text-sm font-semibold shadow-lg shadow-primary/15"
+              )}
             >
-              {negations.map((item) => (
-                <motion.div key={item.label} variants={fadeUp}>
-                  <h3 className="font-heading text-xl lg:text-2xl font-bold tracking-tight text-primary">
-                    {item.label}
-                  </h3>
-                  <p className="mt-1 text-sm text-muted-foreground leading-relaxed">
-                    {item.description}
-                  </p>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </div>
+              <Download className="size-4" />
+              Download for Windows
+            </a>
+          </motion.div>
+
+          <motion.p
+            variants={fadeUp}
+            className="mt-4 text-xs text-muted-foreground/50 tracking-wide"
+          >
+            No cloud · No subscription · No bloat
+          </motion.p>
+        </motion.div>
       </div>
 
-      {/* Dictation showcase — flowing text loop + animated pill */}
+      {/* ── Dictation showcase — flowing text + pill ── */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.97 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.4, ease: "easeOut", delay: 0.2 }}
-        className="relative flex-shrink-0 -mt-8 lg:-mt-16"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.2, delay: 0.4 }}
+        className="relative flex-shrink-0"
       >
         <DictationShowcase />
       </motion.div>
