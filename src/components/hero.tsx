@@ -8,49 +8,184 @@ import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
-// ─── Flowing text stream — luminous arcs of dictated text ────────────────────
+// ─── Flowing text with OmniVox pill showcase ─────────────────────────────────
 
-const FLOW_PRIMARY =
-  "ok claude lets refactor this hook into a custom composable and add proper error boundaries · can you center these divs and fix the padding on mobile · I need you to write a unit test for the auth middleware before we merge · hey grab the response type from that API endpoint and make it generic · ";
+const FLOW_TEXT =
+  "ok claude lets refactor this hook into a custom composable and add proper error boundaries · can you center these divs and fix the padding on mobile · I need you to write a unit test for the auth middleware before we merge · hey grab the response type from that API endpoint and make it generic · move this logic into a server action and cache the result · why is this useEffect firing twice on mount · ";
 
-const FLOW_SECONDARY =
-  "move this logic into a server action and cache the result · add a loading skeleton to the dashboard while the query resolves · pull the latest from main and rebase our feature branch on top · why is this useEffect firing twice on mount · ";
+const CHAR_W = 10.5;
+const TEXT_LEN = FLOW_TEXT.length * CHAR_W;
 
-const PRI_CW = 12.2; // char width at fontSize 20 + letterSpacing
-const SEC_CW = 9.8; // char width at fontSize 16 + letterSpacing
-const PRI_LEN = FLOW_PRIMARY.length * PRI_CW;
-const SEC_LEN = FLOW_SECONDARY.length * SEC_CW;
+// ─── Pill waveform bars (bell-curve weighted, matches real app) ──────────────
 
-function FlowingTextStream() {
-  const p1 = useRef<SVGTextPathElement>(null);
-  const p2 = useRef<SVGTextPathElement>(null);
-  const s1 = useRef<SVGTextPathElement>(null);
-  const s2 = useRef<SVGTextPathElement>(null);
+const PILL_WEIGHTS = [
+  0.25, 0.35, 0.48, 0.6, 0.72, 0.84, 0.92, 1.0, 1.0, 0.92, 0.84, 0.72, 0.6,
+  0.48, 0.35, 0.25,
+];
+
+function PillWaveform({ recording }: { recording: boolean }) {
+  return (
+    <div className="flex items-center gap-[3px] h-7">
+      {PILL_WEIGHTS.map((w, i) => (
+        <div
+          key={i}
+          className={cn(
+            "w-[3px] rounded-full",
+            recording ? "bg-amber-400" : "bg-white/15"
+          )}
+          style={
+            recording
+              ? {
+                  height: `${3 + w * 25}px`,
+                  transformOrigin: "center",
+                  animation: `pill-bar ${0.5 + (i % 4) * 0.2}s ease-in-out ${i * 0.05}s infinite alternate`,
+                }
+              : {
+                  height: "3px",
+                  transition: "height 400ms ease-out, background-color 300ms",
+                }
+          }
+        />
+      ))}
+    </div>
+  );
+}
+
+// ─── OmniVox floating pill — cycles through all UI states ────────────────────
+
+const PILL_STATES = ["idle", "recording", "processing", "success"] as const;
+type PillState = (typeof PILL_STATES)[number];
+const PILL_DURATIONS: Record<PillState, number> = {
+  idle: 2500,
+  recording: 4000,
+  processing: 2000,
+  success: 2500,
+};
+
+function OmniVoxPill() {
+  const [state, setState] = useState<PillState>("idle");
+  const [elapsed, setElapsed] = useState(0);
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setState((s) => PILL_STATES[(PILL_STATES.indexOf(s) + 1) % PILL_STATES.length]);
+      setElapsed(0);
+    }, PILL_DURATIONS[state]);
+    return () => clearTimeout(t);
+  }, [state]);
+
+  useEffect(() => {
+    if (state !== "recording") return;
+    const i = setInterval(() => setElapsed((e) => e + 1), 1000);
+    return () => clearInterval(i);
+  }, [state]);
+
+  const mm = String(Math.floor(elapsed / 60)).padStart(2, "0");
+  const ss = String(elapsed % 60).padStart(2, "0");
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, delay: 0.6 }}
+      className={cn(
+        "relative flex items-center rounded-full border transition-all duration-300",
+        "backdrop-blur-2xl backdrop-saturate-150",
+        "shadow-[0_4px_30px_rgba(0,0,0,0.35)]",
+        "h-[52px] w-[320px] sm:w-[360px] px-4",
+        state === "idle"
+          ? "bg-[rgba(18,16,14,0.7)] border-white/[0.05]"
+          : "bg-[rgba(18,16,14,0.82)] border-white/[0.08]"
+      )}
+    >
+      {/* Left indicator */}
+      <div className="w-[52px] flex-shrink-0 flex items-center justify-center">
+        {state === "idle" && (
+          <span className="font-serif text-sm text-white/60 italic tracking-wide">OV</span>
+        )}
+        {state === "recording" && (
+          <span className="font-mono text-xs text-[oklch(0.72_0.16_22)] tabular-nums tracking-tight">
+            {mm}:{ss}
+          </span>
+        )}
+        {state === "processing" && (
+          <svg className="size-4 text-amber-400 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden>
+            <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" opacity="0.25" />
+            <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+        )}
+        {state === "success" && (
+          <svg className="size-4 text-[oklch(0.65_0.15_145)]" viewBox="0 0 16 16" fill="none" aria-hidden>
+            <polyline points="3 8.5 6.5 12 13 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        )}
+      </div>
+
+      {/* Center */}
+      <div className="flex-1 flex items-center justify-center min-w-0">
+        {(state === "idle" || state === "recording") && (
+          <PillWaveform recording={state === "recording"} />
+        )}
+        {state === "processing" && (
+          <span className="text-xs text-amber-400/80 tracking-wide">Transcribing…</span>
+        )}
+        {state === "success" && (
+          <span className="text-xs text-white/70 truncate">
+            can you center these divs and fix…
+          </span>
+        )}
+      </div>
+
+      {/* Right indicator */}
+      <div className="w-9 flex-shrink-0 flex items-center justify-center">
+        {state === "idle" && (
+          <div className="h-2.5 w-2.5 rounded-full border border-white/20" />
+        )}
+        {state === "recording" && (
+          <div className="relative flex items-center justify-center">
+            <div className="absolute h-5 w-5 rounded-full bg-[oklch(0.52_0.22_18/0.2)] animate-[recording-pulse_2s_infinite]" />
+            <div className="h-2.5 w-2.5 rounded-full bg-[oklch(0.52_0.22_18)] shadow-[0_0_8px_oklch(0.52_0.22_18/0.5)]" />
+          </div>
+        )}
+        {state === "processing" && (
+          <div className="h-2 w-2 rounded-full bg-amber-400/60" />
+        )}
+        {state === "success" && (
+          <div className="h-2 w-2 rounded-full bg-[oklch(0.65_0.15_145/0.6)]" />
+        )}
+      </div>
+
+      {/* Shimmer overlay — processing state */}
+      {state === "processing" && (
+        <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
+          <div className="absolute inset-0 animate-[shimmer_2s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-amber-400/10 to-transparent" />
+        </div>
+      )}
+    </motion.div>
+  );
+}
+
+// ─── Dictation showcase — flowing text loop + animated pill ──────────────────
+
+function DictationShowcase() {
+  const t1 = useRef<SVGTextPathElement>(null);
+  const t2 = useRef<SVGTextPathElement>(null);
   const raf = useRef(0);
   const [show, setShow] = useState(false);
 
   useEffect(() => {
     setShow(true);
-    let offP = 0;
-    let offS = 0;
+    let offset = 0;
     let prev = 0;
 
     const tick = (time: number) => {
       if (!prev) prev = time;
-      const dt = (time - prev) / 1000;
+      offset -= 50 * (time - prev) / 1000;
       prev = time;
+      if (offset < -TEXT_LEN) offset += TEXT_LEN;
 
-      offP -= 42 * dt; // primary speed
-      offS -= 56 * dt; // secondary — slightly faster for parallax
-
-      if (offP < -PRI_LEN) offP += PRI_LEN;
-      if (offS < -SEC_LEN) offS += SEC_LEN;
-
-      p1.current?.setAttribute("startOffset", String(offP));
-      p2.current?.setAttribute("startOffset", String(offP + PRI_LEN));
-      s1.current?.setAttribute("startOffset", String(offS));
-      s2.current?.setAttribute("startOffset", String(offS + SEC_LEN));
-
+      t1.current?.setAttribute("startOffset", String(offset));
+      t2.current?.setAttribute("startOffset", String(offset + TEXT_LEN));
       raf.current = requestAnimationFrame(tick);
     };
 
@@ -58,171 +193,64 @@ function FlowingTextStream() {
     return () => cancelAnimationFrame(raf.current);
   }, []);
 
-  if (!show) return null;
-
   return (
-    <svg
-      className="absolute inset-0 w-full h-full z-[1]"
-      viewBox="0 0 1400 400"
-      preserveAspectRatio="xMidYMid slice"
-      aria-hidden="true"
-      style={{ pointerEvents: "none", overflow: "visible" }}
-    >
-      <defs>
-        {/* Primary arc — sweeps from upper-left down through center to lower-right */}
-        <path
-          id="flowArc1"
-          d="M -500 -40 C 0 40 300 220 700 270 C 1100 320 1400 200 1900 20"
-          fill="none"
-        />
-        {/* Secondary arc — counter-curve, lower-left up through center to upper-right */}
-        <path
-          id="flowArc2"
-          d="M -400 440 C 0 280 350 40 700 -10 C 1050 -60 1400 160 1900 380"
-          fill="none"
-        />
+    <div className="relative w-full h-[280px] sm:h-[360px] md:h-[440px] lg:h-[520px]">
+      {/* Ambient glow behind pill */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_40%_50%_at_48%_78%,oklch(0.78_0.16_75/0.06)_0%,transparent_70%)]" />
 
-        {/* Warm glow filter — blurs then composites over crisp text */}
-        <filter id="flowGlow" x="-15%" y="-40%" width="130%" height="180%">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-      </defs>
-
-      {/* ── Primary layer — warm cream, large text, glowing ── */}
-      <g filter="url(#flowGlow)">
-        <animate
-          attributeName="opacity"
-          values="0.5;0.7;0.5"
-          dur="8s"
-          repeatCount="indefinite"
-        />
-        <text
-          fill="#e8dfd0"
-          fontSize="20"
-          fontFamily="var(--font-geist-mono), ui-monospace, monospace"
-          letterSpacing="0.04em"
+      {/* SVG flowing text — single loop path */}
+      {show && (
+        <svg
+          className="absolute inset-0 w-full h-full"
+          viewBox="0 0 1400 600"
+          preserveAspectRatio="xMidYMid meet"
+          aria-hidden="true"
+          style={{ pointerEvents: "none", overflow: "visible" }}
         >
-          <textPath ref={p1} href="#flowArc1">
-            {FLOW_PRIMARY}
-          </textPath>
-        </text>
-        <text
-          fill="#e8dfd0"
-          fontSize="20"
-          fontFamily="var(--font-geist-mono), ui-monospace, monospace"
-          letterSpacing="0.04em"
-        >
-          <textPath ref={p2} href="#flowArc1">
-            {FLOW_PRIMARY}
-          </textPath>
-        </text>
-      </g>
+          <defs>
+            <path
+              id="flowLoop"
+              d="M -300 660 C -100 550 -50 250 80 100 C 180 -20 350 -30 480 80 C 620 200 400 420 640 510 C 880 600 1250 680 1700 740"
+              fill="none"
+            />
+            <filter id="textGlow" x="-10%" y="-30%" width="120%" height="160%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
 
-      {/* ── Secondary layer — soft gold, smaller, subtler ── */}
-      <g opacity="0.35">
-        <text
-          fill="#c9b07a"
-          fontSize="16"
-          fontFamily="var(--font-geist-mono), ui-monospace, monospace"
-          letterSpacing="0.03em"
-        >
-          <textPath ref={s1} href="#flowArc2">
-            {FLOW_SECONDARY}
-          </textPath>
-        </text>
-        <text
-          fill="#c9b07a"
-          fontSize="16"
-          fontFamily="var(--font-geist-mono), ui-monospace, monospace"
-          letterSpacing="0.03em"
-        >
-          <textPath ref={s2} href="#flowArc2">
-            {FLOW_SECONDARY}
-          </textPath>
-        </text>
-      </g>
-    </svg>
-  );
-}
-
-// Pre-compute bar data — complex multi-frequency waveform
-const BAR_COUNT = 140;
-const BARS = Array.from({ length: BAR_COUNT }, (_, i) => {
-  const x = i / (BAR_COUNT - 1);
-  // Bell curve envelope — tallest in center, tapers at edges
-  const envelope = Math.pow(Math.sin(x * Math.PI), 0.7);
-  // Multi-frequency modulation for audio-like complexity
-  const wave =
-    0.4 +
-    0.3 * Math.sin(x * Math.PI * 4.5) +
-    0.2 * Math.sin(x * Math.PI * 11 + 0.8) +
-    0.1 * Math.sin(x * Math.PI * 23 + 1.6);
-  const height = Math.max(4, Math.round(envelope * wave * 100));
-  return {
-    height,
-    delay: Math.round(((i * 3 + 7) % 19) * 5) / 100,
-    duration: Math.round((20 + ((i * 7 + 3) % 11) * 3)) / 10,
-  };
-});
-
-function MassiveWaveform() {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-
-  return (
-    <div className="relative w-full h-[200px] sm:h-[260px] md:h-[320px] lg:h-[380px]">
-      {/* Layered ambient glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,oklch(0.78_0.16_75/0.08)_0%,transparent_70%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_30%_40%_at_50%_48%,oklch(0.78_0.16_75/0.05)_0%,transparent_50%)]" />
-
-      {/* Center baseline */}
-      <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-px bg-gradient-to-r from-transparent via-primary/15 to-transparent" />
-
-      {/* Flowing text stream — rendered behind bars, z-[1] */}
-      <FlowingTextStream />
-
-      {mounted && (
-        <div className="relative z-[2] flex items-center justify-between w-full h-full px-2 sm:px-4 md:px-8 lg:px-12">
-          {BARS.map((bar, i) => (
-            <div
-              key={i}
-              className={cn(
-                "relative h-full",
-                i % 2 === 1 && "hidden sm:block"
-              )}
-              style={{ width: 3 }}
+          <g filter="url(#textGlow)" opacity="0.6">
+            <text
+              fill="#d4c9b0"
+              fontSize="18"
+              fontFamily="var(--font-geist-mono), ui-monospace, monospace"
+              letterSpacing="0.03em"
             >
-              {/* Upper bar — extends from center upward */}
-              <div
-                className="absolute bottom-1/2 w-full rounded-t-full"
-                style={{
-                  height: `${bar.height * 0.45}%`,
-                  background:
-                    "linear-gradient(to top, oklch(0.78 0.16 75 / 0.75), oklch(0.78 0.16 75 / 0.06))",
-                  boxShadow: "0 0 8px oklch(0.78 0.16 75 / 0.12)",
-                  animation: `wave-bar ${bar.duration}s ease-in-out ${bar.delay}s infinite`,
-                  transformOrigin: "bottom",
-                }}
-              />
-              {/* Lower bar — mirrored, shorter */}
-              <div
-                className="absolute top-1/2 w-full rounded-b-full"
-                style={{
-                  height: `${bar.height * 0.28}%`,
-                  background:
-                    "linear-gradient(to bottom, oklch(0.78 0.16 75 / 0.5), oklch(0.78 0.16 75 / 0.02))",
-                  animation: `wave-bar ${bar.duration}s ease-in-out ${bar.delay}s infinite`,
-                  transformOrigin: "top",
-                }}
-              />
-            </div>
-          ))}
-        </div>
+              <textPath ref={t1} href="#flowLoop">
+                {FLOW_TEXT}
+              </textPath>
+            </text>
+            <text
+              fill="#d4c9b0"
+              fontSize="18"
+              fontFamily="var(--font-geist-mono), ui-monospace, monospace"
+              letterSpacing="0.03em"
+            >
+              <textPath ref={t2} href="#flowLoop">
+                {FLOW_TEXT}
+              </textPath>
+            </text>
+          </g>
+        </svg>
       )}
+
+      {/* OmniVox pill — anchored at the curve's focal point */}
+      <div className="absolute bottom-[12%] sm:bottom-[14%] left-[44%] -translate-x-1/2">
+        <OmniVoxPill />
+      </div>
     </div>
   );
 }
@@ -358,14 +386,14 @@ export function Hero() {
         </div>
       </div>
 
-      {/* Waveform — below content, slightly overlapping upward */}
+      {/* Dictation showcase — flowing text loop + animated pill */}
       <motion.div
         initial={{ opacity: 0, scale: 0.97 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1.4, ease: "easeOut", delay: 0.2 }}
         className="relative flex-shrink-0 -mt-8 lg:-mt-16"
       >
-        <MassiveWaveform />
+        <DictationShowcase />
       </motion.div>
     </section>
   );
