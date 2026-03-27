@@ -13,7 +13,7 @@ const productLinks = [
   { label: "Use Cases", href: "/use-cases" },
   { label: "Vox for Students", href: "/students" },
   { label: "Vox for Non-Profits", href: "/non-profits" },
-  { label: "Vox for Android", href: "/android" },
+  { label: "Vox for Windows", href: "/windows" },
 ];
 
 const resourceLinks = [

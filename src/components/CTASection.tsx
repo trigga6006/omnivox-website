@@ -65,7 +65,7 @@ export function CTASection() {
 
       {/* Availability text */}
       <p className="mt-4 text-sm text-center" style={{ color: "rgba(255, 255, 235, 0.5)" }}>
-        Available on Mac, Windows, iPhone, and Android
+        Available on Windows
       </p>
     </section>
   );

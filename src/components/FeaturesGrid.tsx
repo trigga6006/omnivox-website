@@ -415,7 +415,7 @@ function FeaturesGridSection() {
 /* ------------------------------------------------------------------ */
 
 function OnTheGoSection() {
-  const platforms = ["iPhone", "Mac", "Windows", "Android"];
+  const platforms = ["Windows"];
 
   return (
     <section className="mx-auto w-full max-w-[1280px] px-6 py-20 md:py-28">
