@@ -210,7 +210,7 @@ function DictationShowcase() {
           <defs>
             <path
               id="flowLoop"
-              d="M -300 660 C -100 500 -50 200 100 50 C 220 -60 400 -40 550 80 C 700 200 500 400 700 490 C 900 580 1250 670 1700 740"
+              d="M -300 600 C -100 400 0 100 200 -20 C 350 -100 480 0 560 160 C 640 320 580 300 700 300 C 820 300 1100 340 1700 400"
               fill="none"
             />
             <filter id="textGlow" x="-10%" y="-30%" width="120%" height="160%">
@@ -247,8 +247,8 @@ function DictationShowcase() {
         </svg>
       )}
 
-      {/* OmniVox pill — centered at the curve's crossing */}
-      <div className="absolute bottom-[18%] sm:bottom-[20%] left-1/2 -translate-x-1/2">
+      {/* OmniVox pill — dead center, text flows through horizontally */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
         <OmniVoxPill />
       </div>
     </div>
