@@ -10,6 +10,23 @@ export const metadata: Metadata = {
 
 const changelog = [
   {
+    version: "0.1.8",
+    date: "2026-03-29",
+    title: "Vocabulary System, Audio Ducking Controls & Hot-Swap Prompt",
+    changes: [
+      "Vocabulary System \u2014 add custom words that Whisper should recognize (names, brands, technical terms) without needing a dictionary replacement; vocabulary words bias the Whisper decoder directly via the initial prompt",
+      "Full vocabulary CRUD with per-mode support \u2014 each context mode can have its own vocabulary list",
+      "New \"Vocabulary\" tab on the Dictionary page",
+      "Audio Ducking Controls \u2014 toggle to enable/disable system volume lowering during dictation, plus a slider (0\u2013100%) to control exactly how much other audio is reduced while recording; previously hardcoded at 70% with no way to disable",
+      "Hot-Swap Whisper Prompt \u2014 adding or removing dictionary entries and vocabulary words now updates the Whisper decoder prompt instantly with no model reload required; changes take effect on the very next transcription",
+      "Removed dead AI cleanup scaffolding",
+      "Cleaned up debug logging for production",
+      "Fixed settings page animation staggering",
+      "Synced TypeScript types with Rust backend",
+      "Fixed GPU acceleration being force-disabled in debug builds \u2014 restoring fast transcription speeds in dev",
+    ],
+  },
+  {
     version: "0.1.7",
     date: "2026-03-25",
     title: "Command Send, Mode Creation & Toast Overhaul",
