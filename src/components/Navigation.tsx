@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { WindowsLogo } from "./AppLogos";
+import { DOWNLOAD_WIN } from "@/lib/downloads";
 
 const SCROLL_THRESHOLD = 80;
 
@@ -75,9 +76,10 @@ export function Navigation() {
           ))}
         </div>
 
-        {/* Right-side CTA */}
-        <Link
-          href="#download"
+        {/* Right-side CTA — direct installer download */}
+        <a
+          href={DOWNLOAD_WIN}
+          download
           className="group inline-flex items-center gap-2 rounded-full px-4 py-2 text-[13.5px] font-semibold transition-all hover:translate-y-[-1px]"
           style={{
             backgroundColor: "var(--ember)",
@@ -88,7 +90,7 @@ export function Navigation() {
         >
           <WindowsLogo className="size-3.5 shrink-0" />
           Download
-        </Link>
+        </a>
       </div>
     </nav>
   );
