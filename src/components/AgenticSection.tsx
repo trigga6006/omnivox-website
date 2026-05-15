@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Sparkles, FileCode, GitBranch, ArrowRight } from "lucide-react";
 import { ClaudeCodeLogo, CursorLogo, CodexLogo, AiderLogo } from "./AppLogos";
 
@@ -68,52 +69,109 @@ export function AgenticSection() {
       />
 
       <div className="relative z-10 mx-auto max-w-[1240px]">
-        {/* Header */}
-        <div className="flex flex-col items-center text-center">
-          <span
-            className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 font-mono text-[10.5px] uppercase tracking-[0.2em]"
-            style={{
-              backgroundColor: "rgba(245,233,204,0.06)",
-              border: "1px solid rgba(245,233,204,0.12)",
-              color: "#FFB166",
-            }}
-          >
-            <Sparkles className="size-3" />
-            Built for agentic dev tools
-          </span>
-
-          <h2
-            className="font-display mt-7 max-w-[20ch] text-[46px] leading-[0.96] font-medium tracking-[-0.02em] sm:text-[64px] lg:text-[88px]"
-            style={{ color: "#F5E9CC" }}
-          >
-            Talk to your{" "}
-            <span
-              className="font-display-italic"
-              style={{ color: "#FFB166" }}
+        {/* Header — 2-column hero: image left, headline + agents right */}
+        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+          {/* LEFT — workspace illustration */}
+          <div className="relative">
+            <div
+              className="relative overflow-hidden rounded-3xl"
+              style={{
+                border: "1px solid rgba(245,233,204,0.12)",
+                boxShadow:
+                  "0 30px 80px -32px rgba(0,0,0,0.7), 0 0 0 1px rgba(232,120,44,0.08) inset",
+              }}
             >
-              agents.
-            </span>
-          </h2>
+              <Image
+                src="/images/agentic/workspace-night.avif"
+                alt="A developer&apos;s workspace at night — OmniVox pill projecting structured prompt cards into a code editor next to an open journal"
+                width={1536}
+                height={1024}
+                className="h-auto w-full"
+                priority={false}
+                sizes="(max-width: 1023px) 100vw, 640px"
+              />
+              {/* Bottom fade — blend into section bg */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-24"
+                style={{
+                  background:
+                    "linear-gradient(to bottom, transparent 0%, var(--section-deep-bg) 100%)",
+                }}
+              />
+              {/* Right ember edge glow */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-y-0 right-0 w-1/3"
+                style={{
+                  background:
+                    "radial-gradient(closest-side at 100% 50%, rgba(232,120,44,0.18), transparent 70%)",
+                }}
+              />
+            </div>
 
-          <p
-            className="mt-7 max-w-[640px] text-[17px] leading-[1.6]"
-            style={{ color: "rgba(245,233,204,0.7)" }}
-          >
-            Most dictation tools just paste text. OmniVox shapes what you say
-            into the structure agentic coding tools actually want — intent
-            classification, preserved file paths, explicit constraints. Skip
-            the prompt-engineering tax.
-          </p>
-
-          {/* Agent logos */}
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-            <span
-              className="font-mono text-[10.5px] uppercase tracking-[0.22em]"
-              style={{ color: "rgba(245,233,204,0.4)" }}
+            {/* Floating mono caption tag */}
+            <div
+              className="absolute -bottom-3 left-6 inline-flex items-center gap-2 rounded-full px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.22em]"
+              style={{
+                backgroundColor: "var(--section-deep-bg)",
+                border: "1px solid rgba(232,120,44,0.35)",
+                color: "#FFB166",
+              }}
             >
-              tested with
+              <span
+                className="inline-block size-1.5 rounded-full"
+                style={{ backgroundColor: "#FFB166" }}
+              />
+              Friday · 11:42 PM · Claude Code
+            </div>
+          </div>
+
+          {/* RIGHT — eyebrow + headline + subtitle + agent logos */}
+          <div className="flex flex-col items-start text-left">
+            <span
+              className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 font-mono text-[10.5px] uppercase tracking-[0.2em]"
+              style={{
+                backgroundColor: "rgba(245,233,204,0.06)",
+                border: "1px solid rgba(245,233,204,0.12)",
+                color: "#FFB166",
+              }}
+            >
+              <Sparkles className="size-3" />
+              Built for agentic dev tools
             </span>
-            <div className="flex items-center gap-3">
+
+            <h2
+              className="font-display mt-7 max-w-[14ch] text-[46px] leading-[0.96] font-medium tracking-[-0.02em] sm:text-[64px] lg:text-[80px]"
+              style={{ color: "#F5E9CC" }}
+            >
+              Talk to your{" "}
+              <span
+                className="font-display-italic"
+                style={{ color: "#FFB166" }}
+              >
+                agents.
+              </span>
+            </h2>
+
+            <p
+              className="mt-6 max-w-[520px] text-[17px] leading-[1.6]"
+              style={{ color: "rgba(245,233,204,0.7)" }}
+            >
+              Most dictation tools just paste text. OmniVox shapes what you
+              say into the structure agentic coding tools actually want —
+              intent classification, preserved file paths, explicit
+              constraints. Skip the prompt-engineering tax.
+            </p>
+
+            {/* Agent logos */}
+            <div className="mt-9 flex flex-wrap items-center gap-3">
+              <span
+                className="font-mono text-[10.5px] uppercase tracking-[0.22em]"
+                style={{ color: "rgba(245,233,204,0.4)" }}
+              >
+                tested with
+              </span>
               {AGENTS.map((agent) => (
                 <div
                   key={agent.name}
