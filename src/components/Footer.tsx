@@ -1,5 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
+import {
+  APP_VERSION,
+  DOWNLOAD_WIN,
+  REPO_URL,
+  RELEASES_URL,
+  LATEST_RELEASE_URL,
+} from "@/lib/downloads";
 
 const COLS = [
   {
@@ -14,22 +21,27 @@ const COLS = [
   {
     heading: "Resources",
     links: [
-      { label: "Docs", href: "#" },
-      { label: "Changelog", href: "#" },
-      { label: "GitHub", href: "#" },
-      { label: "Discord", href: "#" },
+      { label: "GitHub", href: REPO_URL, external: true },
+      { label: "Releases", href: RELEASES_URL, external: true },
+      { label: "FAQ", href: "#faq" },
+      { label: "Issues", href: `${REPO_URL}/issues`, external: true },
     ],
   },
   {
     heading: "Download",
     links: [
-      { label: "Windows", href: "#download" },
-      { label: "macOS · beta", href: "#download" },
-      { label: "Linux · soon", href: "#" },
-      { label: "Release notes", href: "#" },
+      {
+        label: `Windows · v${APP_VERSION}`,
+        href: DOWNLOAD_WIN,
+        external: true,
+        download: true,
+      },
+      { label: "macOS · soon", href: RELEASES_URL, external: true },
+      { label: "Linux · soon", href: RELEASES_URL, external: true },
+      { label: "Release notes", href: LATEST_RELEASE_URL, external: true },
     ],
   },
-];
+] as const;
 
 export function Footer() {
   return (
@@ -69,7 +81,7 @@ export function Footer() {
               className="font-mono text-[10.5px] uppercase tracking-[0.22em]"
               style={{ color: "var(--muted-foreground)" }}
             >
-              v0.2.5 · Tauri · Whisper · Qwen3
+              v{APP_VERSION} · Tauri · Whisper · Qwen3
             </span>
           </div>
 
@@ -83,17 +95,29 @@ export function Footer() {
                 {col.heading}
               </span>
               <ul className="flex flex-col gap-2">
-                {col.links.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="text-[13.5px] transition-colors hover:opacity-100"
-                      style={{ color: "var(--foreground)" }}
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
+                {col.links.map((link) => {
+                  const isExternal = "external" in link && link.external;
+                  return (
+                    <li key={link.label}>
+                      <a
+                        href={link.href}
+                        className="text-[13.5px] transition-colors hover:opacity-100"
+                        style={{ color: "var(--foreground)" }}
+                        {...(isExternal
+                          ? {
+                              target: "_blank",
+                              rel: "noopener noreferrer",
+                            }
+                          : {})}
+                        {...("download" in link && link.download
+                          ? { download: "" }
+                          : {})}
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))}

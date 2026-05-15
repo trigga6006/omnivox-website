@@ -1,3 +1,5 @@
+import { APP_VERSION, DOWNLOAD_WIN } from "@/lib/downloads";
+
 export function AnnouncementBar() {
   return (
     <div
@@ -21,13 +23,14 @@ export function AnnouncementBar() {
           className="font-mono text-[10.5px] uppercase tracking-[0.22em] mr-3"
           style={{ color: "var(--ember)" }}
         >
-          v0.2.5
+          v{APP_VERSION}
         </span>
         <span className="opacity-90">
           Free during early access on Windows ·{" "}
         </span>
         <a
-          href="#download"
+          href={DOWNLOAD_WIN}
+          download
           className="inline-flex items-center gap-1 font-medium underline decoration-dotted underline-offset-4 hover:decoration-solid"
           style={{ color: "var(--paper)" }}
         >

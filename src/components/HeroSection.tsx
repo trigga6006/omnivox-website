@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef, useCallback } from "react";
 import { WindowsLogo } from "./AppLogos";
+import { APP_VERSION, DOWNLOAD_WIN, WIN_INSTALLER_SIZE } from "@/lib/downloads";
 
 /* ─── OmniVox-style 16-bar waveform ─── */
 const BAR_COUNT = 18;
@@ -488,7 +489,8 @@ export function HeroSection() {
         {/* CTAs */}
         <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
           <a
-            href="#download"
+            href={DOWNLOAD_WIN}
+            download
             className="group inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-[15px] font-semibold transition-all hover:translate-y-[-1px]"
             style={{
               backgroundColor: "var(--ember)",
@@ -499,9 +501,12 @@ export function HeroSection() {
           >
             <WindowsLogo className="size-[15px]" />
             Download for Windows
-            <svg className="ml-1 transition-transform group-hover:translate-x-0.5" width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M2 7H12 M8 3 L12 7 L8 11" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+            <span
+              className="ml-1 font-mono text-[11px] opacity-70"
+              style={{ letterSpacing: "0.06em" }}
+            >
+              · {WIN_INSTALLER_SIZE}
+            </span>
           </a>
           <a
             href="#structured"
@@ -520,7 +525,7 @@ export function HeroSection() {
           className="mt-4 text-center text-[12.5px] font-mono uppercase tracking-[0.18em]"
           style={{ color: "var(--muted-foreground)" }}
         >
-          Windows · macOS · Linux soon · v0.2.5
+          Windows · macOS · Linux soon · v{APP_VERSION}
         </p>
       </div>
 
