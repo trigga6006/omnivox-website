@@ -1,16 +1,17 @@
 "use client";
 
 import { useEffect, useState, useRef, useCallback } from "react";
+import { WindowsLogo } from "./AppLogos";
 
 /* ─── OmniVox-style 16-bar waveform ─── */
-const BAR_COUNT = 16;
+const BAR_COUNT = 18;
 const WEIGHTS = [
-  0.25, 0.35, 0.48, 0.6, 0.72, 0.84, 0.92, 1.0,
-  1.0, 0.92, 0.84, 0.72, 0.6, 0.48, 0.35, 0.25,
+  0.25, 0.35, 0.48, 0.6, 0.72, 0.84, 0.92, 1.0, 1.0,
+  1.0, 1.0, 0.92, 0.84, 0.72, 0.6, 0.48, 0.35, 0.25,
 ];
 const PHASE_OFFSETS = [
-  0, 0.15, 0.05, 0.22, 0.1, 0.28, 0.08, 0.18,
-  0.12, 0.25, 0.06, 0.2, 0.14, 0.03, 0.24, 0.09,
+  0, 0.15, 0.05, 0.22, 0.1, 0.28, 0.08, 0.18, 0.04,
+  0.12, 0.25, 0.06, 0.2, 0.14, 0.03, 0.24, 0.09, 0.17,
 ];
 
 function PillWaveform({ active }: { active: boolean }) {
@@ -21,7 +22,7 @@ function PillWaveform({ active }: { active: boolean }) {
     const animate = () => {
       const t = Date.now();
       const level = active
-        ? 0.35 + Math.sin(t / 380) * 0.25 + Math.sin(t / 160) * 0.18 + Math.sin(t / 90) * 0.08
+        ? 0.4 + Math.sin(t / 380) * 0.28 + Math.sin(t / 160) * 0.2 + Math.sin(t / 90) * 0.08
         : 0.05 + Math.sin(t / 1200) * 0.03;
 
       for (let i = 0; i < BAR_COUNT; i++) {
@@ -29,9 +30,9 @@ function PillWaveform({ active }: { active: boolean }) {
         if (!bar) continue;
         const w = WEIGHTS[i];
         const p = PHASE_OFFSETS[i];
-        const perBarNoise = Math.sin(t / (120 + i * 20) + i * 1.8) * 0.12;
+        const perBarNoise = Math.sin(t / (120 + i * 20) + i * 1.8) * 0.14;
         const h = active
-          ? 3 + Math.min(1, level * w + p * level * 0.5 + perBarNoise) * 25
+          ? 3 + Math.min(1, level * w + p * level * 0.5 + perBarNoise) * 28
           : 3 + Math.min(1, level * w) * 6;
         bar.style.height = `${h}px`;
       }
@@ -42,17 +43,21 @@ function PillWaveform({ active }: { active: boolean }) {
   }, [active]);
 
   return (
-    <div className="flex items-center justify-center" style={{ gap: 3, height: 28 }}>
+    <div className="flex items-center justify-center" style={{ gap: 3, height: 32 }}>
       {Array.from({ length: BAR_COUNT }, (_, i) => (
         <div
           key={i}
-          ref={(el) => { barsRef.current[i] = el; }}
+          ref={(el) => {
+            barsRef.current[i] = el;
+          }}
           className="rounded-full"
           style={{
             width: 3,
             height: 3,
-            backgroundColor: active ? "#E8B546" : "rgba(255,255,235,0.25)",
-            transition: active ? "background-color 300ms ease" : "background-color 600ms ease, height 400ms ease-out",
+            backgroundColor: active ? "#FFB166" : "rgba(255,235,200,0.22)",
+            transition: active
+              ? "background-color 300ms ease"
+              : "background-color 600ms ease, height 400ms ease-out",
           }}
         />
       ))}
@@ -61,13 +66,14 @@ function PillWaveform({ active }: { active: boolean }) {
 }
 
 /* ─── Pill state types ─── */
-type PillState = "idle" | "recording" | "processing";
+type PillState = "idle" | "recording" | "processing" | "structured";
 
 /* ─── Auto-cycle demo sequence ─── */
 const DEMO_SEQUENCE: { state: PillState; duration: number }[] = [
-  { state: "idle", duration: 500 },
-  { state: "recording", duration: 5500 },
-  { state: "processing", duration: 2500 },
+  { state: "idle", duration: 1200 },
+  { state: "recording", duration: 5200 },
+  { state: "processing", duration: 1800 },
+  { state: "structured", duration: 4200 },
 ];
 
 function formatDuration(ms: number) {
@@ -77,104 +83,263 @@ function formatDuration(ms: number) {
   return `${m}:${sec.toString().padStart(2, "0")}`;
 }
 
-/* ─── OmniVox App UI (miniature replica of real app) ─── */
-const NAV_ITEMS = [
-  { id: "mic", label: "Dictation", active: true },
-  { id: "clock", label: "History", active: false },
-  { id: "book", label: "Dictionary", active: false },
-  { id: "download", label: "Models", active: false },
-  { id: "settings", label: "Settings", active: false },
-];
+/* ─── The structured prompt card on the right ─── */
+function StructuredCard({ stage }: { stage: PillState }) {
+  // Reveal slots one-by-one as we cycle into "structured"
+  const isReady = stage === "structured";
+  const isProc = stage === "processing";
 
-function NavIcon({ id }: { id: string }) {
-  const p = { width: 16, height: 16, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.75, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
-  switch (id) {
-    case "mic": return <svg {...p}><rect x="9" y="2" width="6" height="11" rx="3" /><path d="M5 10a7 7 0 0 0 14 0" /><line x1="12" y1="19" x2="12" y2="22" /></svg>;
-    case "clock": return <svg {...p}><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>;
-    case "book": return <svg {...p}><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></svg>;
-    case "download": return <svg {...p}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>;
-    case "settings": return <svg {...p}><circle cx="12" cy="12" r="3" /><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" /></svg>;
-    default: return null;
-  }
-}
-
-function AppPopup({ pillState }: { pillState: PillState }) {
-  const isIdle = pillState === "idle";
-  const isRecording = pillState === "recording";
-  const isProcessing = pillState === "processing";
+  const slots = [
+    { label: "intent", value: "implementation", delay: 0 },
+    { label: "goal", value: "Fix auth middleware on stale JWT", delay: 140 },
+    { label: "files", value: "src/middleware/auth.ts", delay: 280, mono: true },
+    { label: "constraints", value: "must not break refresh-token flow", delay: 420 },
+    { label: "urgency", value: "high — Friday review", delay: 560 },
+  ];
 
   return (
-    <div className="flex overflow-hidden rounded-xl" style={{
-      width: 320, height: 240,
-      background: "oklch(0.11 0.006 60)",
-      border: "1px solid rgba(255,255,255,0.06)",
-      boxShadow: "0 12px 48px rgba(0,0,0,0.6)",
-    }}>
-      {/* Sidebar */}
-      <div className="flex w-[44px] shrink-0 flex-col items-center border-r py-3" style={{ borderColor: "rgba(255,255,255,0.06)", background: "oklch(0.11 0.006 60)" }}>
-        <span className="text-[10px] font-bold tracking-wider select-none" style={{ color: "#E8B546" }}>OV</span>
-        <div className="my-2 h-px w-5" style={{ background: "rgba(255,255,255,0.08)" }} />
-        <nav className="flex flex-1 flex-col items-center gap-0.5">
-          {NAV_ITEMS.map((item) => (
-            <div key={item.id} className="relative flex h-7 w-7 items-center justify-center rounded-lg" style={{ color: item.active ? "#E8B546" : "rgba(255,255,235,0.3)" }}>
-              {item.active && <span className="absolute left-0 top-1/2 h-3.5 w-[2px] -translate-y-1/2 rounded-r-full" style={{ background: "#E8B546" }} />}
-              <NavIcon id={item.id} />
-            </div>
-          ))}
-        </nav>
+    <div
+      className="relative h-full overflow-hidden rounded-2xl p-5"
+      style={{
+        backgroundColor: "var(--paper)",
+        border: "1px solid var(--border)",
+        boxShadow:
+          "0 1px 0 rgba(255,255,255,0.6) inset, 0 18px 40px -24px rgba(31,20,10,0.18), 0 4px 10px -6px rgba(31,20,10,0.12)",
+      }}
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <span
+            className="inline-block size-2 rounded-full transition-colors duration-500"
+            style={{
+              backgroundColor: isReady ? "#10B981" : isProc ? "var(--amber)" : "rgba(31,20,10,0.2)",
+            }}
+          />
+          <span
+            className="font-mono text-[10px] uppercase tracking-[0.18em]"
+            style={{ color: "var(--muted-foreground)" }}
+          >
+            Structured Mode
+          </span>
+        </div>
+        <span
+          className="font-mono text-[10px]"
+          style={{ color: "var(--muted-foreground)" }}
+        >
+          {isReady ? "ready" : isProc ? "parsing…" : "waiting"}
+        </span>
       </div>
 
-      {/* Main content — Dictation panel */}
-      <div className="flex flex-1 flex-col items-center justify-center px-4" style={{
-        background: "radial-gradient(ellipse at 50% 80%, oklch(0.14 0.015 55) 0%, oklch(0.11 0.006 60) 60%)",
-      }}>
-        {/* Status headline */}
-        <p className="text-[11px] font-medium tracking-wide" style={{
-          fontFamily: "'Instrument Serif', Georgia, serif",
-          color: isRecording ? "#E8B546" : isProcessing ? "rgba(255,255,235,0.5)" : "rgba(255,255,235,0.8)",
-        }}>
-          {isIdle && "Ready to listen"}
-          {isRecording && "Listening..."}
-          {isProcessing && "Transcribing..."}
-        </p>
-        <p className="mt-0.5 text-[9px]" style={{ color: "rgba(255,255,235,0.25)" }}>
-          {isIdle && "Ctrl + Win to begin"}
-          {isRecording && "Speak now — press again to stop"}
-          {isProcessing && "Processing your audio..."}
-        </p>
-
-        {/* Record button */}
-        <div className="relative mt-4 flex items-center justify-center">
-          {isRecording && <span className="absolute inset-[-4px] rounded-full" style={{ background: "rgba(180,50,40,0.15)", animation: "pulse 2s ease-in-out infinite" }} />}
-          {isProcessing && (
-            <svg className="absolute h-[52px] w-[52px]" viewBox="0 0 52 52" style={{ animation: "spin 2s linear infinite" }}>
-              <circle cx="26" cy="26" r="24" fill="none" stroke="#E8B546" strokeWidth="1.5" strokeDasharray="38 114" strokeLinecap="round" />
-            </svg>
-          )}
-          <div className="flex h-11 w-11 items-center justify-center rounded-full" style={{
-            background: isRecording ? "oklch(0.52 0.22 18)" : "oklch(0.17 0.008 52)",
-            border: isRecording ? "1px solid rgba(180,50,40,0.4)" : "1px solid rgba(232,181,70,0.3)",
-            boxShadow: isRecording ? "0 0 20px rgba(180,50,40,0.3)" : "none",
-          }}>
-            {isIdle && <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8B546" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="2" width="6" height="11" rx="3" /><path d="M5 10a7 7 0 0 0 14 0" /><line x1="12" y1="19" x2="12" y2="22" /></svg>}
-            {isRecording && <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><rect x="6" y="6" width="12" height="12" rx="2" /></svg>}
-            {isProcessing && <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8B546" strokeWidth="1.5" style={{ animation: "spin 1s linear infinite" }}><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg>}
+      <div className="flex flex-col gap-2.5">
+        {slots.map((slot, i) => (
+          <div
+            key={slot.label}
+            className="flex flex-col gap-1 transition-all duration-500"
+            style={{
+              opacity: isReady ? 1 : 0.32,
+              transform: isReady ? "translateY(0)" : "translateY(0)",
+              transitionDelay: isReady ? `${slot.delay}ms` : "0ms",
+            }}
+          >
+            <span
+              className="font-mono text-[9px] uppercase tracking-[0.2em]"
+              style={{ color: "var(--ember)" }}
+            >
+              {slot.label}
+            </span>
+            {isReady ? (
+              <span
+                className={
+                  slot.mono
+                    ? "font-mono text-[12px] leading-snug"
+                    : "text-[13.5px] leading-snug"
+                }
+                style={{ color: "var(--foreground)" }}
+              >
+                {slot.value}
+              </span>
+            ) : (
+              <span
+                className="h-3 rounded-sm"
+                style={{
+                  width: `${[68, 80, 60, 75, 55][i] || 60}%`,
+                  backgroundColor: "var(--cream-dark)",
+                  backgroundImage: isProc
+                    ? "linear-gradient(90deg, var(--cream-dark) 0%, var(--secondary) 50%, var(--cream-dark) 100%)"
+                    : "none",
+                  backgroundSize: "200% 100%",
+                  backgroundRepeat: "no-repeat",
+                  animation: isProc ? "shimmerLine 1.4s linear infinite" : "none",
+                }}
+              />
+            )}
+            {i < slots.length - 1 && (
+              <span
+                className="mt-1 block h-px w-full"
+                style={{ backgroundColor: "var(--border)" }}
+              />
+            )}
           </div>
-        </div>
-
-        {/* Audio visualizer bars (recording only) */}
-        <div className="mt-3 flex items-end justify-center gap-[3px] transition-opacity duration-300" style={{ height: 20, opacity: isRecording ? 1 : 0 }}>
-          {[0.5, 0.7, 0.9, 1.0, 0.8].map((w, i) => (
-            <div key={i} className="rounded-full" style={{
-              width: 3,
-              background: "linear-gradient(to top, #E8B546, rgba(232,181,70,0.4))",
-              height: isRecording ? `${8 + w * 12}px` : "3px",
-              transition: "height 150ms ease-out",
-              animation: isRecording ? `bar-bounce 0.6s ease-in-out ${i * 0.08}s infinite alternate` : "none",
-            }} />
-          ))}
-        </div>
+        ))}
       </div>
+
+      {/* Voxify tag bottom */}
+      <div
+        className="absolute bottom-3 right-4 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-mono uppercase tracking-[0.18em] transition-opacity duration-500"
+        style={{
+          backgroundColor: "rgba(216,84,29,0.1)",
+          color: "var(--ember)",
+          opacity: isReady ? 1 : 0,
+        }}
+      >
+        <span>·voxify</span>
+      </div>
+    </div>
+  );
+}
+
+/* ─── The raw transcript card on the left ─── */
+function RawTranscriptCard({ stage }: { stage: PillState }) {
+  // Show as if being dictated; reveal progressively during recording
+  const fullText =
+    "um okay so we need to look at the auth middleware, like the JWT refresh thing — it's failing intermittently on stale tokens and it has to ship by Friday's review, can you handle it? Voxify.";
+  const showAll = stage === "processing" || stage === "structured";
+  const recording = stage === "recording";
+
+  const [chars, setChars] = useState(0);
+  useEffect(() => {
+    if (stage === "idle") {
+      setChars(0);
+      return;
+    }
+    if (showAll) {
+      setChars(fullText.length);
+      return;
+    }
+    if (!recording) return;
+    const startedAt = Date.now();
+    let raf = 0;
+    const step = () => {
+      const elapsed = Date.now() - startedAt;
+      const target = Math.min(fullText.length, Math.floor(elapsed / 35));
+      setChars(target);
+      if (target < fullText.length) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [stage, recording, showAll, fullText.length]);
+
+  const shown = fullText.slice(0, chars);
+
+  return (
+    <div
+      className="relative h-full overflow-hidden rounded-2xl p-5"
+      style={{
+        backgroundColor: "var(--paper)",
+        border: "1px solid var(--border)",
+        boxShadow:
+          "0 1px 0 rgba(255,255,255,0.6) inset, 0 18px 40px -24px rgba(31,20,10,0.18), 0 4px 10px -6px rgba(31,20,10,0.12)",
+      }}
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <span
+            className="inline-block size-2 rounded-full transition-colors duration-300"
+            style={{
+              backgroundColor:
+                stage === "recording"
+                  ? "var(--ember)"
+                  : stage === "idle"
+                  ? "rgba(31,20,10,0.2)"
+                  : "rgba(31,20,10,0.35)",
+              animation: stage === "recording" ? "pulse-glow 2s ease-out infinite" : "none",
+            }}
+          />
+          <span
+            className="font-mono text-[10px] uppercase tracking-[0.18em]"
+            style={{ color: "var(--muted-foreground)" }}
+          >
+            Raw transcript
+          </span>
+        </div>
+        <span
+          className="font-mono text-[10px]"
+          style={{ color: "var(--muted-foreground)" }}
+        >
+          whisper-medium
+        </span>
+      </div>
+
+      <p
+        className="text-[14px] leading-[1.55] min-h-[112px]"
+        style={{ color: stage === "idle" ? "rgba(31,20,10,0.3)" : "var(--foreground)" }}
+      >
+        {stage === "idle"
+          ? "press Ctrl + Alt to speak…"
+          : (
+            <>
+              {shown}
+              {recording && (
+                <span
+                  className="inline-block w-[6px] -mb-0.5 ml-0.5 align-baseline"
+                  style={{
+                    height: 14,
+                    backgroundColor: "var(--ember)",
+                    animation: "pulse 1s ease-in-out infinite",
+                  }}
+                />
+              )}
+            </>
+          )}
+      </p>
+
+      {/* Bottom tag: highlights "voxify" trigger */}
+      <div
+        className="absolute bottom-3 right-4 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-mono uppercase tracking-[0.18em] transition-opacity duration-500"
+        style={{
+          backgroundColor: "rgba(232,120,44,0.12)",
+          color: "var(--ember)",
+          opacity: showAll ? 1 : 0,
+        }}
+      >
+        trigger detected
+      </div>
+    </div>
+  );
+}
+
+/* ─── Connecting arrow / flow indicator ─── */
+function FlowArrow({ active }: { active: boolean }) {
+  return (
+    <div
+      className="relative hidden lg:flex items-center justify-center"
+      style={{ width: 48, height: 2 }}
+      aria-hidden="true"
+    >
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundColor: "transparent",
+          backgroundImage: active
+            ? "linear-gradient(90deg, transparent 0%, var(--ember) 50%, transparent 100%)"
+            : "linear-gradient(90deg, transparent 0%, rgba(31,20,10,0.15) 50%, transparent 100%)",
+          backgroundSize: active ? "200% 100%" : "100% 100%",
+          backgroundRepeat: "no-repeat",
+          animation: active ? "shimmerLine 1.6s linear infinite" : "none",
+          transition: "background-image 400ms ease",
+        }}
+      />
+      <svg
+        width="10"
+        height="10"
+        viewBox="0 0 10 10"
+        className="absolute right-[-2px]"
+        style={{ color: active ? "var(--ember)" : "rgba(31,20,10,0.25)", transition: "color 400ms" }}
+      >
+        <path d="M1 1 L9 5 L1 9" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
     </div>
   );
 }
@@ -182,7 +347,6 @@ function AppPopup({ pillState }: { pillState: PillState }) {
 export function HeroSection() {
   const [pillState, setPillState] = useState<PillState>("idle");
   const [elapsed, setElapsed] = useState(0);
-  const [showPopup, setShowPopup] = useState(false);
   const seqIdx = useRef(0);
 
   // Auto-cycle through demo states
@@ -206,215 +370,348 @@ export function HeroSection() {
     return () => clearInterval(iv);
   }, [pillState]);
 
-  const handleContextMenu = useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    setShowPopup((v) => !v);
-  }, []);
-
-  const isIdle = pillState === "idle";
   const isRecording = pillState === "recording";
   const isProcessing = pillState === "processing";
+  const isStructured = pillState === "structured";
+
+  // Pill copy
+  const pillCenter = useCallback(() => {
+    if (isRecording) return <PillWaveform active />;
+    if (isProcessing) {
+      return (
+        <span
+          className="font-mono text-[11px] tracking-wider"
+          style={{ color: "rgba(255,177,102,0.85)" }}
+        >
+          structuring…
+        </span>
+      );
+    }
+    if (isStructured) {
+      return (
+        <span
+          className="font-mono text-[11px] tracking-wider"
+          style={{ color: "rgba(255,177,102,0.95)" }}
+        >
+          ready · paste
+        </span>
+      );
+    }
+    return <PillWaveform active={false} />;
+  }, [isRecording, isProcessing, isStructured]);
 
   return (
     <section
-      className="relative overflow-hidden"
-      style={{ backgroundColor: "var(--section-light-bg)" }}
+      className="relative overflow-hidden grain-overlay"
+      style={{
+        backgroundColor: "var(--background)",
+        background:
+          "radial-gradient(1200px 600px at 50% -8%, rgba(232,120,44,0.10), transparent 60%), radial-gradient(800px 500px at 90% 30%, rgba(200,168,216,0.10), transparent 60%), var(--background)",
+      }}
     >
-      {/* Main content */}
-      <div className="relative z-10 mx-auto max-w-[1200px] px-6 pt-32 text-center lg:pt-36">
-        <h1 className="font-heading mx-auto text-[44px] leading-[1em] tracking-[-0.02em] font-normal md:text-[72px] lg:text-[110px]">
-          <span style={{ color: "color-mix(in srgb, var(--foreground) 30%, transparent)" }}>
-            Don&apos;t type,{" "}
+      {/* Decorative ember orb top-right */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-32 -right-24 w-[480px] h-[480px] rounded-full"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(232,120,44,0.18) 0%, transparent 65%)",
+          filter: "blur(20px)",
+        }}
+      />
+      {/* Decorative ember orb mid-left */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-40 -left-32 w-[420px] h-[420px] rounded-full"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(216,84,29,0.10) 0%, transparent 70%)",
+          filter: "blur(30px)",
+        }}
+      />
+
+      <div className="relative z-10 mx-auto max-w-[1240px] px-6 pt-32 lg:pt-40">
+        {/* Eyebrow tag */}
+        <div className="flex justify-center">
+          <span
+            className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-mono uppercase tracking-[0.18em]"
+            style={{
+              backgroundColor: "var(--paper)",
+              border: "1px solid var(--border)",
+              color: "var(--ember)",
+              boxShadow: "0 1px 0 rgba(255,255,255,0.6) inset, 0 6px 14px -8px rgba(31,20,10,0.15)",
+            }}
+          >
+            <span
+              className="inline-block size-1.5 rounded-full"
+              style={{ backgroundColor: "var(--ember)" }}
+            />
+            local-first dictation for the agentic age
           </span>
-          <span className="font-bold italic" style={{ color: "var(--foreground)" }}>
-            just speak
+        </div>
+
+        {/* Headline */}
+        <h1
+          className="font-display mx-auto mt-7 max-w-[14ch] text-center text-[56px] leading-[0.94] font-medium md:text-[88px] lg:text-[122px]"
+          style={{ color: "var(--foreground)" }}
+        >
+          Speak your{" "}
+          <span
+            className="font-display-italic"
+            style={{
+              color: "var(--ember)",
+            }}
+          >
+            intent.
+          </span>{" "}
+          Ship a{" "}
+          <span
+            className="font-display-italic"
+            style={{
+              color: "var(--ember)",
+            }}
+          >
+            prompt.
           </span>
         </h1>
 
+        {/* Subtitle */}
         <p
-          className="font-sans mx-auto mt-6 max-w-[520px] text-lg leading-relaxed font-normal md:text-xl"
+          className="mx-auto mt-7 max-w-[620px] text-center text-[17px] md:text-lg leading-[1.55]"
           style={{ color: "var(--dark-secondary)" }}
         >
-          The voice-to-text AI that turns speech into clear, polished writing in
-          every app.
+          OmniVox listens, structures, and types — all on your machine. Whisper
+          for speech, a local Qwen for cleanup, output shaped for Claude Code,
+          Cursor, and Codex. No cloud, no API keys, no telemetry.
         </p>
 
-        <div className="mt-8">
+        {/* CTAs */}
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
           <a
             href="#download"
-            className="inline-flex items-center gap-2.5 rounded-xl border-2 px-7 py-3.5 text-[15px] font-semibold transition-all hover:opacity-90"
+            className="group inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-[15px] font-semibold transition-all hover:translate-y-[-1px]"
             style={{
-              backgroundColor: "var(--purple)",
-              borderColor: "var(--foreground)",
-              color: "var(--foreground)",
+              backgroundColor: "var(--ember)",
+              color: "#FFFBF1",
+              boxShadow:
+                "0 1px 0 rgba(255,255,255,0.18) inset, 0 14px 28px -12px rgba(216,84,29,0.55), 0 4px 10px -4px rgba(216,84,29,0.35)",
             }}
           >
-            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <rect x="0" y="0" width="7" height="7" fill="currentColor" />
-              <rect x="9" y="0" width="7" height="7" fill="currentColor" />
-              <rect x="0" y="9" width="7" height="7" fill="currentColor" />
-              <rect x="9" y="9" width="7" height="7" fill="currentColor" />
-            </svg>
+            <WindowsLogo className="size-[15px]" />
             Download for Windows
+            <svg className="ml-1 transition-transform group-hover:translate-x-0.5" width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M2 7H12 M8 3 L12 7 L8 11" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </a>
+          <a
+            href="#structured"
+            className="inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-[15px] font-medium transition-colors hover:bg-[var(--secondary)]"
+            style={{
+              border: "1.5px solid var(--foreground)",
+              color: "var(--foreground)",
+              backgroundColor: "transparent",
+            }}
+          >
+            See Structured Mode
           </a>
         </div>
 
-        <p className="mt-3 text-[13px] tracking-wide" style={{ color: "var(--muted-foreground)" }}>
-          Available on Windows
+        <p
+          className="mt-4 text-center text-[12.5px] font-mono uppercase tracking-[0.18em]"
+          style={{ color: "var(--muted-foreground)" }}
+        >
+          Windows · macOS · Linux soon · v0.2.5
         </p>
       </div>
 
-      {/* === Hero Animation === */}
-      <div
-        className="relative mt-6 flex w-full items-end justify-center lg:mt-2"
-        style={{ height: 300 }}
-      >
-        {/* Left SVG — messy text trail flowing from left edge INTO the pill */}
-        <div className="absolute left-0 top-0 bottom-0 w-1/2 overflow-visible" aria-hidden="true">
-          <svg viewBox="0 0 600 300" width="100%" height="100%" style={{ overflow: "visible" }} preserveAspectRatio="xMaxYMax meet">
-            <defs><style>{`#marquee-text-left { font-size: 14px; font-weight: 400; fill: var(--foreground); opacity: 0.25; font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif; }`}</style></defs>
-            <path id="curve-left" d="M-200 30 C0 50, 200 160, 400 230 C500 250, 570 258, 650 260" stroke="transparent" fill="none" />
-            <text x="-3300">
-              <textPath id="marquee-text-left" xlinkHref="#curve-left">
-                Umm, hope your week has started well…I was talking to Cheyene earlier but reception was really bad and I think their going to handle the first part of the project, but I&apos;m not totally sure. Also, I told the team the the new timeline should be ready by Friday, although it&apos;s probably going to slip. There&apos;s been a lot of back and forth and honestly the the whole thing&apos;s been kind of chaotic, like nobody really knows what&apos;s going on so can you check in with them and see if the notes from yesterday&apos;s meeting were sent out, or if they&apos;re still waiting. I think Cheyene mentioned it but didn&apos;t confirm, and now I&apos;m a little lost.
-              </textPath>
-              <animate attributeName="x" values="-3300; 0" dur="35s" repeatCount="indefinite" />
-            </text>
-          </svg>
-        </div>
-
-        {/* Solid mask behind the pill — blocks trail text from showing through */}
-        <div
-          className="absolute z-[5]"
-          style={{
-            bottom: 16,
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: 300,
-            height: 48,
-            borderRadius: 9999,
-            backgroundColor: "var(--section-light-bg)",
-          }}
-        />
-
-        {/* Center: OmniVox floating pill with popup */}
-        <div
-          className="absolute z-10 flex flex-col items-center"
-          style={{ bottom: 16, left: "50%", transform: "translateX(-50%)" }}
-        >
-          {/* "Removed repetition" tag */}
-          <span
-            className="mb-3 inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold tracking-wide"
-            style={{ backgroundColor: "var(--section-green-bg)" }}
-          >
-            <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-              <path d="M2 7L5.5 10.5L12 3.5" stroke="#E8B546" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            <span style={{ color: "#E8B546" }}>Removed repetition</span>
-          </span>
-
-          {/* App popup — miniature replica of the real OmniVox desktop app */}
+      {/* === The transformation diagram === */}
+      <div className="relative z-10 mx-auto mt-20 max-w-[1240px] px-6 pb-24 lg:mt-24">
+        <div className="grid items-stretch grid-cols-1 gap-6 lg:grid-cols-[1fr_auto_auto_auto_1fr] lg:gap-3">
+          {/* Left: Raw transcript */}
           <div
-            className="mb-2 overflow-hidden rounded-xl transition-all duration-300 ease-out"
-            style={{
-              maxHeight: showPopup ? 260 : 0,
-              opacity: showPopup ? 1 : 0,
-              transform: showPopup ? "scale(1) translateY(0)" : "scale(0.95) translateY(8px)",
-            }}
+            className="min-h-[220px]"
+            style={{ animation: "fadeInUp 700ms ease-out both" }}
           >
-            <AppPopup pillState={pillState} />
+            <RawTranscriptCard stage={pillState} />
           </div>
 
-          {/* Floating pill */}
-          <div
-            className="relative flex items-center gap-3 rounded-full px-5 transition-all duration-300 ease-out"
-            style={{
-              height: 48,
-              minWidth: 300,
-              background: isIdle
-                ? "rgba(18,16,14,0.65)"
-                : "rgba(18,16,14,0.82)",
-              backdropFilter: "blur(24px) saturate(1.5)",
-              WebkitBackdropFilter: "blur(24px) saturate(1.5)",
-              boxShadow: isRecording
-                ? "0 4px 30px rgba(0,0,0,0.35), 0 0 20px rgba(232,181,70,0.12)"
-                : "0 4px 30px rgba(0,0,0,0.35)",
-              border: `1px solid ${isRecording ? "rgba(232,181,70,0.2)" : isProcessing ? "rgba(232,181,70,0.15)" : "rgba(255,255,255,0.06)"}`,
-              opacity: isIdle ? 0.7 : 1,
-              cursor: "pointer",
-            }}
-            onContextMenu={handleContextMenu}
-            onClick={() => showPopup && setShowPopup(false)}
-          >
-            {/* Processing shimmer */}
-            {isProcessing && (
-              <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-full" aria-hidden="true">
-                <div className="absolute inset-0" style={{
-                  background: "linear-gradient(90deg, transparent 0%, rgba(232,181,70,0.08) 50%, transparent 100%)",
-                  animation: "shimmer 2s ease-in-out infinite",
-                }} />
-              </div>
-            )}
+          {/* Arrow */}
+          <FlowArrow active={isProcessing || isStructured} />
 
-            {/* Left: brand / timer */}
-            <div className="flex w-[48px] shrink-0 items-center justify-start">
-              {isIdle && (
-                <span className="text-sm font-semibold tracking-wider select-none" style={{ color: "rgba(255,255,235,0.4)" }}>OV</span>
-              )}
-              {isRecording && (
-                <span className="font-mono text-xs tabular-nums tracking-wide" style={{ color: "#E8B546" }}>
-                  {formatDuration(elapsed)}
-                </span>
-              )}
-              {isProcessing && (
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8B546" strokeWidth="2" style={{ animation: "spin 1s linear infinite" }}>
-                  <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-                </svg>
-              )}
-            </div>
+          {/* Center: the floating pill */}
+          <div className="relative flex items-center justify-center" style={{ minWidth: 320 }}>
+            {/* Glow ring */}
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 -m-6 rounded-full transition-opacity duration-700"
+              style={{
+                background:
+                  "radial-gradient(closest-side, rgba(232,120,44,0.22), transparent 70%)",
+                opacity: isRecording ? 1 : isProcessing ? 0.55 : 0.25,
+                filter: "blur(12px)",
+              }}
+            />
 
-            {/* Center: waveform / status */}
-            <div className="flex flex-1 items-center justify-center overflow-hidden">
-              {(isIdle || isRecording) && <PillWaveform active={isRecording} />}
-              {isProcessing && (
-                <span className="truncate text-xs font-medium tracking-wide" style={{ color: "rgba(232,181,70,0.8)" }}>
-                  Transcribing...
-                </span>
-              )}
-            </div>
-
-            {/* Right: indicator dot */}
-            <div className="flex w-[32px] shrink-0 items-center justify-end">
-              {isIdle && <div className="h-2 w-2 rounded-full" style={{ border: "1px solid rgba(255,255,235,0.2)" }} />}
-              {isRecording && (
-                <div className="relative flex items-center justify-center">
-                  <span className="absolute h-5 w-5 rounded-full" style={{ backgroundColor: "rgba(232,181,70,0.15)", animation: "pulse 2s ease-in-out infinite" }} />
-                  <span className="relative h-2.5 w-2.5 rounded-full" style={{ backgroundColor: "#E8B546", boxShadow: "0 0 8px rgba(232,181,70,0.4)" }} />
+            <div className="relative flex flex-col items-center">
+              {/* Pill */}
+              <div
+                className="relative flex items-center gap-3 rounded-full px-5 transition-all duration-500"
+                style={{
+                  height: 56,
+                  minWidth: 280,
+                  background:
+                    "linear-gradient(180deg, rgba(42,26,14,0.96) 0%, rgba(31,20,10,0.96) 100%)",
+                  backdropFilter: "blur(20px) saturate(1.5)",
+                  WebkitBackdropFilter: "blur(20px) saturate(1.5)",
+                  boxShadow: isRecording
+                    ? "0 1px 0 rgba(255,255,255,0.06) inset, 0 18px 50px -16px rgba(216,84,29,0.55), 0 6px 18px -8px rgba(31,20,10,0.4)"
+                    : isStructured
+                    ? "0 1px 0 rgba(255,255,255,0.06) inset, 0 18px 50px -16px rgba(16,185,129,0.35), 0 6px 18px -8px rgba(31,20,10,0.4)"
+                    : "0 1px 0 rgba(255,255,255,0.06) inset, 0 14px 40px -16px rgba(31,20,10,0.45), 0 6px 14px -8px rgba(31,20,10,0.3)",
+                  border: `1px solid ${
+                    isRecording
+                      ? "rgba(232,120,44,0.35)"
+                      : isStructured
+                      ? "rgba(16,185,129,0.35)"
+                      : "rgba(255,255,255,0.06)"
+                  }`,
+                }}
+              >
+                {/* Left: brand / timer */}
+                <div className="flex w-[52px] shrink-0 items-center justify-start">
+                  {pillState === "idle" && (
+                    <span
+                      className="font-display text-[15px] font-semibold tracking-[0.05em]"
+                      style={{ color: "rgba(255,235,200,0.55)" }}
+                    >
+                      OV
+                    </span>
+                  )}
+                  {isRecording && (
+                    <span
+                      className="font-mono text-[12px] tabular-nums tracking-wide"
+                      style={{ color: "#FFB166" }}
+                    >
+                      {formatDuration(elapsed)}
+                    </span>
+                  )}
+                  {isProcessing && (
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#FFB166"
+                      strokeWidth="2"
+                      style={{ animation: "spin 1s linear infinite" }}
+                    >
+                      <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+                    </svg>
+                  )}
+                  {isStructured && (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path
+                        d="M5 12l4 4 10-10"
+                        stroke="#34D399"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  )}
                 </div>
-              )}
-              {isProcessing && <div className="h-2 w-2 rounded-full" style={{ backgroundColor: "rgba(232,181,70,0.5)" }} />}
+
+                {/* Center */}
+                <div className="flex flex-1 items-center justify-center overflow-hidden">
+                  {pillCenter()}
+                </div>
+
+                {/* Right: indicator */}
+                <div className="flex w-[36px] shrink-0 items-center justify-end">
+                  {pillState === "idle" && (
+                    <div
+                      className="h-2 w-2 rounded-full"
+                      style={{ border: "1px solid rgba(255,235,200,0.22)" }}
+                    />
+                  )}
+                  {isRecording && (
+                    <div className="relative flex items-center justify-center">
+                      <span
+                        className="absolute h-5 w-5 rounded-full"
+                        style={{
+                          backgroundColor: "rgba(232,120,44,0.2)",
+                          animation: "pulse 2s ease-in-out infinite",
+                        }}
+                      />
+                      <span
+                        className="relative h-2.5 w-2.5 rounded-full"
+                        style={{
+                          backgroundColor: "#FFB166",
+                          boxShadow: "0 0 12px rgba(232,120,44,0.5)",
+                        }}
+                      />
+                    </div>
+                  )}
+                  {isProcessing && (
+                    <div
+                      className="h-2 w-2 rounded-full"
+                      style={{ backgroundColor: "rgba(255,177,102,0.55)" }}
+                    />
+                  )}
+                  {isStructured && (
+                    <div
+                      className="h-2 w-2 rounded-full"
+                      style={{
+                        backgroundColor: "#34D399",
+                        boxShadow: "0 0 10px rgba(52,211,153,0.5)",
+                      }}
+                    />
+                  )}
+                </div>
+              </div>
+
+              {/* Pill caption */}
+              <p
+                className="mt-4 font-mono text-[10px] uppercase tracking-[0.22em]"
+                style={{ color: "var(--muted-foreground)" }}
+              >
+                Ctrl + Alt · global hotkey
+              </p>
             </div>
           </div>
 
-          {/* Right-click hint */}
-          <p className="mt-2 text-[10px] tracking-wider" style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>
-            right-click for menu
-          </p>
+          {/* Arrow */}
+          <FlowArrow active={isStructured} />
+
+          {/* Right: Structured prompt */}
+          <div
+            className="min-h-[220px]"
+            style={{ animation: "fadeInUp 700ms ease-out 100ms both" }}
+          >
+            <StructuredCard stage={pillState} />
+          </div>
         </div>
 
-        {/* Right SVG — clean text trail flowing OUT of the pill to right edge */}
-        <div className="absolute right-0 top-0 bottom-0 w-1/2 overflow-visible" aria-hidden="true">
-          <svg viewBox="0 0 600 300" width="100%" height="100%" style={{ overflow: "visible" }} preserveAspectRatio="xMinYMax meet">
-            <defs><style>{`#marquee-text-right { font-size: 14px; font-weight: 600; fill: #FFFFEB; font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif; }`}</style></defs>
-            <path id="curve-right-bg" d="M-50 260 C30 258, 100 250, 200 230 C400 170, 550 80, 800 30" stroke="var(--section-dark-bg)" strokeWidth="40" strokeLinecap="round" fill="none" />
-            <path id="curve-right" d="M-50 260 C30 258, 100 250, 200 230 C400 170, 550 80, 800 30" stroke="transparent" fill="none" />
-            <text x="-2500">
-              <textPath id="marquee-text-right" xlinkHref="#curve-right">
-                Hope your week is off to a good start. I was talking to Cheyene earlier, but the reception was really bad. I think they&apos;re going to handle the first part of the project, but I&apos;m not totally sure. I also told the team the new timeline should be ready by Friday — although it might slip. There&apos;s been a lot of back and forth, and honestly, the whole thing has been a bit chaotic. It feels like nobody really knows what&apos;s going on. Can you check in with them and see if the notes from yesterday&apos;s meeting were sent out, or if they&apos;re still waiting? I think Cheyene mentioned it, but didn&apos;t confirm — and now I&apos;m a little lost!
-              </textPath>
-              <animate attributeName="x" values="-2500; 0" dur="28s" repeatCount="indefinite" />
-            </text>
-          </svg>
+        {/* Stage labels under the diagram */}
+        <div className="mt-6 grid grid-cols-1 gap-3 lg:grid-cols-3 lg:gap-12 lg:px-2">
+          <p
+            className="text-center font-mono text-[10.5px] uppercase tracking-[0.22em]"
+            style={{ color: "var(--muted-foreground)" }}
+          >
+            01 — Speech in (local Whisper)
+          </p>
+          <p
+            className="text-center font-mono text-[10.5px] uppercase tracking-[0.22em]"
+            style={{ color: "var(--muted-foreground)" }}
+          >
+            02 — Voxify trigger fires
+          </p>
+          <p
+            className="text-center font-mono text-[10.5px] uppercase tracking-[0.22em]"
+            style={{ color: "var(--muted-foreground)" }}
+          >
+            03 — Slot-shaped prompt out
+          </p>
         </div>
       </div>
 
@@ -422,7 +719,6 @@ export function HeroSection() {
         @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(200%); } }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.4); opacity: 0; } }
-        @keyframes bar-bounce { 0% { height: 4px; } 100% { height: 18px; } }
       `}</style>
     </section>
   );

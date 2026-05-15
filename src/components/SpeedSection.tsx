@@ -1,156 +1,218 @@
 export function SpeedSection() {
   return (
-    <section className="px-6 py-20" style={{ backgroundColor: "var(--section-light-bg)" }}>
-      <div className="mx-auto max-w-[1200px] text-center">
+    <section
+      className="relative overflow-hidden px-6 py-28 lg:py-36"
+      style={{ backgroundColor: "var(--background)" }}
+    >
+      {/* Soft warm wash */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(900px 400px at 50% 0%, rgba(232,120,44,0.06), transparent 70%)",
+        }}
+      />
+
+      <div className="relative z-10 mx-auto max-w-[1200px] text-center">
+        {/* Eyebrow */}
+        <span
+          className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 font-mono text-[10.5px] uppercase tracking-[0.2em]"
+          style={{
+            backgroundColor: "var(--paper)",
+            border: "1px solid var(--border)",
+            color: "var(--ember)",
+          }}
+        >
+          <span
+            className="inline-block size-1.5 rounded-full"
+            style={{ backgroundColor: "var(--ember)" }}
+          />
+          Speed
+        </span>
+
         {/* Heading */}
-        <h2 className="font-heading text-[48px] leading-[48px] font-normal md:text-[72px] md:leading-[68px] lg:text-[120px] lg:leading-[102px]" style={{ color: "var(--foreground)" }}>
+        <h2
+          className="font-display mt-7 text-[52px] leading-[0.94] font-medium tracking-[-0.02em] md:text-[80px] lg:text-[120px]"
+          style={{ color: "var(--foreground)" }}
+        >
           <span className="relative inline-block">
-            4x faster
+            <span className="font-display-italic" style={{ color: "var(--ember)" }}>
+              4×
+            </span>
             <span
               aria-hidden="true"
-              className="absolute bottom-0 left-0 h-1 w-full rounded-full"
-              style={{ backgroundColor: "color-mix(in srgb, var(--purple) 60%, transparent)" }}
+              className="absolute -bottom-1 left-0 h-[6px] w-full rounded-full"
+              style={{
+                background:
+                  "linear-gradient(90deg, transparent 0%, rgba(232,120,44,0.45) 30%, rgba(232,120,44,0.45) 70%, transparent 100%)",
+              }}
             />
           </span>{" "}
-          than typing
+          faster than{" "}
+          <span style={{ color: "var(--foreground)" }}>typing.</span>
         </h2>
 
         {/* Body text */}
-        <p className="mx-auto mt-6 mb-8 max-w-[680px] text-lg leading-7" style={{ color: "var(--dark-secondary)" }}>
-          After 150 years of using the same keyboard, voice that actually works
-          is <em>finally</em> here. When you create, code, and respond faster,
-          you free up time for more. Speak naturally at the speed you think and
-          let Vox handle the rest.
+        <p
+          className="mx-auto mt-7 mb-10 max-w-[640px] text-[17px] leading-[1.55] md:text-lg"
+          style={{ color: "var(--dark-secondary)" }}
+        >
+          You think at 400 words per minute, speak at ~180, and type at 45.
+          OmniVox closes the gap between thought and prompt — so you stop
+          translating ideas into keystrokes and start shipping them.
         </p>
 
-        {/* Buttons row */}
-        <div className="mb-12 flex flex-wrap items-center justify-center gap-3">
-          <button
-            type="button"
-            className="flex items-center gap-2 rounded-xl border-2 bg-transparent px-7 py-3.5 text-base font-semibold transition-colors hover:opacity-80"
-            style={{ borderColor: "var(--foreground)", color: "var(--foreground)" }}
-          >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                d="M8 1a2.5 2.5 0 0 0-2.5 2.5v4a2.5 2.5 0 0 0 5 0v-4A2.5 2.5 0 0 0 8 1Z"
-                fill="currentColor"
-              />
-              <path
-                d="M4 6.5a.5.5 0 0 0-1 0v1a5 5 0 0 0 4.5 4.975V14H6a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1H8.5v-1.525A5 5 0 0 0 13 7.5v-1a.5.5 0 0 0-1 0v1a4 4 0 0 1-8 0v-1Z"
-                fill="currentColor"
-              />
-            </svg>
-            Try Vox
-          </button>
-
-          <button
-            type="button"
-            className="flex items-center gap-2 rounded-xl border-2 px-7 py-3.5 text-base font-semibold transition-colors hover:brightness-95"
-            style={{ borderColor: "var(--foreground)", backgroundColor: "var(--purple)", color: "var(--foreground)" }}
-          >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                d="M6.555 1.375 0 7.488h4.574v6.441h3.962V7.488H6.555ZM9.445 1.375v6.441h3.962v6.113L16 7.488h-4.574V1.375H9.445Z"
-                fill="currentColor"
-              />
-            </svg>
-            Download for Windows
-          </button>
-        </div>
-
         {/* Comparison cards */}
-        <div className="mx-auto grid max-w-[1100px] grid-cols-1 gap-4 md:grid-cols-[1fr_2.5fr]">
-          {/* Keyboard card */}
-          <div className="overflow-hidden rounded-3xl border-[1.5px] p-8 text-left" style={{ borderColor: "var(--border)" }}>
-            <p className="text-sm font-medium" style={{ color: "var(--muted-foreground)" }}>Keyboard</p>
-            <p className="font-heading mt-2 text-5xl font-normal italic" style={{ color: "var(--foreground)" }}>
-              45 wpm
+        <div className="mx-auto mt-12 grid max-w-[1100px] grid-cols-1 gap-5 md:grid-cols-[1fr_2fr]">
+          {/* Keyboard card — paper, restrained */}
+          <div
+            className="relative overflow-hidden rounded-3xl p-8 text-left"
+            style={{
+              backgroundColor: "var(--paper)",
+              border: "1px solid var(--border)",
+              boxShadow:
+                "0 1px 0 rgba(255,255,255,0.6) inset, 0 14px 28px -16px rgba(31,20,10,0.16)",
+            }}
+          >
+            <p
+              className="font-mono text-[10.5px] uppercase tracking-[0.22em]"
+              style={{ color: "var(--muted-foreground)" }}
+            >
+              Keyboard
             </p>
-            <p className="mt-4 max-h-24 overflow-hidden text-sm leading-relaxed" style={{ color: "var(--muted-foreground)" }}>
-              I&apos;m getting started with the project, How would you like to
-              set up the file. Here are a few options.
+            <p
+              className="font-display mt-4 text-[60px] leading-none font-medium"
+              style={{ color: "var(--foreground)" }}
+            >
+              45<span className="font-display-italic" style={{ fontSize: "0.5em", marginLeft: "0.1em", color: "var(--muted-foreground)" }}>wpm</span>
             </p>
+            <p
+              className="mt-6 max-h-24 overflow-hidden text-[14.5px] leading-relaxed"
+              style={{ color: "var(--muted-foreground)" }}
+            >
+              I&apos;m getting started with the project. How would you like to
+              set up the file…
+            </p>
+            {/* Tiny key visualization */}
+            <div className="mt-6 grid grid-cols-10 gap-1 opacity-50">
+              {Array.from({ length: 30 }).map((_, i) => (
+                <span
+                  key={i}
+                  className="h-2 rounded-sm"
+                  style={{ backgroundColor: "var(--border)" }}
+                />
+              ))}
+            </div>
           </div>
 
-          {/* Vox card */}
+          {/* OmniVox card — warm ember gradient with thought streams */}
           <div
             className="relative overflow-hidden rounded-3xl p-8 text-left"
             style={{
               background:
-                "linear-gradient(135deg, #8B6914 0%, #4A90A4 50%, #8B6914 100%)",
+                "linear-gradient(135deg, #C8794A 0%, #D8541D 45%, #8B2C0C 100%)",
+              boxShadow:
+                "0 1px 0 rgba(255,255,255,0.1) inset, 0 20px 40px -20px rgba(216,84,29,0.5)",
             }}
           >
-            {/* Spiral/curved dictation text overlay */}
+            {/* Decorative orb */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -top-20 -right-20 w-[260px] h-[260px] rounded-full"
+              style={{
+                background:
+                  "radial-gradient(circle, rgba(255,235,200,0.18) 0%, transparent 65%)",
+                filter: "blur(20px)",
+              }}
+            />
+
+            {/* Floating thought snippets */}
             <div
               aria-hidden="true"
               className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden"
             >
               <div className="relative h-full w-full">
                 <span
-                  className="absolute top-[20%] left-[10%] text-sm whitespace-nowrap text-cream/30"
-                  style={{ transform: "rotate(-12deg)" }}
+                  className="absolute top-[18%] left-[8%] font-display-italic whitespace-nowrap"
+                  style={{
+                    color: "rgba(255,251,241,0.25)",
+                    transform: "rotate(-8deg)",
+                    fontSize: 18,
+                    animation: "drift 14s ease-in-out infinite",
+                  }}
                 >
-                  I want to build a product that helps people communicate faster
+                  refactor the auth middleware to handle stale tokens
                 </span>
                 <span
-                  className="absolute top-[35%] left-[5%] text-sm whitespace-nowrap text-cream/25"
-                  style={{ transform: "rotate(-6deg)" }}
+                  className="absolute top-[36%] right-[6%] font-display-italic whitespace-nowrap"
+                  style={{
+                    color: "rgba(255,251,241,0.18)",
+                    transform: "rotate(4deg)",
+                    fontSize: 15,
+                    animation: "drift 16s ease-in-out infinite 1s",
+                  }}
                 >
-                  The key insight is that voice is naturally faster than typing
-                  and more natural
+                  draft an email to Jenny about Q2 goals
                 </span>
                 <span
-                  className="absolute top-[50%] left-[8%] text-sm whitespace-nowrap text-cream/20"
-                  style={{ transform: "rotate(3deg)" }}
+                  className="absolute bottom-[26%] left-[10%] font-display-italic whitespace-nowrap"
+                  style={{
+                    color: "rgba(255,251,241,0.22)",
+                    transform: "rotate(-3deg)",
+                    fontSize: 16,
+                    animation: "drift 18s ease-in-out infinite 2s",
+                  }}
                 >
-                  When you can speak at the speed of thought everything changes
+                  ship a prompt to Claude Code, hands-free
                 </span>
                 <span
-                  className="absolute top-[65%] left-[12%] text-sm whitespace-nowrap text-cream/25"
-                  style={{ transform: "rotate(8deg)" }}
+                  className="absolute bottom-[12%] right-[12%] font-display-italic whitespace-nowrap"
+                  style={{
+                    color: "rgba(255,251,241,0.17)",
+                    transform: "rotate(5deg)",
+                    fontSize: 14,
+                    animation: "drift 20s ease-in-out infinite 0.5s",
+                  }}
                 >
-                  Let me draft this email quickly and move on to the next task
-                </span>
-                <span
-                  className="absolute top-[78%] left-[6%] text-sm whitespace-nowrap text-cream/20"
-                  style={{ transform: "rotate(-4deg)" }}
-                >
-                  Vox captures your ideas before they disappear from your mind
+                  capture this idea before it&apos;s gone
                 </span>
               </div>
             </div>
 
             {/* Card content */}
             <div className="relative z-10">
-              <p className="text-sm font-medium text-cream/70">Vox</p>
-              <p className="font-heading mt-2 text-5xl font-normal italic text-cream">
-                220 wpm
+              <p
+                className="font-mono text-[10.5px] uppercase tracking-[0.22em]"
+                style={{ color: "rgba(255,251,241,0.7)" }}
+              >
+                OmniVox · spoken
+              </p>
+              <p
+                className="font-display mt-4 text-[60px] leading-none font-medium"
+                style={{ color: "#FFFBF1" }}
+              >
+                180<span className="font-display-italic" style={{ fontSize: "0.5em", marginLeft: "0.1em", color: "rgba(255,251,241,0.65)" }}>wpm</span>
+              </p>
+              <p className="mt-6 max-w-[60%] text-[14.5px] leading-relaxed" style={{ color: "rgba(255,251,241,0.78)" }}>
+                Natural speech, captured locally, structured for the tool you&apos;re aiming it at.
               </p>
             </div>
 
-            {/* Microphone icon in center */}
-            <div className="absolute inset-0 z-10 flex items-center justify-center">
-              <div className="flex h-14 w-10 items-center justify-center rounded-full bg-white/90 shadow-lg">
-                <div className="flex items-end gap-[3px]">
-                  <span className="block h-3 w-[3px] rounded-full bg-dark/70" />
-                  <span className="block h-5 w-[3px] rounded-full bg-dark/70" />
-                  <span className="block h-4 w-[3px] rounded-full bg-dark/70" />
-                </div>
-              </div>
+            {/* Centered mic indicator */}
+            <div className="absolute right-8 bottom-8 z-10 flex items-end gap-1">
+              {[0.4, 0.7, 1.0, 0.85, 0.5].map((w, i) => (
+                <span
+                  key={i}
+                  className="block w-[3px] rounded-full"
+                  style={{
+                    height: `${10 + w * 30}px`,
+                    backgroundColor: "#FFFBF1",
+                    opacity: 0.85,
+                    animation: `waveform 1.2s ease-in-out ${i * 0.12}s infinite alternate`,
+                  }}
+                />
+              ))}
             </div>
           </div>
         </div>

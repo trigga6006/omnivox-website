@@ -1,32 +1,40 @@
 import type { Metadata } from "next";
-import { EB_Garamond, Figtree } from "next/font/google";
+import { Bricolage_Grotesque, Geist, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const ebGaramond = EB_Garamond({
-  variable: "--font-heading",
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-display",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
+  display: "swap",
+  axes: ["opsz", "wdth"],
 });
 
-const figtree = Figtree({
+const geist = Geist({
   variable: "--font-sans",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-mono",
+  subsets: ["latin"],
   weight: ["400", "500", "600"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "OmniVox | Effortless Voice Dictation",
+  title: "OmniVox — Voice dictation that stays on your machine",
   description:
-    "Vox makes writing quick and clear with seamless voice dictation. It is the fastest, smartest way to type with your voice.",
+    "A local-first dictation assistant for developers. Whisper + Qwen on your hardware, structured for agentic tools like Claude Code. No cloud, no telemetry, no API keys.",
   icons: {
     icon: "/seo/favicon.png",
     apple: "/seo/apple-touch-icon.png",
   },
   openGraph: {
-    title: "OmniVox | Effortless Voice Dictation",
+    title: "OmniVox — Voice dictation that stays on your machine",
     description:
-      "Vox makes writing quick and clear with seamless voice dictation. It is the fastest, smartest way to type with your voice.",
+      "A local-first dictation assistant for developers. Whisper + Qwen on your hardware, structured for agentic tools like Claude Code.",
     images: ["/seo/og-image.jpg"],
   },
 };
@@ -39,9 +47,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${figtree.variable} ${ebGaramond.variable} h-full antialiased`}
+      className={`${geist.variable} ${bricolage.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-cream text-dark">
+      <body className="min-h-full flex flex-col bg-background text-foreground">
         {children}
       </body>
     </html>

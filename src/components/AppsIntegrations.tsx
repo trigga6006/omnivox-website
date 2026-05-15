@@ -1,122 +1,100 @@
 "use client";
 
+import {
+  ClaudeLogo,
+  CursorLogo,
+  VSCodeLogo,
+  GitHubLogo,
+  TerminalLogo,
+  NotionLogo,
+  LinearLogo,
+  ObsidianLogo,
+  SlackLogo,
+  DiscordLogo,
+  FigmaLogo,
+  GmailLogo,
+  ChatGPTLogo,
+  XLogo,
+  OutlookLogo,
+  TeamsLogo,
+  WordLogo,
+  DocsLogo,
+  SheetsLogo,
+  TelegramLogo,
+  TodoistLogo,
+  ClickUpLogo,
+} from "./AppLogos";
+
 /* ------------------------------------------------------------------ */
-/*  Platform pill data                                                 */
+/*  App entries — real apps where OmniVox shines                       */
 /* ------------------------------------------------------------------ */
 
-const platforms = [
-  {
-    label: "Windows",
-    icon: (
-      <svg viewBox="0 0 16 16" fill="currentColor" className="h-4 w-4">
-        <path d="M0 2.2l6.5-.9v6.3H0V2.2zm7.3-1l8.7-1.2v7.6H7.3V1.2zM16 8.4v7.6l-8.7-1.2V8.4H16zM6.5 14.7L0 13.8V8.4h6.5v6.3z" />
-      </svg>
-    ),
-  },
-];
-
-/* ------------------------------------------------------------------ */
-/*  App icon data                                                      */
-/* ------------------------------------------------------------------ */
-
-interface AppIcon {
+interface AppEntry {
   name: string;
-  initial: string;
-  bg: string;
-  textColor?: string;
+  Logo: React.FC<{ className?: string }>;
 }
 
-const appIcons: AppIcon[] = [
-  { name: "Gmail", initial: "G", bg: "#EA4335" },
-  { name: "Notion", initial: "N", bg: "#FFFFFF", textColor: "#000000" },
-  { name: "Slack", initial: "S", bg: "#4A154B" },
-  { name: "Figma", initial: "F", bg: "#A259FF" },
-  { name: "VS Code", initial: "V", bg: "#007ACC" },
-  { name: "Discord", initial: "D", bg: "#5865F2" },
-  { name: "Docs", initial: "D", bg: "#4285F4" },
-  { name: "Sheets", initial: "S", bg: "#34A853" },
-  { name: "X", initial: "X", bg: "#000000" },
-  { name: "WhatsApp", initial: "W", bg: "#25D366" },
-  { name: "Teams", initial: "T", bg: "#6264A7" },
-  { name: "Signal", initial: "S", bg: "#3A76F0" },
-  { name: "Snapchat", initial: "S", bg: "#FFFC00", textColor: "#000000" },
-  { name: "iMessage", initial: "i", bg: "#34C759" },
-  { name: "Telegram", initial: "T", bg: "#0088CC" },
-  { name: "Instagram", initial: "I", bg: "#E1306C" },
-  { name: "OmniFocus", initial: "O", bg: "#7B46A3" },
-  { name: "ClickUp", initial: "C", bg: "#7B68EE" },
-  { name: "Todoist", initial: "T", bg: "#E44332" },
-  { name: "Cursor", initial: "C", bg: "#1A1A1A" },
-  { name: "Linear", initial: "L", bg: "#5E6AD2" },
-  { name: "Slides", initial: "S", bg: "#F4B400" },
-];
-
-/* ------------------------------------------------------------------ */
-/*  Logo ticker companies                                              */
-/* ------------------------------------------------------------------ */
-
-const tickerLogos = [
-  "Rivian",
-  "Notion",
-  "Substack",
-  "Amazon",
-  "Strava",
-  "Nvidia",
-  "Spotify",
-  "Figma",
-  "Stripe",
-  "Linear",
+const appIcons: AppEntry[] = [
+  { name: "Claude Code", Logo: ClaudeLogo },
+  { name: "Cursor", Logo: CursorLogo },
+  { name: "VS Code", Logo: VSCodeLogo },
+  { name: "Codex (GitHub)", Logo: GitHubLogo },
+  { name: "Terminal", Logo: TerminalLogo },
+  { name: "Notion", Logo: NotionLogo },
+  { name: "Linear", Logo: LinearLogo },
+  { name: "Obsidian", Logo: ObsidianLogo },
+  { name: "Slack", Logo: SlackLogo },
+  { name: "Discord", Logo: DiscordLogo },
+  { name: "Figma", Logo: FigmaLogo },
+  { name: "Gmail", Logo: GmailLogo },
+  { name: "Google Docs", Logo: DocsLogo },
+  { name: "Google Sheets", Logo: SheetsLogo },
+  { name: "ChatGPT", Logo: ChatGPTLogo },
+  { name: "X", Logo: XLogo },
+  { name: "Outlook", Logo: OutlookLogo },
+  { name: "Teams", Logo: TeamsLogo },
+  { name: "Word", Logo: WordLogo },
+  { name: "Telegram", Logo: TelegramLogo },
+  { name: "Todoist", Logo: TodoistLogo },
+  { name: "ClickUp", Logo: ClickUpLogo },
 ];
 
 /* ------------------------------------------------------------------ */
 /*  Sub-components                                                     */
 /* ------------------------------------------------------------------ */
 
-function PlatformPill({ label, icon }: { label: string; icon: React.ReactNode }) {
-  return (
-    <span
-      className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium"
-      style={{
-        border: "1.5px solid #FFFFEB",
-        color: "#FFFFEB",
-      }}
-    >
-      {icon}
-      {label}
-    </span>
-  );
-}
-
-function AppIconTile({ app }: { app: AppIcon }) {
+function AppIconTile({ app }: { app: AppEntry }) {
   return (
     <div
-      className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl text-lg font-bold"
+      className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl transition-transform hover:scale-110"
       style={{
-        backgroundColor: app.bg,
-        color: app.textColor ?? "#FFFFFF",
-        border: app.bg === "#000000" || app.bg === "#1A1A1A" ? "1px solid rgba(255,255,255,0.15)" : undefined,
+        backgroundColor: "var(--paper)",
+        border: "1px solid var(--border)",
+        boxShadow:
+          "0 1px 0 rgba(255,255,255,0.6) inset, 0 6px 12px -4px rgba(31,20,10,0.18)",
       }}
       title={app.name}
     >
-      {app.initial}
+      <app.Logo className="size-8" />
     </div>
   );
 }
 
 function DiagonalAppGrid() {
-  /* Build rows of icons to create a diagonal / cascading look.
-     We rotate the whole grid -15 deg and offset each row. */
-  const rows: AppIcon[][] = [];
+  const rows: AppEntry[][] = [];
   const cols = 6;
   for (let i = 0; i < appIcons.length; i += cols) {
     rows.push(appIcons.slice(i, i + cols));
   }
 
   return (
-    <div className="pointer-events-none select-none overflow-hidden" aria-hidden="true">
+    <div
+      className="pointer-events-none select-none overflow-hidden"
+      aria-hidden="true"
+    >
       <div
         className="flex flex-col gap-4"
-        style={{ transform: "rotate(-15deg)", transformOrigin: "center center" }}
+        style={{ transform: "rotate(-12deg)", transformOrigin: "center center" }}
       >
         {rows.map((row, ri) => (
           <div
@@ -125,7 +103,7 @@ function DiagonalAppGrid() {
             style={{ marginLeft: `${ri * 40}px` }}
           >
             {row.map((app) => (
-              <AppIconTile key={app.name} app={app} />
+              <AppIconTile key={`${app.name}-${ri}`} app={app} />
             ))}
           </div>
         ))}
@@ -134,130 +112,177 @@ function DiagonalAppGrid() {
   );
 }
 
-function PhoneMockup() {
-  /* Bars for the sound-wave animation */
-  const barHeights = [12, 20, 28, 16, 32, 24, 18, 30, 14, 22, 26, 10, 20, 28, 16];
+/* Editor-style mockup with the pill at the bottom — light theme */
+function EditorMockup() {
+  const waveBarHeights = [
+    8, 14, 22, 12, 26, 18, 14, 22, 10, 16, 20, 8, 14, 22, 12,
+  ];
 
   return (
     <div
-      className="relative mx-auto w-[280px] shrink-0 overflow-hidden rounded-[32px] lg:w-[320px]"
+      className="relative mx-auto w-[320px] shrink-0 overflow-hidden rounded-2xl lg:w-[380px]"
       style={{
-        backgroundColor: "#111111",
-        border: "3px solid #333",
-        aspectRatio: "9/18",
+        backgroundColor: "var(--paper)",
+        border: "1px solid var(--border)",
+        boxShadow:
+          "0 1px 0 rgba(255,255,255,0.6) inset, 0 30px 60px -28px rgba(31,20,10,0.4), 0 12px 24px -8px rgba(31,20,10,0.18)",
       }}
     >
-      {/* Status bar */}
-      <div className="flex items-center justify-between px-5 pt-3 pb-1 text-[10px] font-medium" style={{ color: "#FFFFEB" }}>
-        <span>9:41</span>
-        <div className="flex items-center gap-1">
-          <span>&#9679;&#9679;&#9679;</span>
-        </div>
-      </div>
-
-      {/* Back arrow + contact */}
-      <div className="flex items-center gap-3 px-4 pt-2 pb-4">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#FFFFEB" strokeWidth={2} className="h-5 w-5">
-          <path d="M15 19l-7-7 7-7" />
-        </svg>
-        {/* Avatar */}
-        <div
-          className="flex h-8 w-8 items-center justify-center rounded-full text-sm"
-          style={{ backgroundColor: "#E1306C", color: "#fff" }}
+      {/* Window title bar */}
+      <div
+        className="flex items-center gap-2 px-4 py-3"
+        style={{ borderBottom: "1px solid var(--border)" }}
+      >
+        <div className="size-3 rounded-full" style={{ backgroundColor: "#FF5F57" }} />
+        <div className="size-3 rounded-full" style={{ backgroundColor: "#FEBC2E" }} />
+        <div className="size-3 rounded-full" style={{ backgroundColor: "#28C840" }} />
+        <span
+          className="ml-3 font-mono text-[10.5px]"
+          style={{ color: "var(--muted-foreground)" }}
         >
-          M
-        </div>
-        <span className="text-sm font-medium" style={{ color: "#FFFFEB" }}>
-          mom &#10084;&#65039;
+          auth.ts — claude code
         </span>
       </div>
 
-      {/* Chat area */}
-      <div className="flex flex-1 flex-col gap-3 px-4 pt-2">
-        {/* Incoming bubble */}
-        <div
-          className="max-w-[200px] self-start rounded-2xl rounded-bl-sm px-4 py-2.5 text-[13px]"
-          style={{ backgroundColor: "#2A2A2A", color: "#FFFFEB" }}
-        >
-          hey sweetie, how&rsquo;s your day going?
-        </div>
-      </div>
-
-      {/* Bottom input area */}
-      <div className="absolute right-0 bottom-0 left-0 px-4 pt-3 pb-6">
-        {/* Sound wave visualizer */}
-        <div className="mb-3 flex items-end justify-center gap-[3px]">
-          {barHeights.map((h, i) => (
-            <div
-              key={i}
-              className="rounded-full"
-              style={{
-                width: 3,
-                height: h,
-                backgroundColor: "#34C759",
-                opacity: 0.8,
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Input bar */}
-        <div className="flex items-center gap-3">
-          {/* X close button */}
-          <button
-            type="button"
-            className="flex h-9 w-9 items-center justify-center rounded-full"
-            style={{ backgroundColor: "#333" }}
-            aria-label="Close"
+      {/* Fake code/doc content */}
+      <div className="flex flex-col gap-2.5 p-5 pt-4">
+        <div className="flex gap-3 items-center">
+          <span
+            className="font-mono text-[9.5px] w-3 text-right"
+            style={{ color: "var(--muted-foreground)" }}
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="#FFFFEB" strokeWidth={2} className="h-4 w-4">
-              <path d="M18 6L6 18M6 6l12 12" />
-            </svg>
-          </button>
-          {/* Text field */}
+            1
+          </span>
+          <div className="h-2.5 w-2/3 rounded" style={{ backgroundColor: "var(--border)" }} />
+        </div>
+        <div className="flex gap-3 items-center">
+          <span
+            className="font-mono text-[9.5px] w-3 text-right"
+            style={{ color: "var(--muted-foreground)" }}
+          >
+            2
+          </span>
+          <div className="h-2.5 w-1/2 rounded" style={{ backgroundColor: "var(--border)" }} />
+        </div>
+        <div className="flex gap-3 items-center">
+          <span
+            className="font-mono text-[9.5px] w-3 text-right"
+            style={{ color: "var(--muted-foreground)" }}
+          >
+            3
+          </span>
           <div
-            className="flex-1 rounded-full px-4 py-2 text-xs"
-            style={{ backgroundColor: "#2A2A2A", color: "rgba(255,255,235,0.4)" }}
+            className="h-2.5 w-3/4 rounded"
+            style={{ backgroundColor: "rgba(232,120,44,0.25)" }}
+          />
+        </div>
+        <div className="flex gap-3 items-center">
+          <span
+            className="font-mono text-[9.5px] w-3 text-right"
+            style={{ color: "var(--muted-foreground)" }}
           >
-            Transcribing&hellip;
-          </div>
-          {/* Mic button */}
-          <button
-            type="button"
-            className="flex h-9 w-9 items-center justify-center rounded-full"
-            style={{ backgroundColor: "#34C759" }}
-            aria-label="Microphone"
+            4
+          </span>
+          <div className="h-2.5 w-5/6 rounded" style={{ backgroundColor: "var(--border)" }} />
+        </div>
+        <div className="flex gap-3 items-center">
+          <span
+            className="font-mono text-[9.5px] w-3 text-right"
+            style={{ color: "var(--muted-foreground)" }}
           >
-            <svg viewBox="0 0 24 24" fill="#fff" className="h-4 w-4">
-              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3Zm5 11a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V22h2v-3.08A7 7 0 0 0 19 12h-2Z" />
-            </svg>
-          </button>
+            5
+          </span>
+          <div className="h-2.5 w-2/5 rounded" style={{ backgroundColor: "var(--border)" }} />
+        </div>
+        {/* Caret line */}
+        <div className="flex gap-3 items-center">
+          <span
+            className="font-mono text-[9.5px] w-3 text-right"
+            style={{ color: "var(--ember)" }}
+          >
+            6
+          </span>
+          <span
+            className="inline-block w-[2px] h-3.5"
+            style={{
+              backgroundColor: "var(--ember)",
+              animation: "pulse 1s ease-in-out infinite",
+            }}
+          />
+        </div>
+        <div className="flex gap-3 items-center">
+          <span
+            className="font-mono text-[9.5px] w-3 text-right"
+            style={{ color: "var(--muted-foreground)" }}
+          >
+            7
+          </span>
+          <div className="h-2.5 w-1/3 rounded" style={{ backgroundColor: "var(--border)" }} />
+        </div>
+        <div className="flex gap-3 items-center">
+          <span
+            className="font-mono text-[9.5px] w-3 text-right"
+            style={{ color: "var(--muted-foreground)" }}
+          >
+            8
+          </span>
+          <div className="h-2.5 w-3/5 rounded" style={{ backgroundColor: "var(--border)" }} />
         </div>
       </div>
-    </div>
-  );
-}
 
-function LogoTicker() {
-  const track = tickerLogos.map((name) => (
-    <span
-      key={name}
-      className="whitespace-nowrap text-xl font-semibold uppercase tracking-[4px]"
-      style={{ color: "rgba(255,255,235,0.6)" }}
-    >
-      {name}
-    </span>
-  ));
-
-  return (
-    <div className="w-full overflow-hidden">
-      <div
-        className="flex gap-12"
-        style={{ animation: "logoTicker 60s linear infinite" }}
-      >
-        {/* Duplicate the set for seamless looping */}
-        {track}
-        {track}
+      {/* OmniVox floating pill overlay */}
+      <div className="relative h-20">
+        <div className="absolute bottom-4 left-1/2 z-10 -translate-x-1/2">
+          <div
+            className="flex items-center gap-2.5 rounded-full px-4"
+            style={{
+              height: 36,
+              minWidth: 220,
+              background: "linear-gradient(180deg, #2A1A0E 0%, #1F140A 100%)",
+              backdropFilter: "blur(16px)",
+              border: "1px solid rgba(232,120,44,0.25)",
+              boxShadow:
+                "0 1px 0 rgba(255,255,255,0.05) inset, 0 8px 24px -6px rgba(31,20,10,0.5)",
+            }}
+          >
+            <span
+              className="font-display text-[10px] font-semibold tracking-[0.08em]"
+              style={{ color: "#FFB166" }}
+            >
+              OV
+            </span>
+            <div
+              className="flex items-center justify-center gap-[2px]"
+              style={{ height: 20 }}
+            >
+              {waveBarHeights.slice(0, 14).map((h, i) => (
+                <div
+                  key={i}
+                  className="rounded-full"
+                  style={{
+                    width: 2,
+                    height: Math.max(3, h * 0.7),
+                    backgroundColor: "#FFB166",
+                    opacity: 0.85,
+                  }}
+                />
+              ))}
+            </div>
+            <div className="relative flex items-center justify-center ml-1">
+              <span
+                className="absolute h-4 w-4 rounded-full"
+                style={{
+                  backgroundColor: "rgba(232,120,44,0.18)",
+                  animation: "pulse 2s ease-in-out infinite",
+                }}
+              />
+              <span
+                className="relative h-2 w-2 rounded-full"
+                style={{ backgroundColor: "#FFB166" }}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -269,106 +294,101 @@ function LogoTicker() {
 
 export function AppsIntegrations() {
   return (
-    <section className="w-full">
-      {/* Green curved transition at top */}
+    <section
+      id="features"
+      className="relative w-full overflow-hidden grain-overlay"
+      style={{
+        backgroundColor: "var(--background)",
+      }}
+    >
+      {/* Decorative warm orb */}
       <div
-        className="w-full px-4 pb-0 pt-16 sm:px-6 lg:px-8"
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-32 -right-32 w-[520px] h-[520px] rounded-full"
         style={{
-          backgroundColor: "var(--section-green-bg)",
-          borderRadius: "32px 32px 0 0",
+          background:
+            "radial-gradient(circle, rgba(216,84,29,0.10) 0%, transparent 65%)",
+          filter: "blur(40px)",
         }}
-      >
-        {/* Dark inner container */}
-        <div
-          className="w-full overflow-hidden"
-          style={{
-            backgroundColor: "var(--section-dark-bg)",
-            borderRadius: "32px 32px 0 0",
-          }}
-        >
-          {/* ---- Top content area: text left, grid+phone right ---- */}
-          <div className="mx-auto max-w-7xl px-6 pt-16 pb-0 sm:px-8 lg:px-12 lg:pt-20">
-            <div className="flex flex-col gap-12 lg:flex-row lg:items-start lg:gap-8">
-              {/* ---- Left column: pills, heading, subtitle, button ---- */}
-              <div className="flex max-w-xl flex-col gap-6 lg:max-w-lg lg:pt-4">
-                {/* Platform pills */}
-                <div className="flex flex-wrap gap-2">
-                  {platforms.map((p) => (
-                    <PlatformPill key={p.label} label={p.label} icon={p.icon} />
-                  ))}
-                </div>
+      />
 
-                {/* Heading */}
-                <h2
-                  className="font-heading text-5xl font-normal leading-[0.95em] sm:text-6xl lg:text-[64px]"
-                  style={{ color: "#FFFFEB" }}
+      <div className="relative z-10 mx-auto max-w-[1240px] px-6 py-24 lg:py-32">
+        <div className="flex flex-col gap-14 lg:flex-row lg:items-start lg:gap-12">
+          {/* Left column: text */}
+          <div className="flex max-w-xl flex-col gap-7 lg:max-w-lg lg:pt-6">
+            <span
+              className="inline-flex w-fit items-center gap-2 rounded-full px-3.5 py-1.5 font-mono text-[10.5px] uppercase tracking-[0.2em]"
+              style={{
+                backgroundColor: "var(--paper)",
+                border: "1px solid var(--border)",
+                color: "var(--ember)",
+              }}
+            >
+              <span
+                className="inline-block size-1.5 rounded-full"
+                style={{ backgroundColor: "var(--ember)" }}
+              />
+              Type Simulation
+            </span>
+
+            <h2
+              className="font-display text-[44px] leading-[0.96] font-medium tracking-[-0.02em] sm:text-[56px] lg:text-[68px]"
+              style={{ color: "var(--foreground)" }}
+            >
+              Lands cleanly in{" "}
+              <span className="font-display-italic" style={{ color: "var(--ember)" }}>
+                every app
+              </span>{" "}
+              you already use.
+            </h2>
+
+            <p
+              className="max-w-[520px] text-[17px] leading-[1.55]"
+              style={{ color: "var(--dark-secondary)" }}
+            >
+              OmniVox simulates keystrokes the moment a transcript is ready, so
+              your words land in the focused window — whether that&apos;s
+              Claude Code, Cursor, your terminal, Linear, Notion, or any text
+              field. Clipboard, type, or both, with focus restored after.
+            </p>
+
+            <div className="flex flex-wrap gap-2">
+              {[
+                "Clipboard",
+                "Type-simulation",
+                "Auto-paste",
+                "Focus restore",
+              ].map((label) => (
+                <span
+                  key={label}
+                  className="inline-flex items-center rounded-full px-3 py-1 text-[11.5px] font-medium"
+                  style={{
+                    backgroundColor: "var(--secondary)",
+                    color: "var(--foreground)",
+                    border: "1px solid var(--border)",
+                  }}
                 >
-                  Write faster in all your apps, on any device
-                </h2>
-
-                {/* Subtitle */}
-                <p
-                  className="max-w-[480px] text-lg"
-                  style={{ color: "rgba(255,255,235,0.7)" }}
-                >
-                  Seamless speech-to-text in every application on your phone or
-                  computer.
-                </p>
-
-                {/* CTA button */}
-                <div>
-                  <button
-                    type="button"
-                    className="rounded-xl px-6 py-3 text-base font-medium transition-opacity hover:opacity-80"
-                    style={{
-                      border: "1.5px solid #FFFFEB",
-                      color: "#FFFFEB",
-                      backgroundColor: "transparent",
-                    }}
-                  >
-                    Watch in action
-                  </button>
-                </div>
-              </div>
-
-              {/* ---- Right column: diagonal grid + phone ---- */}
-              <div className="relative flex flex-1 items-center justify-center lg:justify-end">
-                {/* Diagonal app icons behind the phone */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-60 lg:opacity-80">
-                  <DiagonalAppGrid />
-                </div>
-                {/* Phone mockup on top */}
-                <div className="relative z-10">
-                  <PhoneMockup />
-                </div>
-              </div>
+                  {label}
+                </span>
+              ))}
             </div>
           </div>
 
-          {/* ---- "Used by professionals" section ---- */}
-          <div
-            className="mt-16 w-full px-6 py-16 sm:px-8 lg:mt-20 lg:px-12"
-            style={{
-              backgroundColor: "var(--section-green-bg)",
-              borderRadius: "32px 32px 0 0",
-            }}
-          >
-            <div className="mx-auto max-w-3xl text-center">
-              <p
-                className="text-base font-normal leading-relaxed sm:text-lg"
-                style={{ color: "#FFFFEB" }}
-              >
-                Used by professionals everywhere to speed up their thoughts
-              </p>
+          {/* Right column: diagonal grid + editor mockup */}
+          <div className="relative flex flex-1 items-center justify-center lg:justify-end min-h-[460px]">
+            <div className="absolute inset-0 flex items-center justify-center opacity-90">
+              <DiagonalAppGrid />
             </div>
-
-            {/* Logo ticker */}
-            <div className="mt-10">
-              <LogoTicker />
+            <div className="relative z-10">
+              <EditorMockup />
             </div>
           </div>
         </div>
       </div>
+
+      <style>{`
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.4); opacity: 0; } }
+      `}</style>
     </section>
   );
 }

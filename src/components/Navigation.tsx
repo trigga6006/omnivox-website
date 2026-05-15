@@ -2,93 +2,94 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { WindowsLogo } from "./AppLogos";
 
-const NAV_LINKS = ["Product", "Individuals", "Business", "Resources"] as const;
+const SCROLL_THRESHOLD = 80;
+
+const NAV_LINKS = [
+  { label: "How it works", href: "#workflow" },
+  { label: "Structured Mode", href: "#structured" },
+  { label: "For agents", href: "#agentic" },
+  { label: "FAQ", href: "#faq" },
+];
 
 export function Navigation() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    function handleScroll() {
+      setVisible(window.scrollY > SCROLL_THRESHOLD);
+    }
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-[999] pt-[65px]">
-      <div className="mx-auto max-w-[1360px] flex items-center justify-between px-6 py-2.5 backdrop-blur-sm" style={{ backgroundColor: "var(--nav-bg)", borderBottom: "1px solid var(--nav-border)" }}>
+    <nav
+      className="fixed top-3 left-0 right-0 z-[999] transition-all duration-300 px-4"
+      style={{
+        opacity: visible ? 1 : 0,
+        pointerEvents: visible ? "auto" : "none",
+        transform: visible ? "translateY(0)" : "translateY(-12px)",
+      }}
+    >
+      <div
+        className="mx-auto flex max-w-[1240px] items-center justify-between rounded-full px-5 py-2.5 backdrop-blur-md"
+        style={{
+          backgroundColor: "var(--nav-bg)",
+          border: "1px solid var(--nav-border)",
+          boxShadow:
+            "0 1px 0 rgba(255,255,255,0.6) inset, 0 14px 28px -16px rgba(31,20,10,0.18)",
+        }}
+      >
         {/* Logo */}
-        <Link href="/" className="shrink-0">
+        <Link href="/" className="flex shrink-0 items-center gap-2.5">
           <Image
-            src="/images/683215c6f233131a07d8bafc_navbar_logo.svg"
-            alt="Vox Logo"
-            width={80}
-            height={23}
+            src="/images/omnivox-logo.svg"
+            alt="OmniVox"
+            width={26}
+            height={26}
             priority
           />
+          <span
+            className="font-display text-[19px] font-semibold tracking-[-0.02em]"
+            style={{ color: "var(--foreground)" }}
+          >
+            OmniVox
+          </span>
         </Link>
 
-        {/* Nav links — hidden on mobile */}
-        <div className="hidden items-center gap-8 lg:flex">
-          {NAV_LINKS.map((label) => (
+        {/* Center links */}
+        <div className="hidden lg:flex items-center gap-7">
+          {NAV_LINKS.map((link) => (
             <Link
-              key={label}
-              href="#"
-              className="text-base font-medium transition-opacity hover:opacity-70"
-              style={{ color: "var(--foreground)" }}
+              key={link.href}
+              href={link.href}
+              className="text-[13.5px] font-medium transition-colors hover:opacity-100"
+              style={{ color: "var(--muted-foreground)" }}
             >
-              {label}
+              {link.label}
             </Link>
           ))}
         </div>
 
-        {/* Right-side CTA buttons — hidden on mobile */}
-        <div className="hidden items-center gap-3 lg:flex">
-          {/* Download for Windows */}
-          <Link
-            href="#"
-            className="flex items-center gap-2 rounded-xl border-2 px-5 py-2.5 text-base font-semibold transition-colors hover:opacity-80"
-            style={{ borderColor: "var(--foreground)", backgroundColor: "var(--purple)", color: "var(--foreground)" }}
-          >
-            <WindowsIcon />
-            Download for Windows
-          </Link>
-        </div>
-
-        {/* Mobile hamburger placeholder */}
-        <button
-          type="button"
-          className="flex size-10 items-center justify-center lg:hidden"
-          aria-label="Open menu"
+        {/* Right-side CTA */}
+        <Link
+          href="#download"
+          className="group inline-flex items-center gap-2 rounded-full px-4 py-2 text-[13.5px] font-semibold transition-all hover:translate-y-[-1px]"
+          style={{
+            backgroundColor: "var(--ember)",
+            color: "#FFFBF1",
+            boxShadow:
+              "0 1px 0 rgba(255,255,255,0.18) inset, 0 8px 16px -8px rgba(216,84,29,0.55)",
+          }}
         >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            style={{ color: "var(--foreground)" }}
-          >
-            <line x1="3" y1="6" x2="21" y2="6" />
-            <line x1="3" y1="12" x2="21" y2="12" />
-            <line x1="3" y1="18" x2="21" y2="18" />
-          </svg>
-        </button>
+          <WindowsLogo className="size-3.5 shrink-0" />
+          Download
+        </Link>
       </div>
     </nav>
-  );
-}
-
-/** Small Windows-style 4-square grid icon */
-function WindowsIcon() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="currentColor"
-      aria-hidden="true"
-      className="shrink-0"
-    >
-      <rect x="1" y="1" width="6" height="6" rx="1" />
-      <rect x="9" y="1" width="6" height="6" rx="1" />
-      <rect x="1" y="9" width="6" height="6" rx="1" />
-      <rect x="9" y="9" width="6" height="6" rx="1" />
-    </svg>
   );
 }
