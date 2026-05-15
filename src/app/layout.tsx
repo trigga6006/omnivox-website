@@ -58,10 +58,8 @@ export const metadata: Metadata = {
     "Windows",
     "macOS",
   ],
-  icons: {
-    icon: "/seo/favicon.png",
-    apple: "/seo/apple-touch-icon.png",
-  },
+  // Favicons are auto-resolved by Next.js from the App Router file
+  // convention: src/app/{favicon.ico, icon.svg, icon.png, apple-icon.png}.
   // Open Graph — Facebook, LinkedIn, Slack, Discord, iMessage
   openGraph: {
     type: "website",
