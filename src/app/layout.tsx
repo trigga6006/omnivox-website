@@ -1,34 +1,41 @@
 import type { Metadata } from "next";
-import { Syne, Outfit } from "next/font/google";
+import { Bricolage_Grotesque, Geist, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const syne = Syne({
-  variable: "--font-syne",
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-display",
   subsets: ["latin"],
+  display: "swap",
+  axes: ["opsz", "wdth"],
+});
+
+const geist = Geist({
+  variable: "--font-sans",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
-const outfit = Outfit({
-  variable: "--font-outfit",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "OmniVox — Local AI Dictation for Windows",
+  title: "OmniVox — Voice dictation that stays on your machine",
   description:
-    "Privacy-first speech-to-text powered by Whisper AI. Zero cloud. Zero compromise. Your voice never leaves your machine.",
-  keywords: [
-    "dictation",
-    "speech to text",
-    "whisper",
-    "local AI",
-    "privacy",
-    "windows",
-    "transcription",
-  ],
+    "A local-first dictation assistant for developers. Whisper + Qwen on your hardware, structured for agentic tools like Claude Code. No cloud, no telemetry, no API keys.",
   icons: {
-    icon: "/logo.svg",
+    icon: "/seo/favicon.png",
+    apple: "/seo/apple-touch-icon.png",
+  },
+  openGraph: {
+    title: "OmniVox — Voice dictation that stays on your machine",
+    description:
+      "A local-first dictation assistant for developers. Whisper + Qwen on your hardware, structured for agentic tools like Claude Code.",
+    images: ["/seo/og-image.jpg"],
   },
 };
 
@@ -38,8 +45,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${syne.variable} ${outfit.variable} dark`}>
-      <body className="min-h-screen bg-background text-foreground overflow-x-hidden">
+    <html
+      lang="en"
+      className={`${geist.variable} ${bricolage.variable} ${jetbrainsMono.variable} h-full antialiased`}
+    >
+      <body className="min-h-full flex flex-col bg-background text-foreground">
         {children}
       </body>
     </html>
