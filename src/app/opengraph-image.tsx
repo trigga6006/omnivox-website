@@ -280,7 +280,8 @@ export default async function OpengraphImage() {
             display: "flex",
             flex: 1,
             alignItems: "center",
-            marginTop: 22,
+            marginTop: 16,
+            marginBottom: 16,
             position: "relative",
             zIndex: 2,
           }}
@@ -371,11 +372,11 @@ export default async function OpengraphImage() {
             <div
               style={{
                 display: "flex",
-                fontSize: 22,
-                lineHeight: 1.4,
+                fontSize: 19,
+                lineHeight: 1.35,
                 color: "#4A382A",
-                marginTop: 28,
-                maxWidth: 580,
+                marginTop: 20,
+                maxWidth: 640,
               }}
             >
               Local-first voice dictation for the agentic age. Whisper +
@@ -573,7 +574,7 @@ export default async function OpengraphImage() {
                 marginTop: 4,
               }}
             >
-              omnivox.app  /
+              tryomnivox.com  /
             </div>
           </div>
         </div>

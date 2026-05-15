@@ -23,20 +23,24 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-// Resolve the canonical site URL across local dev, Vercel previews,
-// and Vercel production. Set NEXT_PUBLIC_SITE_URL in your Vercel
-// environment to lock to a custom domain (e.g. https://omnivox.app).
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000");
+// Resolve the canonical site URL. Defaults to the custom production
+// domain so og:image / twitter:image always render on the same host as
+// the page being shared — X refuses to render summary_large_image cards
+// when the page URL and image URL live on mismatched domains. Override
+// with NEXT_PUBLIC_SITE_URL=http://localhost:3000 for local dev.
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://tryomnivox.com";
 
 const TITLE = "OmniVox — Voice dictation that stays on your machine";
 const DESCRIPTION =
   "Local-first voice dictation for the agentic age. Whisper + Qwen on your hardware, structured for Claude Code, Cursor, and Codex. No cloud, no API keys, no telemetry.";
+
+const OG_IMAGE = {
+  url: "/opengraph-image",
+  width: 1200,
+  height: 630,
+  alt: "OmniVox — Local-first voice dictation for the agentic age",
+  type: "image/png",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -68,15 +72,17 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
     url: siteUrl,
     locale: "en_US",
-    // The OG image is auto-detected from src/app/opengraph-image.tsx
+    images: [OG_IMAGE],
   },
-  // Twitter / X cards
+  // Twitter / X cards. Both `site` and `creator` declared — X uses
+  // `site` to attribute the card and `creator` to attribute the author.
   twitter: {
     card: "summary_large_image",
     title: TITLE,
     description: DESCRIPTION,
+    site: "@omnivox",
     creator: "@omnivox",
-    // The Twitter image is auto-detected from src/app/twitter-image.tsx
+    images: [OG_IMAGE],
   },
   // Misc nice-to-haves
   robots: {
