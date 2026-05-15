@@ -573,7 +573,7 @@ export default async function OpengraphImage() {
                 marginTop: 4,
               }}
             >
-              omnivox.app  /
+              tryomnivox.com  /
             </div>
           </div>
         </div>

@@ -28,7 +28,7 @@ const jetbrainsMono = JetBrains_Mono({
 // the page being shared — X refuses to render summary_large_image cards
 // when the page URL and image URL live on mismatched domains. Override
 // with NEXT_PUBLIC_SITE_URL=http://localhost:3000 for local dev.
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://omnivox.app";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://tryomnivox.com";
 
 const TITLE = "OmniVox — Voice dictation that stays on your machine";
 const DESCRIPTION =
