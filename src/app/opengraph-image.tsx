@@ -6,7 +6,51 @@ export const alt =
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
+async function loadLocalFont(path: string): Promise<ArrayBuffer | null> {
+  try {
+    return await fetch(new URL(path, import.meta.url)).then((r) =>
+      r.arrayBuffer()
+    );
+  } catch {
+    return null;
+  }
+}
+
 export default async function OpengraphImage() {
+  // Load typography from bundled TTFs
+  const [bricolage, jetbrainsMono] = await Promise.all([
+    loadLocalFont("./fonts/Bricolage.ttf"),
+    loadLocalFont("./fonts/JetBrainsMono-Regular.ttf"),
+  ]);
+
+  const fonts: {
+    name: string;
+    data: ArrayBuffer;
+    weight: 400 | 700;
+    style: "normal";
+  }[] = [];
+  // Bricolage is a variable font; register the same data at multiple weights
+  // so Satori picks the right axis position.
+  if (bricolage) {
+    fonts.push({ name: "Bricolage", data: bricolage, weight: 400, style: "normal" });
+    fonts.push({ name: "Bricolage", data: bricolage, weight: 700, style: "normal" });
+  }
+  if (jetbrainsMono)
+    fonts.push({ name: "JetBrains", data: jetbrainsMono, weight: 400, style: "normal" });
+
+  // Subtle waveform dots — left half only, between masthead and headline,
+  // suggests "audio in" without crowding any text.
+  const waveformDots = Array.from({ length: 14 }, (_, i) => {
+    const t = i / 13;
+    const x = 70 + t * 320;
+    const baseY = 185;
+    const amp = Math.sin(t * Math.PI * 2.3) * 8;
+    const y = baseY + amp;
+    const size = 4 + Math.abs(Math.sin(t * Math.PI * 2)) * 2;
+    const opacity = 0.25 + Math.abs(Math.sin(t * Math.PI * 1.8)) * 0.35;
+    return { x, y, size, opacity };
+  });
+
   return new ImageResponse(
     (
       <div
@@ -16,36 +60,126 @@ export default async function OpengraphImage() {
           display: "flex",
           flexDirection: "column",
           background:
-            "linear-gradient(135deg, #FAF3E2 0%, #FFEAD0 55%, #F5C28A 100%)",
-          padding: "70px 80px",
-          fontFamily: "system-ui",
+            "linear-gradient(135deg, #FAF3E2 0%, #FAEAC9 38%, #F2C58E 78%, #E8956F 100%)",
+          padding: 56,
+          fontFamily: "Bricolage",
           color: "#1F140A",
+          position: "relative",
         }}
       >
-        {/* Decorative ember orb top-right */}
+        {/* Ember orb — top-right */}
         <div
           style={{
             position: "absolute",
-            top: -160,
-            right: -120,
-            width: 540,
-            height: 540,
+            top: -200,
+            right: -160,
+            width: 640,
+            height: 640,
             borderRadius: 9999,
             background:
-              "radial-gradient(closest-side, rgba(232,120,44,0.55), rgba(232,120,44,0))",
+              "radial-gradient(closest-side, rgba(216,84,29,0.55), rgba(216,84,29,0))",
+            display: "flex",
+          }}
+        />
+        {/* Ember orb — bottom-left, mid-low */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: -120,
+            left: -80,
+            width: 380,
+            height: 380,
+            borderRadius: 9999,
+            background:
+              "radial-gradient(closest-side, rgba(232,120,44,0.32), rgba(232,120,44,0))",
             display: "flex",
           }}
         />
 
-        {/* Top row: brand + version chip */}
+        {/* Editorial perimeter rule — like a magazine tear-out */}
+        <div
+          style={{
+            position: "absolute",
+            top: 28,
+            left: 28,
+            right: 28,
+            bottom: 28,
+            border: "1px solid rgba(31,20,10,0.10)",
+            borderRadius: 14,
+            display: "flex",
+            pointerEvents: "none",
+          }}
+        />
+        {/* Corner crosshair markers (top-left + bottom-right) */}
+        {[
+          { top: 22, left: 22 },
+          { bottom: 22, right: 22 },
+        ].map((pos, i) => (
+          <div
+            key={i}
+            style={{
+              position: "absolute",
+              ...pos,
+              width: 12,
+              height: 12,
+              display: "flex",
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                top: 5,
+                left: 0,
+                width: 12,
+                height: 1,
+                background: "rgba(216,84,29,0.55)",
+                display: "flex",
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                left: 5,
+                top: 0,
+                height: 12,
+                width: 1,
+                background: "rgba(216,84,29,0.55)",
+                display: "flex",
+              }}
+            />
+          </div>
+        ))}
+
+        {/* Decorative waveform dots — diagonal across the lower half */}
+        {waveformDots.map((d, i) => (
+          <div
+            key={i}
+            style={{
+              position: "absolute",
+              left: d.x,
+              top: d.y,
+              width: d.size,
+              height: d.size,
+              borderRadius: 9999,
+              background: "#D8541D",
+              opacity: d.opacity,
+              display: "flex",
+            }}
+          />
+        ))}
+
+        {/* ─── TOP ROW ──────────────────────────────────────────── */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
             width: "100%",
+            position: "relative",
+            zIndex: 2,
           }}
         >
-          <svg width="56" height="56" viewBox="0 0 200 200" style={{ marginRight: 18 }}>
+          {/* Brand mark */}
+          <svg width="52" height="52" viewBox="0 0 200 200" style={{ marginRight: 16 }}>
             <defs>
               <linearGradient id="ogTop" x1="0" y1="0" x2="1" y2="1">
                 <stop offset="0" stopColor="#F59E0B" />
@@ -67,113 +201,203 @@ export default async function OpengraphImage() {
           </svg>
           <div
             style={{
-              fontSize: 38,
+              fontSize: 36,
               fontWeight: 700,
-              letterSpacing: "-0.02em",
+              letterSpacing: "-0.025em",
               color: "#1F140A",
             }}
           >
             OmniVox
           </div>
+
           <div style={{ display: "flex", flex: 1 }} />
+
+          {/* Issue / version meta — editorial style */}
           <div
             style={{
               display: "flex",
-              alignItems: "center",
-              padding: "8px 16px",
-              borderRadius: 999,
-              border: "1px solid rgba(31,20,10,0.12)",
-              background: "rgba(255,251,241,0.9)",
-              fontSize: 14,
-              fontWeight: 600,
-              letterSpacing: "0.18em",
-              color: "#D8541D",
+              flexDirection: "column",
+              alignItems: "flex-end",
+              gap: 6,
             }}
           >
             <div
               style={{
                 display: "flex",
-                width: 8,
-                height: 8,
-                borderRadius: 999,
-                background: "#D8541D",
-                marginRight: 10,
+                fontFamily: "JetBrains",
+                fontSize: 12,
+                letterSpacing: "0.28em",
+                color: "rgba(31,20,10,0.5)",
               }}
-            />
-            V0.2.5 · EARLY ACCESS
+            >
+              ISSUE 01 / MAY 2026
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                fontFamily: "JetBrains",
+                fontSize: 13,
+                fontWeight: 700,
+                letterSpacing: "0.18em",
+                color: "#D8541D",
+              }}
+            >
+              <span>[ </span>
+              <div
+                style={{
+                  display: "flex",
+                  width: 7,
+                  height: 7,
+                  borderRadius: 999,
+                  background: "#D8541D",
+                  margin: "0 8px",
+                }}
+              />
+              <span>V0.2.5 · EARLY ACCESS </span>
+              <span>]</span>
+            </div>
           </div>
         </div>
 
-        {/* Body: headline + preview card */}
+        {/* Hairline divider under the masthead */}
+        <div
+          style={{
+            display: "flex",
+            width: "100%",
+            height: 1,
+            background:
+              "linear-gradient(90deg, transparent 0%, rgba(31,20,10,0.18) 12%, rgba(31,20,10,0.18) 88%, transparent 100%)",
+            marginTop: 16,
+            position: "relative",
+            zIndex: 2,
+          }}
+        />
+
+        {/* ─── BODY ─────────────────────────────────────────────── */}
         <div
           style={{
             display: "flex",
             flex: 1,
             alignItems: "center",
-            marginTop: 30,
+            marginTop: 22,
+            position: "relative",
+            zIndex: 2,
           }}
         >
-          {/* Left column */}
+          {/* Left — headline */}
           <div
             style={{
               display: "flex",
               flexDirection: "column",
-              flex: 1.15,
-              marginRight: 56,
+              flex: 1.2,
+              marginRight: 36,
             }}
           >
+            {/* Section label */}
             <div
               style={{
                 display: "flex",
-                fontSize: 84,
+                alignItems: "center",
+                fontFamily: "JetBrains",
+                fontSize: 13,
+                letterSpacing: "0.28em",
+                color: "rgba(31,20,10,0.5)",
+                marginBottom: 18,
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  width: 28,
+                  height: 1,
+                  background: "rgba(31,20,10,0.35)",
+                  marginRight: 12,
+                }}
+              />
+              FEATURE
+            </div>
+
+            {/* Headline */}
+            <div
+              style={{
+                display: "flex",
+                fontSize: 92,
                 fontWeight: 700,
-                letterSpacing: "-0.035em",
-                lineHeight: 0.94,
+                letterSpacing: "-0.04em",
+                lineHeight: 0.92,
                 color: "#1F140A",
               }}
             >
-              Speak your intent.
+              Speak your
             </div>
             <div
               style={{
                 display: "flex",
-                fontSize: 84,
+                fontSize: 92,
                 fontWeight: 700,
-                letterSpacing: "-0.035em",
-                lineHeight: 0.94,
+                letterSpacing: "-0.05em",
+                lineHeight: 0.92,
                 color: "#D8541D",
-                fontStyle: "italic",
-                marginTop: 4,
+                marginTop: 2,
               }}
             >
-              Ship a prompt.
+              intent.
             </div>
             <div
               style={{
                 display: "flex",
-                fontSize: 26,
+                fontSize: 92,
+                fontWeight: 700,
+                letterSpacing: "-0.04em",
+                lineHeight: 0.92,
+                color: "#1F140A",
+                marginTop: 2,
+              }}
+            >
+              Ship a{" "}
+              <span
+                style={{
+                  color: "#D8541D",
+                  letterSpacing: "-0.05em",
+                  marginLeft: 24,
+                }}
+              >
+                prompt.
+              </span>
+            </div>
+
+            {/* Subtitle */}
+            <div
+              style={{
+                display: "flex",
+                fontSize: 22,
                 lineHeight: 1.4,
                 color: "#4A382A",
                 marginTop: 28,
-                maxWidth: 620,
+                maxWidth: 580,
               }}
             >
-              Local-first voice dictation for the agentic age. Whisper + Qwen
-              on your machine, structured for Claude Code, Cursor, and Codex.
+              Local-first voice dictation for the agentic age. Whisper +
+              Qwen on your machine, structured for Claude Code, Cursor, and
+              Codex.
             </div>
           </div>
 
-          {/* Right column: structured prompt card */}
+          {/* Right — structured prompt card, slightly tilted */}
           <div
             style={{
               display: "flex",
               flexDirection: "column",
-              width: 360,
+              width: 350,
               padding: 24,
-              borderRadius: 24,
+              borderRadius: 22,
               background: "#FFFBF1",
               border: "1px solid rgba(31,20,10,0.10)",
-              boxShadow: "0 24px 48px rgba(31,20,10,0.18)",
+              boxShadow:
+                "0 32px 60px rgba(31,20,10,0.22), 0 8px 16px rgba(31,20,10,0.10)",
+              transform: "rotate(2deg)",
+              marginRight: -8,
             }}
           >
             {/* Card header */}
@@ -187,8 +411,8 @@ export default async function OpengraphImage() {
               <div
                 style={{
                   display: "flex",
-                  width: 10,
-                  height: 10,
+                  width: 9,
+                  height: 9,
                   borderRadius: 999,
                   background: "#10B981",
                   marginRight: 10,
@@ -197,10 +421,11 @@ export default async function OpengraphImage() {
               <div
                 style={{
                   display: "flex",
-                  fontSize: 12,
-                  fontWeight: 600,
-                  letterSpacing: "0.2em",
-                  color: "rgba(31,20,10,0.55)",
+                  fontFamily: "JetBrains",
+                  fontSize: 11,
+                  fontWeight: 700,
+                  letterSpacing: "0.22em",
+                  color: "rgba(31,20,10,0.5)",
                 }}
               >
                 STRUCTURED MODE
@@ -209,12 +434,13 @@ export default async function OpengraphImage() {
               <div
                 style={{
                   display: "flex",
-                  fontSize: 12,
-                  padding: "4px 12px",
+                  fontFamily: "JetBrains",
+                  fontSize: 11,
+                  padding: "4px 10px",
                   borderRadius: 999,
                   background: "rgba(232,120,44,0.14)",
                   color: "#D8541D",
-                  fontWeight: 600,
+                  fontWeight: 700,
                   letterSpacing: "0.18em",
                 }}
               >
@@ -222,155 +448,194 @@ export default async function OpengraphImage() {
               </div>
             </div>
 
-            {/* Slot 1: Goal */}
-            <div style={{ display: "flex", flexDirection: "column", marginBottom: 14 }}>
-              <div
-                style={{
-                  display: "flex",
-                  fontSize: 11,
-                  fontWeight: 700,
-                  letterSpacing: "0.22em",
-                  color: "#D8541D",
-                  marginBottom: 4,
-                }}
-              >
-                GOAL
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  fontSize: 16,
-                  lineHeight: 1.35,
-                  color: "#1F140A",
-                }}
-              >
-                Fix auth middleware on stale JWT
-              </div>
-            </div>
+            {/* Slot 1 */}
+            <Slot label="GOAL" value="Fix auth middleware on stale JWT" />
+            <SlotDivider />
+            {/* Slot 2 */}
+            <Slot
+              label="FILES"
+              value="src/middleware/auth.ts"
+              mono
+            />
+            <SlotDivider />
+            {/* Slot 3 */}
+            <Slot label="URGENCY" value="high — Friday review" />
 
-            {/* Slot 2: Files */}
-            <div style={{ display: "flex", flexDirection: "column", marginBottom: 14 }}>
+            {/* Voxify footer */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginTop: 16,
+                paddingTop: 12,
+                borderTop: "1px dashed rgba(31,20,10,0.18)",
+              }}
+            >
               <div
                 style={{
                   display: "flex",
+                  fontFamily: "JetBrains",
                   fontSize: 11,
-                  fontWeight: 700,
-                  letterSpacing: "0.22em",
-                  color: "#D8541D",
-                  marginBottom: 4,
+                  letterSpacing: "0.2em",
+                  color: "rgba(31,20,10,0.45)",
                 }}
               >
-                FILES
+                ENTER TO PASTE
               </div>
+              <div style={{ display: "flex", flex: 1 }} />
               <div
                 style={{
                   display: "flex",
-                  fontSize: 15,
-                  lineHeight: 1.35,
-                  color: "#1F140A",
-                  fontFamily: "monospace",
-                }}
-              >
-                src/middleware/auth.ts
-              </div>
-            </div>
-
-            {/* Slot 3: Urgency */}
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <div
-                style={{
-                  display: "flex",
+                  fontFamily: "JetBrains",
                   fontSize: 11,
-                  fontWeight: 700,
-                  letterSpacing: "0.22em",
+                  letterSpacing: "0.18em",
                   color: "#D8541D",
-                  marginBottom: 4,
+                  fontWeight: 700,
                 }}
               >
-                URGENCY
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  fontSize: 16,
-                  lineHeight: 1.35,
-                  color: "#1F140A",
-                }}
-              >
-                high — Friday review
+                ·VOXIFY
               </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom row: trust badges + domain */}
+        {/* ─── BOTTOM ROW ───────────────────────────────────────── */}
         <div
           style={{
             display: "flex",
-            alignItems: "center",
-            marginTop: 32,
+            alignItems: "flex-end",
+            position: "relative",
+            zIndex: 2,
           }}
         >
+          {/* Trust pills */}
           <div style={{ display: "flex" }}>
-            <div
-              style={{
-                display: "flex",
-                fontSize: 14,
-                padding: "10px 18px",
-                borderRadius: 999,
-                background: "rgba(31,20,10,0.07)",
-                color: "#4A382A",
-                fontWeight: 500,
-                marginRight: 10,
-              }}
-            >
-              No cloud
-            </div>
-            <div
-              style={{
-                display: "flex",
-                fontSize: 14,
-                padding: "10px 18px",
-                borderRadius: 999,
-                background: "rgba(31,20,10,0.07)",
-                color: "#4A382A",
-                fontWeight: 500,
-                marginRight: 10,
-              }}
-            >
-              No API keys
-            </div>
-            <div
-              style={{
-                display: "flex",
-                fontSize: 14,
-                padding: "10px 18px",
-                borderRadius: 999,
-                background: "rgba(31,20,10,0.07)",
-                color: "#4A382A",
-                fontWeight: 500,
-              }}
-            >
-              No telemetry
-            </div>
+            {["No cloud", "No API keys", "No telemetry"].map((b) => (
+              <div
+                key={b}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  fontSize: 14,
+                  padding: "9px 16px",
+                  borderRadius: 999,
+                  background: "rgba(255,251,241,0.7)",
+                  border: "1px solid rgba(31,20,10,0.10)",
+                  color: "#1F140A",
+                  fontWeight: 400,
+                  marginRight: 10,
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    width: 6,
+                    height: 6,
+                    borderRadius: 999,
+                    background: "#D8541D",
+                    marginRight: 10,
+                  }}
+                />
+                {b}
+              </div>
+            ))}
           </div>
+
           <div style={{ display: "flex", flex: 1 }} />
+
+          {/* Domain */}
           <div
             style={{
               display: "flex",
-              fontSize: 14,
-              fontWeight: 600,
-              letterSpacing: "0.22em",
-              color: "rgba(31,20,10,0.55)",
+              flexDirection: "column",
+              alignItems: "flex-end",
             }}
           >
-            OMNIVOX.APP
+            <div
+              style={{
+                display: "flex",
+                fontFamily: "JetBrains",
+                fontSize: 11,
+                letterSpacing: "0.28em",
+                color: "rgba(31,20,10,0.4)",
+              }}
+            >
+              READ MORE AT
+            </div>
+            <div
+              style={{
+                display: "flex",
+                fontFamily: "JetBrains",
+                fontSize: 18,
+                fontWeight: 700,
+                letterSpacing: "0.04em",
+                color: "#1F140A",
+                marginTop: 4,
+              }}
+            >
+              omnivox.app  /
+            </div>
           </div>
         </div>
       </div>
     ),
     {
       ...size,
+      fonts: fonts.length > 0 ? fonts : undefined,
     }
+  );
+}
+
+function Slot({
+  label,
+  value,
+  mono,
+}: {
+  label: string;
+  value: string;
+  mono?: boolean;
+}) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", marginBottom: 4 }}>
+      <div
+        style={{
+          display: "flex",
+          fontFamily: "JetBrains",
+          fontSize: 10,
+          fontWeight: 700,
+          letterSpacing: "0.24em",
+          color: "#D8541D",
+          marginBottom: 4,
+        }}
+      >
+        {label}
+      </div>
+      <div
+        style={{
+          display: "flex",
+          fontSize: 16,
+          lineHeight: 1.3,
+          color: "#1F140A",
+          fontFamily: mono ? "JetBrains" : "Bricolage",
+          fontWeight: mono ? 400 : 400,
+        }}
+      >
+        {value}
+      </div>
+    </div>
+  );
+}
+
+function SlotDivider() {
+  return (
+    <div
+      style={{
+        display: "flex",
+        width: "100%",
+        height: 1,
+        background: "rgba(31,20,10,0.08)",
+        margin: "10px 0",
+      }}
+    />
   );
 }
