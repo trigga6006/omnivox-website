@@ -1,10 +1,14 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt =
-  "OmniVox — Local-first voice dictation for the agentic age";
-export const size = { width: 1200, height: 630 };
-export const contentType = "image/png";
+
+// Kept as a Route Handler at /api/og so the OG image can still be
+// regenerated on demand (see scripts/generate-og.mjs). The metadata in
+// src/app/layout.tsx references the pre-rendered static file at
+// /og-image.png — this route is NOT auto-injected as og:image because
+// it doesn't sit at the conventional src/app/opengraph-image.tsx path.
+
+const size = { width: 1200, height: 630 };
 
 async function loadLocalFont(path: string): Promise<ArrayBuffer | null> {
   try {
@@ -16,11 +20,11 @@ async function loadLocalFont(path: string): Promise<ArrayBuffer | null> {
   }
 }
 
-export default async function OpengraphImage() {
-  // Load typography from bundled TTFs
+export async function GET() {
+  // Fonts live at src/app/fonts; this route is at src/app/api/og.
   const [bricolage, jetbrainsMono] = await Promise.all([
-    loadLocalFont("./fonts/Bricolage.ttf"),
-    loadLocalFont("./fonts/JetBrainsMono-Regular.ttf"),
+    loadLocalFont("../../fonts/Bricolage.ttf"),
+    loadLocalFont("../../fonts/JetBrainsMono-Regular.ttf"),
   ]);
 
   const fonts: {
