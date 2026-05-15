@@ -34,8 +34,11 @@ const TITLE = "OmniVox — Voice dictation that stays on your machine";
 const DESCRIPTION =
   "Local-first voice dictation for the agentic age. Whisper + Qwen on your hardware, structured for Claude Code, Cursor, and Codex. No cloud, no API keys, no telemetry.";
 
+// Pre-rendered static asset. Regenerate via `npm run og`. Serving a
+// static PNG (vs Edge-rendering per request) eliminates cold-start
+// latency for X's bot, which has a tight scrape timeout.
 const OG_IMAGE = {
-  url: "/opengraph-image",
+  url: "/og-image.png",
   width: 1200,
   height: 630,
   alt: "OmniVox — Local-first voice dictation for the agentic age",
@@ -74,14 +77,13 @@ export const metadata: Metadata = {
     locale: "en_US",
     images: [OG_IMAGE],
   },
-  // Twitter / X cards. Both `site` and `creator` declared — X uses
-  // `site` to attribute the card and `creator` to attribute the author.
+  // Twitter / X cards. No site/creator declared — the card should
+  // render regardless of who posts the link; declaring a handle that
+  // doesn't exist on X has been observed to suppress the card.
   twitter: {
     card: "summary_large_image",
     title: TITLE,
     description: DESCRIPTION,
-    site: "@omnivox",
-    creator: "@omnivox",
     images: [OG_IMAGE],
   },
   // Misc nice-to-haves
