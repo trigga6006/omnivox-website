@@ -774,38 +774,38 @@ interface ContextMode {
   name: string;
   description: string;
   icon: React.ReactNode;
-  color: string;
   style: string;
+  shortcut: string;
 }
 
 const contextModes: ContextMode[] = [
   {
     name: "Coding",
     description: "Tech vocab, file-paths bias, code-style snippets",
-    icon: <Terminal className="size-5" />,
-    color: "#10B981",
+    icon: <Terminal className="size-[18px]" />,
     style: "Casual",
+    shortcut: "⌥1",
   },
   {
     name: "Email",
     description: "Formal structure, signoffs, salutations",
-    icon: <Mail className="size-5" />,
-    color: "#3B82F6",
+    icon: <Mail className="size-[18px]" />,
     style: "Formal",
+    shortcut: "⌥2",
   },
   {
     name: "Notes",
     description: "Minimal formatting, append straight to a note",
-    icon: <FileText className="size-5" />,
-    color: "#F59E0B",
+    icon: <FileText className="size-[18px]" />,
     style: "Very Casual",
+    shortcut: "⌥3",
   },
   {
     name: "Chat",
     description: "Ship mode on — send right after transcription",
-    icon: <MessageSquare className="size-5" />,
-    color: "#A855F7",
+    icon: <MessageSquare className="size-[18px]" />,
     style: "Very Casual",
+    shortcut: "⌥4",
   },
 ];
 
@@ -861,74 +861,159 @@ function ContextModesSection() {
           </div>
         </div>
 
-        {/* Right: mode cards */}
-        <div className="flex flex-col gap-3">
-          {contextModes.map((mode) => (
+        {/* Right: mode cards — editorial restraint, ember-only accent */}
+        <div
+          className="overflow-hidden rounded-3xl"
+          style={{
+            backgroundColor: "var(--paper)",
+            border: "1px solid var(--border)",
+            boxShadow:
+              "0 1px 0 rgba(255,255,255,0.6) inset, 0 14px 28px -16px rgba(31,20,10,0.18)",
+          }}
+        >
+          {/* Header strip */}
+          <div
+            className="flex items-center justify-between px-5 py-3"
+            style={{
+              backgroundColor: "var(--cream-dark)",
+              borderBottom: "1px solid var(--border)",
+            }}
+          >
+            <span
+              className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em]"
+              style={{ color: "var(--ember)" }}
+            >
+              4 modes · auto-switching
+            </span>
+            <span
+              className="font-mono text-[10px] uppercase tracking-[0.22em]"
+              style={{ color: "var(--muted-foreground)" }}
+            >
+              live
+            </span>
+          </div>
+
+          {contextModes.map((mode, idx) => (
             <div
               key={mode.name}
-              className="group flex items-center gap-4 rounded-2xl p-4 transition-all hover:translate-x-1"
+              className="group relative flex items-center gap-5 px-5 py-4 transition-colors hover:bg-[var(--cream-dark)]"
               style={{
-                backgroundColor: "var(--paper)",
-                border: "1px solid var(--border)",
-                borderLeft: `4px solid ${mode.color}`,
-                boxShadow:
-                  "0 1px 0 rgba(255,255,255,0.6) inset, 0 10px 22px -16px rgba(31,20,10,0.18)",
+                borderTop:
+                  idx === 0 ? "none" : "1px solid var(--border)",
               }}
             >
-              <div
-                className="flex size-11 shrink-0 items-center justify-center rounded-xl"
+              {/* Ember accent — appears on hover only, in place of the old colored sliver */}
+              <span
+                aria-hidden="true"
+                className="absolute left-0 top-1/2 h-7 w-[2px] -translate-y-1/2 rounded-r opacity-0 transition-opacity group-hover:opacity-100"
+                style={{ backgroundColor: "var(--ember)" }}
+              />
+
+              {/* Mono numeral */}
+              <span
+                className="font-mono text-[10.5px] tabular-nums w-6 shrink-0"
+                style={{ color: "var(--muted-foreground)" }}
+              >
+                {String(idx + 1).padStart(2, "0")}
+              </span>
+
+              {/* Icon — uniform ember treatment */}
+              <span
+                className="flex size-9 shrink-0 items-center justify-center rounded-lg transition-colors"
                 style={{
-                  backgroundColor: `${mode.color}1A`,
-                  color: mode.color,
+                  backgroundColor: "var(--paper)",
+                  border: "1px solid var(--border)",
+                  color: "var(--ember)",
                 }}
               >
                 {mode.icon}
-              </div>
+              </span>
 
+              {/* Body */}
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
+                <div className="flex items-baseline gap-3">
                   <span
-                    className="text-[15px] font-semibold"
-                    style={{ color: "var(--foreground)" }}
+                    className="font-display text-[18px] font-medium leading-tight"
+                    style={{
+                      color: "var(--foreground)",
+                      letterSpacing: "-0.01em",
+                    }}
                   >
                     {mode.name}
                   </span>
                   <span
-                    className="rounded-full px-2 py-0.5 font-mono text-[9.5px] uppercase tracking-[0.18em]"
-                    style={{
-                      backgroundColor: `${mode.color}1A`,
-                      color: mode.color,
-                    }}
+                    className="font-mono text-[10px] uppercase tracking-[0.22em]"
+                    style={{ color: "var(--muted-foreground)" }}
                   >
                     {mode.style}
                   </span>
                 </div>
                 <p
-                  className="mt-0.5 text-[13px] leading-snug"
+                  className="mt-1 text-[13px] leading-snug"
                   style={{ color: "var(--dark-secondary)" }}
                 >
                   {mode.description}
                 </p>
               </div>
 
-              <span
-                className="font-mono text-[9.5px] uppercase tracking-[0.22em]"
-                style={{ color: "var(--muted-foreground)" }}
-              >
-                Auto
-              </span>
+              {/* Right side — keyboard shortcut + auto indicator */}
+              <div className="flex items-center gap-3 shrink-0">
+                <kbd
+                  className="hidden sm:inline-flex items-center justify-center rounded-md px-2 py-0.5 font-mono text-[11px]"
+                  style={{
+                    backgroundColor: "var(--cream-dark)",
+                    border: "1px solid var(--border)",
+                    color: "var(--foreground)",
+                    boxShadow: "inset 0 -1px 0 var(--border)",
+                  }}
+                >
+                  {mode.shortcut}
+                </kbd>
+                <span
+                  className="inline-flex items-center gap-1.5 font-mono text-[9.5px] uppercase tracking-[0.22em]"
+                  style={{ color: "var(--muted-foreground)" }}
+                >
+                  <span
+                    className="inline-block size-1 rounded-full"
+                    style={{ backgroundColor: "var(--ember)" }}
+                  />
+                  Auto
+                </span>
+              </div>
             </div>
           ))}
 
-          <div
-            className="flex items-center justify-center gap-2 rounded-2xl border-2 border-dashed p-4"
-            style={{ borderColor: "var(--border)" }}
+          {/* Add mode footer — replaces the dashed-box pattern */}
+          <button
+            type="button"
+            className="group flex w-full items-center justify-between px-5 py-3.5 text-left transition-colors hover:bg-[var(--cream-dark)]"
+            style={{ borderTop: "1px solid var(--border)" }}
           >
-            <Plus className="size-4" style={{ color: "var(--muted-foreground)" }} />
-            <span className="text-[13.5px]" style={{ color: "var(--muted-foreground)" }}>
-              Create a new mode — 13 icons, 6 colors
+            <span className="flex items-center gap-3">
+              <span
+                className="flex size-7 items-center justify-center rounded-md"
+                style={{
+                  backgroundColor: "var(--cream-dark)",
+                  border: "1px dashed var(--border)",
+                  color: "var(--ember)",
+                }}
+              >
+                <Plus className="size-3.5" />
+              </span>
+              <span
+                className="text-[13.5px]"
+                style={{ color: "var(--foreground)" }}
+              >
+                Create a new mode
+              </span>
             </span>
-          </div>
+            <span
+              className="font-mono text-[10.5px] uppercase tracking-[0.22em] transition-colors group-hover:text-[var(--ember)]"
+              style={{ color: "var(--muted-foreground)" }}
+            >
+              13 icons · 6 colors →
+            </span>
+          </button>
         </div>
       </div>
     </section>
